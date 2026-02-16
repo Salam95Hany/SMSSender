@@ -1,0 +1,21 @@
+.content {
+    position: relative;
+    top: var(--navbar-height);
+    width: calc(100% - var(--sidebar-width));
+    margin-right: var(--sidebar-width);
+    padding: 15px;
+    transition: var(--transition-toggled);
+}
+
+.content.toggle {
+    width: calc(100% - var(--toggled-value));
+    margin-right: var(--toggled-value);
+}
+
+@media (max-width: 1199px) {
+    .content,
+    .content.toggle {
+        width: 100%;
+        margin-right: 0;
+    }
+}

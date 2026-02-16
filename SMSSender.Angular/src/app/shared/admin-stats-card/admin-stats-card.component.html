@@ -1,0 +1,20 @@
+<div class="stats-card radius-10 border w-100 text-white shadow-sm overflow-hidden" [ngClass]="{
+  'blue': statsInfo.status === 'blue',
+  'green': statsInfo.status === 'green',
+  'orange': statsInfo.status === 'orange',
+  'red': statsInfo.status === 'red'
+}">
+    <div class="stats-info d-flex align-items-center justify-content-between p-3">
+        <div class="stats-icon">
+            <i class="{{ statsInfo.icon }}"></i>
+        </div>
+        <div class="stats-desc text-end">
+            <div class="stats-number">{{ statsInfo.number }}</div>
+            <div class="stats-text">{{ statsInfo.text }}</div>
+        </div>
+    </div>
+    <div class="stats-action d-flex align-items-center justify-content-between border-top px-3 py-3 bg-white">
+        <div class="cursor-pointer">عرض التفاصيل</div>
+        <i class="fas fa-arrow-circle-right view-details-icon"></i>
+    </div>
+</div>

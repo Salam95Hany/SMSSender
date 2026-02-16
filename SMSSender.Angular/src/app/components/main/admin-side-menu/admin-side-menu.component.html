@@ -1,0 +1,139 @@
+<aside class="sidebar" [ngClass]="{'toggle': isMenuCollapse, 'sm-toggle': isSmMenuCollapse}" dir="rtl">
+    <span class="toggler-sidebar-btn shadow border-top" (click)="onSmallToggle()">
+        <i class="fas fa-chevron-right"></i>
+    </span>
+    <div class="sidebar-header">
+        <img src="logo.png" class="logo-img" alt="Sidebar-Image" loading="lazy" />
+    </div>
+    <div class="sidebar-content small-scroll overflow-auto with-icons mt-4">
+        <div ngbAccordion [closeOthers]="false">
+            <div ngbAccordionItem="customer-admin-acc">
+                <h2 ngbAccordionHeader>
+                    <button class="accordion-button no-arrow mb-4" routerLink="/admin/dashboard">
+                        <i class="fas fa-home nav-head-icons me-2"></i>
+                        <span class="nav-head-text">الصفحة الرئيسية</span>
+                    </button>
+                    <button ngbAccordionButton class="accordion-button">
+                        <i class="fas fa-user-cog nav-head-icons me-2"></i>
+                        <span class="nav-head-text">إدارة الرسائل</span>
+                    </button>
+                </h2>
+                <div ngbAccordionCollapse>
+                    <div ngbAccordionBody>
+                        <ul class="list-unstyled m-0 nav-list">
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" routerLink="/admin/all-message" routerLinkActive="active">
+                                    <i class="fas fa-envelope nav-icons"></i>
+                                    <span class="nav-link-text">الرسائل</span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" routerLink="/admin/deposit" routerLinkActive="active">
+                                    <i class="fas fa-cash-register nav-icons"></i>
+                                    <span class="nav-link-text">الايداعات</span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" routerLink="/admin/transformation" routerLinkActive="active">
+                                    <i class="fas fa-exchange-alt nav-icons"></i>
+                                    <span class="nav-link-text">التحويلات</span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" routerLink="/admin/withdraw" routerLinkActive="active">
+                                    <i class="fas fa-money-bill-wave nav-icons"></i>
+                                    <span class="nav-link-text">السحوبات</span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" routerLink="/admin/wallet-account" routerLinkActive="active">
+                                    <i class="fas fa-wallet nav-icons"></i>
+                                    <span class="nav-link-text">رصيد المحافظ</span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" routerLink="/admin/wallet-operation" routerLinkActive="active">
+                                    <i class="fas fa-list-alt nav-icons"></i>
+                                    <span class="nav-link-text">العمليات الشهرية</span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" routerLink="/admin/cash-box" routerLinkActive="active">
+                                    <i class="fas fa-box nav-icons"></i>
+                                    <span class="nav-link-text">الصندوق</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div ngbAccordionItem="customer-admin-acc2">
+                <h2 ngbAccordionHeader>
+                    <button ngbAccordionButton class="accordion-button">
+            <i class="fas fa-file-alt nav-head-icons"></i>
+            <span class="nav-head-text">التقارير</span>
+          </button>
+                </h2>
+
+                <div ngbAccordionCollapse>
+                    <div ngbAccordionBody>
+                        <ul class="list-unstyled m-0 nav-list">
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" routerLink="/admin/deposit-report" routerLinkActive="active">
+                                    <i class="fas fa-file-invoice nav-icons"></i>
+                                    <span class="nav-link-text">الايداعات</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" routerLink="/admin/transformation-report" routerLinkActive="active">
+                                    <i class="fas fa-file-invoice nav-icons"></i>
+                                    <span class="nav-link-text">التحويلات</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" routerLink="/admin/withdraw-report" routerLinkActive="active">
+                                    <i class="fas fa-file-invoice nav-icons"></i>
+                                    <span class="nav-link-text">السحوبات</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div ngbAccordionItem="customer-admin-acc3">
+                <h2 ngbAccordionHeader>
+                    <button ngbAccordionButton class="accordion-button">
+            <i class="fas fa-cogs nav-head-icons me-2"></i>
+            <span class="nav-head-text">الإعدادات</span>
+          </button>
+                </h2>
+                <div ngbAccordionCollapse>
+                    <div ngbAccordionBody>
+                        <ul class="list-unstyled m-0 nav-list">
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" routerLink="/admin/user" routerLinkActive="active">
+                                    <i class="fas fa-users nav-icons"></i>
+                                    <span class="nav-link-text">المستخدمين</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" routerLink="/admin/factory" routerLinkActive="active">
+                                    <i class="fas fa-undo-alt nav-icons"></i>
+                                    <span class="nav-link-text">إعادة ضبط المصنع</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</aside>
+
+<div class="overlay-sidebar" (click)="isSmMenuCollapse = false"></div>

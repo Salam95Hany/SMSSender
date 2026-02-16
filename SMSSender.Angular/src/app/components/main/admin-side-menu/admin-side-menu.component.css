@@ -1,0 +1,204 @@
+.sidebar {
+    width: 260px;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 1040;
+    background: #fff;
+    border-left: 1px solid var(--main-border-color);
+    box-shadow: 0 2px 6px 0 rgb(218 218 253 / 5%), 0 2px 6px 0 rgb(206 206 238 / 54%);
+    transition: var(--transition-toggled);
+    -webkit-transition: var(--transition-toggled);
+    -moz-transition: var(--transition-toggled);
+    -ms-transition: var(--transition-toggled);
+    -o-transition: var(--transition-toggled);
+}
+
+.sidebar.toggle {
+    width: var(--toggled-value);
+    overflow: hidden;
+}
+
+.sidebar .sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: var(--navbar-height);
+    padding: 0 15px;
+    background: #fff;
+    border-bottom: 1px solid var(--main-border-color);
+}
+
+.logo-img {
+    max-width: 180px;
+    max-height: 110px;
+}
+
+.sidebar.toggle .sidebar-header {
+    justify-content: center;
+}
+
+.sidebar.toggle .sidebar-header .logo-img {
+    display: none;
+}
+
+.sidebar .sidebar-header .sidebar-collapser,
+.sidebar.sm-toggle .toggler-sidebar-btn i {
+    transition: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    -webkit-transition: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    -moz-transition: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    -ms-transition: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    -o-transition: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.sidebar .sidebar-header .sidebar-collapser:hover {
+    color: var(--main-color);
+}
+
+.sidebar.toggle .sidebar-header .sidebar-collapser,
+.sidebar.sm-toggle .toggler-sidebar-btn i {
+    transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+}
+
+.sidebar-content.small-scroll {
+    height: calc(100vh - 60px);
+    position: relative;
+}
+
+.toggler-sidebar-btn {
+    position: absolute;
+    top: 60px;
+    right: -31px;
+    z-index: 1040;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    font-size: 13px;
+    cursor: pointer;
+    display: none;
+}
+
+.nav-list {
+    padding-left: 1.7rem;
+    padding-right: 1.7rem;
+}
+
+.nav-list .nav-link {
+    padding: 6px 15px;
+    cursor: pointer;
+    white-space: nowrap;
+    border-radius: 0.6rem;
+    -webkit-border-radius: 0.6rem;
+    -moz-border-radius: 0.6rem;
+    -ms-border-radius: 0.6rem;
+    -o-border-radius: 0.6rem;
+}
+
+.nav-list li:not(:last-child) .nav-link {
+    margin-bottom: 6px;
+}
+
+.sidebar.toggle .nav-list {
+    padding-left: 0.7rem;
+    padding-right: 0.7rem;
+}
+
+.sidebar.toggle .nav-list .nav-link {
+    justify-content: center;
+    /* padding-left: 30px; */
+}
+
+.nav-link-text {
+    display: block;
+    white-space: nowrap;
+}
+
+.sidebar.toggle .nav-list .nav-link .nav-link-text {
+    display: none;
+}
+
+.nav-list .nav-link .nav-icons {
+    font-size: 17px;
+    width: 40px;
+    text-align: center;
+    color: var(--main-color);
+}
+
+
+/* .nav-list .nav-link:hover {
+  background-color: var(--light-gray);
+} */
+
+.nav-list .nav-link.active,
+.nav-list .nav-link:hover {
+    background-color: var(--hover-element);
+    color: var(--main-color);
+}
+
+.nav-list .nav-link.active {
+    box-shadow: 0 0.125rem 0.25rem rgb(178 203 243) !important;
+}
+
+.active-create {
+    background-color: var(--hover-element);
+    color: var(--main-color);
+    box-shadow: 0 0.125rem 0.25rem rgb(178 203 243) !important;
+}
+
+.nav-head-icons {
+    width: 20px;
+    font-size: 18px;
+    display: block;
+    color: var(--dark-color);
+    color: #fff;
+}
+
+.sidebar.toggle .nav-head-text {
+    display: none;
+}
+
+.overlay-sidebar {
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+    position: fixed;
+    inset: 0;
+    z-index: 1035;
+    cursor: pointer;
+    display: none;
+}
+
+@media (max-width: 1199px) {
+    .sidebar {
+        left: -250px;
+    }
+    .sidebar.sm-toggle {
+        width: 250px;
+        left: 0;
+    }
+    .sidebar.sidebar.sm-toggle+.overlay-sidebar {
+        display: block;
+    }
+    .toggler-sidebar-btn {
+        display: flex;
+    }
+    .sidebar-header {
+        justify-content: center !important;
+    }
+    .sidebar-collapser {
+        display: none;
+    }
+}
+
+.accordion-button.no-arrow::after {
+    display: none;
+}

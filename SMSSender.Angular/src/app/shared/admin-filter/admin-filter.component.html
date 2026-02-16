@@ -1,0 +1,81 @@
+<div class="d-flex align-items-center flex-wrap gap-2 mb-2">
+    <ng-container *ngFor="let filter of FilterList">
+        <!-- TEXT FILTER -->
+        <div *ngIf="filter.filterType === 'SearchText'" class="position-relative">
+            <input type="text" [(ngModel)]="filter.itemId" (keyup.enter)="updateFilters(filter)" class="form-control border p-6" [ngClass]="{'width-250': Page == '', 'width-420': Page == 'PatientsSearch'}" [placeholder]="'بحث ' + (filter.categoryDisplayName) + ' ...'"
+            />
+            <i class="fas fa-search search-icon-input" (click)="updateFilters(filter)"></i>
+        </div>
+
+        <!-- DATE FILTER -->
+        <div *ngIf="filter.filterType === 'Day'" class="custom-date-input position-relative">
+            <span class="date-label" *ngIf="!filter.itemId">{{filter.categoryDisplayName}}</span>
+            <input type="date" class="form-control width-250 cursor-pointer" [(ngModel)]="filter.itemId" (change)="updateFilters(filter)" />
+        </div>
+
+        <!-- MONTH FILTER -->
+        <div *ngIf="filter.filterType === 'Month'" class="custom-date-input position-relative">
+            <span class="date-label" *ngIf="!filter.itemId">{{filter.categoryDisplayName}}</span>
+            <input type="month" class="form-control width-250 cursor-pointer" [(ngModel)]="filter.itemId" (change)="updateFilters(filter)" />
+        </div>
+
+        <!-- DATE RANGE FILTER -->
+        <div *ngIf="filter.filterType === 'DateRange'" class="date-picker-flex px-2">
+            <input type="text" ngxDaterangepickerMd [(ngModel)]="filter.rangeValue" (datesUpdated)="updateFilters(filter, $event)" [locale]="{ applyLabel: 'Apply', format: 'YYYY-MM-DD' }" [autoApply]="true" autocomplete="off" [placeholder]="filter.categoryDisplayName"
+                class="date-range-input py-2" />
+            <i class="fa fa-calendar calendar-icon"></i>
+        </div>
+
+        <!-- CHECKBOX FILTER -->
+        <div *ngIf="filter.filterType === 'Checkbox'" class="filter-button" ngbDropdown #dd="ngbDropdown" display="dynamic" [autoClose]="'outside'">
+            <button class="btn main-filter-button d-flex align-items-center gap-2" ngbDropdownToggle>
+                <i class="fas fa-filter"></i>
+                <span class="navbar-brand m-0">{{filter.categoryDisplayName}}</span>
+            </button>
+            <div ngbDropdownMenu class="dropdown-menu shadow-sm border animate__animated animate__fadeInUp p-0 overflow-hidden">
+
+                <!-- Search inside checkbox list -->
+                <div class="filter-search p-2 gray-bgcolor border-bottom">
+                    <div class="position-relative">
+                        <input type="text" class="form-control form-control-sm" [(ngModel)]="filter.searchText" placeholder="Search..." />
+                        <i class="fas fa-search search-icon-input"></i>
+                    </div>
+                </div>
+
+                <!-- Checkbox list -->
+                <div class="min-width-230 max-height-180 px-2 py-2 overflow-auto bg-white">
+                    <div class="d-flex align-items-center justify-content-between cursor-pointer" *ngFor="let fItem of filter.filterItems | searchArry: filter.searchText:['itemKey']; let x = index">
+                        <div class="d-flex align-items-center">
+                            <input class="form-check-input me-2" type="checkbox" [(ngModel)]="fItem.isChecked" (change)="updateFilters(filter);dd.close()" id="{{filter.categoryName}}_{{fItem.itemKey}}_{{x}}">
+                            <label class="form-check-label cursor-pointer filter-content" for="{{filter.categoryName}}_{{fItem.itemKey}}_{{x}}">
+                                <span>{{fItem.itemKey}}</span>
+                            </label>
+                        </div>
+                        <div>
+                            <span>{{fItem.itemValue}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</div>
+
+<!-- Selected filters display -->
+<div class="d-flex align-items-center flex-wrap gap-2 mt-2">
+    <div class="badge badge-success round fs-15 d-flex align-items-center justify-content-between" style="min-width: 200px;" *ngFor="let selected of SelectedFilter; let i = index">
+        <i class="fas fa-times-circle font-small-3 px-02 cursor-pointer me-1" (click)="removeSelectedFilter(selected, i)"></i>
+        <span class="ms-auto fw-bold">{{selected.categoryName}} :</span>
+        <span class="ms-1">
+            <ng-container *ngIf="selected.from; else normalFilter">
+                {{selected.from}} - {{selected.to}}
+            </ng-container>
+            <ng-template #normalFilter>
+                {{selected.itemKey ? selected.itemKey : selected.itemId}}
+            </ng-template>
+        </span>
+    </div>
+    <div class="badge badge-danger round fs-15" *ngIf="SelectedFilter.length > 0">
+        <i class="fas fa-times-circle font-small-3 px-02 cursor-pointer" (click)="removeAllFilters()"></i> مسح الكل
+    </div>
+</div>

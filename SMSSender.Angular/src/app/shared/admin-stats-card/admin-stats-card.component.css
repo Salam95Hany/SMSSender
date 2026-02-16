@@ -1,0 +1,63 @@
+.stats-card.blue .stats-info {
+    background-color: #4579b2;
+}
+
+.stats-card.blue .stats-action,
+.stats-card.blue .stats-icon {
+    color: #4579b2;
+}
+
+.stats-card.green .stats-info {
+    background-color: #73b666;
+}
+
+.stats-card.green .stats-action,
+.stats-card.green .stats-icon {
+    color: #73b666;
+}
+
+.stats-card.orange .stats-info {
+    background-color: #e7ae5f;
+}
+
+.stats-card.orange .stats-action,
+.stats-card.orange .stats-icon {
+    color: #e7ae5f;
+}
+
+.stats-card.red .stats-info {
+    background-color: #cc5d54;
+}
+
+.stats-card.red .stats-action,
+.stats-card.red .stats-icon {
+    color: #cc5d54;
+}
+
+.stats-card .stats-icon {
+    font-size: 30px;
+    background-color: #fff;
+    border-radius: 50%;
+    --icon-dimension: 60px;
+    width: var(--icon-dimension);
+    height: var(--icon-dimension);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #eee;
+}
+
+.stats-card .stats-number {
+    font-size: 35px;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.stats-card .stats-text {
+    font-size: 13px;
+}
+
+.stats-card .view-details-icon {
+    font-size: 20px;
+    cursor: pointer;
+}

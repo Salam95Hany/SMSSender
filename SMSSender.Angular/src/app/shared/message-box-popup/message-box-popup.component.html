@@ -1,0 +1,152 @@
+<div class="modal-header">
+    <h5 class="modal-title">
+        <i class="fas fa-envelope-open"></i> صندوق الرسائل
+    </h5>
+    <button type="button" class="btn-close" (click)="DismissModal()"></button>
+</div>
+<div class="modal-dialog-scrollable">
+    <div class="search-box position-relative">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" class="form-control search-input" placeholder="ابحث في الرسائل...">
+    </div>
+    <div class="filter-tabs">
+        <button class="filter-tab active">
+            <i class="fas fa-inbox"></i> الكل
+        </button>
+        <button class="filter-tab">
+            <i class="fas fa-envelope"></i> غير مقروء
+        </button>
+    </div>
+    <div class="modal-body p-0">
+        <div class="message-list">
+            <div class="message-card unread">
+                <div class="message-header">
+                    <div class="sender-info">
+                        <div class="sender-avatar">أ</div>
+                        <div class="sender-details">
+                            <div class="sender-name">أحمد محمد</div>
+                            <div class="sender-number">+966 50 123 4567</div>
+                        </div>
+                    </div>
+                    <div class="message-time">
+                        <span class="time-text">
+                                        <i class="fas fa-clock"></i> منذ 5 دقائق
+                                    </span>
+                        <span class="unread-badge">جديد</span>
+                    </div>
+                </div>
+                <div class="message-body">
+                    مرحباً، أرجو منك التأكيد على موعد الاجتماع القادم. هل سيكون متاحاً لك يوم الأحد الساعة 10 صباحاً؟ في انتظار ردك.
+                </div>
+                <div class="message-actions">
+                    <button class="action-btn btn-mark-read">
+                                    <i class="fas fa-check2-all"></i> تم الاستلام
+                            </button>
+                </div>
+            </div>
+            <div class="message-card">
+                <div class="message-header">
+                    <div class="sender-info">
+                        <div class="sender-avatar" style="background: linear-gradient(135deg, #f093fb, #f5576c);">س</div>
+                        <div class="sender-details">
+                            <div class="sender-name">سارة أحمد</div>
+                            <div class="sender-number">+966 55 987 6543</div>
+                        </div>
+                    </div>
+                    <div class="message-time">
+                        <span class="time-text">
+                                        <i class="fas fa-clock"></i> منذ ساعة
+                                    </span>
+                    </div>
+                </div>
+                <div class="message-body">
+                    شكراً لك على المساعدة في المشروع الأخير. النتائج كانت رائعة والجميع معجب بالعمل المنجز.
+                </div>
+                <div class="message-actions">
+                    <button class="action-btn btn-mark-read">
+                                    <i class="fas fa-check2-all"></i> تم الاستلام
+                            </button>
+                </div>
+            </div>
+            <div class="message-card">
+                <div class="message-header">
+                    <div class="sender-info">
+                        <div class="sender-avatar" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">م</div>
+                        <div class="sender-details">
+                            <div class="sender-name">محمد علي</div>
+                            <div class="sender-number">+966 54 456 7890</div>
+                        </div>
+                    </div>
+                    <div class="message-time">
+                        <span class="time-text">
+                                        <i class="fas fa-clock"></i> منذ 3 ساعات
+                                    </span>
+                    </div>
+                </div>
+                <div class="message-body">
+                    تم إرسال الملفات المطلوبة عبر البريد الإلكتروني. يرجى مراجعتها وإبلاغي بأي ملاحظات.
+                </div>
+                <div class="message-actions">
+                    <button class="action-btn btn-mark-read">
+                                    <i class="fas fa-check2-all"></i> تم الاستلام
+                            </button>
+                </div>
+            </div>
+            <div class="message-card unread">
+                <div class="message-header">
+                    <div class="sender-info">
+                        <div class="sender-avatar" style="background: linear-gradient(135deg, #fa709a, #fee140);">ن</div>
+                        <div class="sender-details">
+                            <div class="sender-name">نور الدين</div>
+                            <div class="sender-number">+966 56 789 0123</div>
+                        </div>
+                    </div>
+                    <div class="message-time">
+                        <span class="time-text">
+                                        <i class="fas fa-clock"></i> منذ 6 ساعات
+                                    </span>
+                        <span class="unread-badge">جديد</span>
+                    </div>
+                </div>
+                <div class="message-body">
+                    هل يمكنك مساعدتي في حل المشكلة التقنية التي واجهتها؟ أحتاج لاستشارتك بأسرع وقت ممكن.
+                </div>
+                <div class="message-actions">
+                    <button class="action-btn btn-mark-read">
+                                    <i class="fas fa-check2-all"></i> تم الاستلام
+                            </button>
+                </div>
+            </div>
+            <div class="message-card">
+                <div class="message-header">
+                    <div class="sender-info">
+                        <div class="sender-avatar" style="background: linear-gradient(135deg, #30cfd0, #330867);">خ</div>
+                        <div class="sender-details">
+                            <div class="sender-name">خالد إبراهيم</div>
+                            <div class="sender-number">+966 53 234 5678</div>
+                        </div>
+                    </div>
+                    <div class="message-time">
+                        <span class="time-text">
+                            <i class="fas fa-clock"></i> أمس
+                        </span>
+                    </div>
+                </div>
+                <div class="message-body">
+                    تذكير: موعد التسليم النهائي للمشروع هو يوم الخميس القادم. أرجو الالتزام بالموعد المحدد.
+                </div>
+                <div class="message-actions">
+                    <button class="action-btn btn-mark-read">
+                        <i class="fas fa-check2-all"></i> تم الاستلام
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="modal-footer-style">
+        <span class="message-count">
+            <i class="fas fa-envelope"></i> إجمالي الرسائل: <strong>5</strong> |  غير مقروء: <strong>2</strong>
+        </span>
+    </div>
+</div>

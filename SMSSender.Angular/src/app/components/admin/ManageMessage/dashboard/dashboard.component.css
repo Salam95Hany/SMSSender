@@ -1,0 +1,24 @@
+.table-vp-height {
+    height: calc(100vh - 242px);
+}
+
+@media (max-width: 991px) {
+    .stats-row .col {
+        margin-bottom: 15px;
+    }
+}
+
+.default {
+    background-color: rgb(13 202 240 / 18%) !important;
+    color: #0dcaf0 !important;
+}
+
+.finished {
+    background-color: rgb(23 160 14 / 0.11) !important;
+    color: #15ca20 !important;
+}
+
+.deleted {
+    background-color: rgba(255, 44, 7, 0.11) !important;
+    color: #ff0707 !important;
+}

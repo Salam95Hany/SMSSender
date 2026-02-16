@@ -1,0 +1,7 @@
+<main id="app" class="app">
+    <app-admin-header [isMenuCollapse]="isMenuCollapse"></app-admin-header>
+    <app-admin-side-menu (toggleMenuEvent)="isMenuCollapse = $event"></app-admin-side-menu>
+    <section class="content" [ngClass]="{'toggle': isMenuCollapse}">
+        <router-outlet></router-outlet>
+    </section>
+</main>

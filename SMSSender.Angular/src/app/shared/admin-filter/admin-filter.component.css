@@ -1,0 +1,103 @@
+.filter-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.fs-15 {
+    font-size: 15px;
+}
+
+.form-check .form-check-input {
+    float: left;
+}
+
+.date-picker-flex {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    width: 250px;
+    background-color: #fff;
+}
+
+.date-range-input {
+    border: none;
+    outline: none;
+    flex: 1;
+    font-size: 14px;
+    padding: 6px;
+    background: transparent;
+}
+
+.calendar-icon {
+    font-size: 16px;
+    color: #555;
+    cursor: pointer;
+}
+
+.width-420 {
+    width: 420px;
+}
+
+.search-icon-input {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    cursor: pointer;
+    transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+}
+
+.main-filter-button {
+    border: 1px solid #DDD;
+    font-size: 15px;
+    background-color: #f2f4f5;
+}
+
+.main-filter-button:hover,
+.main-filter-button:active,
+.main-filter-button:focus {
+    background-color: #64B5F6;
+    color: #FFF;
+}
+
+.min-width-230 {
+    min-width: 230px;
+}
+
+.max-height-180 {
+    max-height: 180px;
+}
+
+.p-6 {
+    padding: 6px;
+}
+
+.badge {
+    cursor: pointer;
+}
+
+.badge-sky {
+    background-color: #d5e6f6;
+    color: #1f407d;
+}
+
+.badge-danger {
+    background-color: #edc7cb;
+    color: #dc3545;
+}
+
+.badge-success {
+    background-color: #d9efd8;
+    color: #269124;
+}
+
+.badge-warning {
+    background-color: #f5ebcb;
+    color: #d8a408;
+    ;
+}
