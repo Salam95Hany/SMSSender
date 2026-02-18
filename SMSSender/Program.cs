@@ -1,23 +1,39 @@
+using Microsoft.AspNetCore.Http.Features;
+using SMSSender.DI;
+using SMSSender.Services.Common;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.Configure<AppPaths>(options =>
+{
+    var env = builder.Environment;
+    options.WebRootPath = env.WebRootPath;
+});
 
+builder.Services.AddDependencies(builder.Configuration);
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.ValueCountLimit = 10000;
+    options.MultipartBodyLengthLimit = 200_000_000;
+    options.ValueLengthLimit = 16384;
+    options.MemoryBufferThreshold = 81920;
+});
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
+app.UseCors(DependencyInjection.GetCorsPolicyName());
+app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
-
+app.UseStaticFiles();
 app.Run();
