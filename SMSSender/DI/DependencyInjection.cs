@@ -15,6 +15,8 @@ using SMSSender.Entities.Auth;
 using RazorLight;
 using SMSSender.Reports.Interface;
 using SMSSender.Reports.Service;
+using SMSSender.Interfaces;
+using SMSSender.Services;
 
 namespace SMSSender.DI
 {
@@ -52,6 +54,8 @@ namespace SMSSender.DI
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IMessageService, MessageService>();
+
 
             #region ReportsDI
 

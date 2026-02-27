@@ -18,11 +18,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
     <Folder Include="wwwroot\Reports\" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SMSSender.Messaging\SMSSender.Messaging.csproj" />
     <ProjectReference Include="..\SMSSender.Reports\SMSSender.Reports.csproj" />
     <ProjectReference Include="..\SMSSender.Services\SMSSender.Services.csproj" />
   </ItemGroup>

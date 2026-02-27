@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http.Features;
 using SMSSender.DI;
 using SMSSender.Services.Common;
+using SMSSender.Messaging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,7 @@ builder.Services.Configure<AppPaths>(options =>
 });
 
 builder.Services.AddDependencies(builder.Configuration);
+builder.Services.Bootstrap();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
