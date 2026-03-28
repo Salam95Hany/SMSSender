@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.SqlServer.Server;
-using SMSSender.Entities.Models.Messaging;
+﻿using SMSSender.Entities.Models.Messaging;
 using SMSSender.Interfaces.Common;
 using SMSSender.Messaging.Models;
 using SMSSender.Messaging.Services;
@@ -14,15 +12,15 @@ using System.Threading.Tasks;
 
 namespace SMSSender.Messaging.Parsers
 {
-    public class VodafoneCashParser : IProviderMessageParser
+    public class VodafoneCashEnParser : IProviderMessageParser
     {
         private readonly IAppSettings _appSettings;
 
-        public VodafoneCashParser(IAppSettings appSettings)
+        public VodafoneCashEnParser(IAppSettings appSettings)
         {
             _appSettings = appSettings;
         }
-        public ProviderType Provider => ProviderType.VodafoneCash;
+        public ProviderType Provider => ProviderType.VodafoneCashEnglish;
 
         public MessageTransaction Parse(string message)
         {
@@ -34,9 +32,6 @@ namespace SMSSender.Messaging.Parsers
 
             if (TryExtractField(message, "FromPhone", out var fromPhone))
                 parsed.FromPhone = fromPhone;
-
-            if (TryExtractField(message, "SenderName", out var senderName))
-                parsed.SenderName = senderName;
 
             if (TryExtractField(message, "BalanceAfter", out var balanceStr) && double.TryParse(balanceStr, out var balance))
                 parsed.BalanceAfter = balance;

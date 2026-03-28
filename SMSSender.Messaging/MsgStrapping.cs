@@ -25,9 +25,11 @@ namespace SMSSender.Messaging
             services.AddScoped<IMessageLogRepository, MessageLogRepository>();
 
             services.AddScoped<IProviderMessageParser, VodafoneCashParser>();
+            services.AddScoped<IProviderMessageParser, VodafoneCashEnParser>();
             services.AddScoped<IProviderMessageParser, InstaPayParser>();
 
             services.AddScoped<IMessageProviderDetector, VodafoneCashDetector>();
+            services.AddScoped<IMessageProviderDetector, VodafoneCashEnDetector>();
             services.AddScoped<IMessageProviderDetector, InstaPayDetector>();
 
             services.AddScoped<IOperationHandler, DepositHandler>();

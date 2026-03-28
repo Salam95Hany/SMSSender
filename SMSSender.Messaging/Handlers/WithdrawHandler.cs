@@ -1,4 +1,7 @@
-﻿using SMSSender.Messaging.Models;
+﻿using SMSSender.Entities.Common;
+using SMSSender.Entities.Models.Messaging;
+using SMSSender.Interfaces.Repositories;
+using SMSSender.Messaging.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,12 +12,25 @@ namespace SMSSender.Messaging.Handlers
 {
     public class WithdrawHandler : IOperationHandler
     {
+        private readonly IUnitOfWork _unitOfWork;
+        public WithdrawHandler(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
         public OperationType OperationType => OperationType.Withdraw;
 
-        public void Handle(ParsedOperationMessage message)
+        public async Task Handle(MessageTransaction message)
         {
-            Console.WriteLine($"Withdraw: {message.Amount} from {message.SenderName}");
-            // هنا تضع منطق البيزنس
+            try
+            {
+                await _unitOfWork.Repository<MessageTransaction>().AddAsync(message);
+                await _unitOfWork.CompleteAsync();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+           
         }
     }
 }

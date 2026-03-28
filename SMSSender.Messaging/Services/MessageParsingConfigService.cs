@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using SMSSender.Entities.Common;
 using SMSSender.Interfaces.Common;
 using SMSSender.Messaging.Models;
 using System;

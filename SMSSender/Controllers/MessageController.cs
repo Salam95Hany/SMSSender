@@ -50,19 +50,24 @@ namespace SMSSender.Controllers
                     DeviceName = deviceName,
                     PhoneNumber = phoneNumber,
                     Message = model.Text,
-                    Provider = model.From == "VF-Cash" ? ProviderType.VodafoneCash : ProviderType.InstaPay,
+                    ProviderStr = model.From,
+                    ReceivedStamp = model.ReceivedStamp,
+                    SentStamp = model.SentStamp,
                     Sim = model.Sim
                 };
 
-                _processingService.Process(smsMessage);
-
-                await BroadcastAsync("Message_Added");
-
-                return Ok();
+                var Process = await _processingService.Process(smsMessage);
+                if (Process)
+                {
+                    await BroadcastAsync("Message_Added");
+                    return Ok();
+                }else
+                    return BadRequest();
+                
             }
             catch (Exception)
             {
-                return Ok();
+                return BadRequest();
             }
         }
 

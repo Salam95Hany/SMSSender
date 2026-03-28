@@ -1,10 +1,13 @@
 ﻿using Microsoft.Extensions.Configuration;
+using SMSSender.Entities.Common;
+using SMSSender.Entities.Models.Messaging;
 using SMSSender.Interfaces.Common;
 using SMSSender.Messaging.Handlers;
 using SMSSender.Messaging.Models;
 using SMSSender.Messaging.Parsers;
 using SMSSender.Messaging.Providers;
 using SMSSender.Messaging.Repositories;
+using System.Runtime.Serialization;
 
 namespace SMSSender.Messaging.Services
 {
@@ -25,29 +28,22 @@ namespace SMSSender.Messaging.Services
             _appSettings = appSettings;
         }
 
-        public void Process(SmsMessagePure Model)
+        public async Task<bool> Process(SmsMessagePure Model)
         {
             var TransactionId = Guid.NewGuid();
             try
             {
+                if (Model.Message.Contains("Received") || Model.Message.Contains("received"))
+                    Model.Provider = ProviderType.VodafoneCashEnglish;
+                else
+                    Model.Provider = ParseProvider(Model.ProviderStr);
+
                 var detector = _providerDetectors.FirstOrDefault(d => d.CanHandle(Model.Provider));
                 if (detector == null)
-                {
-                    _logRepo.LogMsgStatus(new MessageStatusLog
-                    {
-                        TransactionId = Guid.NewGuid(),
-                        RawMessage = Model.Message,
-                        ErrorMessage = "Unknown Provider",
-                        MsgStatus = MsgStatus.Failure.ToString(),
-                        CreatedAt = DateTime.UtcNow
-                    });
+                    throw new Exception("Unknown Provider");
 
-                    return;
-                }
                 var provider = detector.ProviderType;
-
                 var operation = DetectOperation(Model.Message, provider.ToString());
-
                 var parser = _parsers.First(p => p.Provider == provider);
                 var parsedMessage = parser.Parse(Model.Message);
                 parsedMessage.TransactionId = TransactionId;
@@ -55,26 +51,43 @@ namespace SMSSender.Messaging.Services
                 parsedMessage.ProviderName = Model.DeviceName;
                 parsedMessage.ProviderPhone = Model.PhoneNumber;
                 var handler = _operationHandlers.First(h => h.OperationType == operation);
-                handler.Handle(parsedMessage);
-                _logRepo.LogMsgStatus(new MessageStatusLog
+                await handler.Handle(parsedMessage);
+
+                await _logRepo.LogMsgStatus(new SmsMessageLog
                 {
                     TransactionId = TransactionId,
-                    RawMessage = Model.Message,
+                    Message = Model.Message,
                     ErrorMessage = "",
                     MsgStatus = MsgStatus.Success.ToString(),
-                    CreatedAt = DateTime.Now
+                    Provider = Model.ProviderStr,
+                    ProviderName = Model.DeviceName,
+                    ProviderPhone = Model.PhoneNumber,
+                    SentStamp = Model.SentStamp,
+                    ReceivedStamp = Model.ReceivedStamp,
+                    Sim = Model.Sim,
+                    CreatedDate = DateTime.Now,
                 });
+
+                return true;
             }
             catch (Exception ex)
             {
-                _logRepo.LogMsgStatus(new MessageStatusLog
+                await _logRepo.LogMsgStatus(new SmsMessageLog
                 {
                     TransactionId = TransactionId,
-                    RawMessage = Model.Message,
+                    Message = Model.Message,
                     ErrorMessage = ex.Message,
                     MsgStatus = MsgStatus.Failure.ToString(),
-                    CreatedAt = DateTime.Now
+                    Provider = Model.ProviderStr,
+                    ProviderName = Model.DeviceName,
+                    ProviderPhone = Model.PhoneNumber,
+                    SentStamp = Model.SentStamp,
+                    ReceivedStamp = Model.ReceivedStamp,
+                    Sim = Model.Sim,
+                    CreatedDate = DateTime.Now,
                 });
+
+                return false;
             }
         }
 
@@ -86,7 +99,20 @@ namespace SMSSender.Messaging.Services
                 if (keywords.Any(k => message.Contains(k)))
                     return op;
             }
-            throw new Exception("Unknown operation type");
+            throw new Exception("Unknown Operation Type");
+        }
+
+        public ProviderType ParseProvider(string value)
+        {
+            foreach (var field in typeof(ProviderType).GetFields())
+            {
+                var attr = Attribute.GetCustomAttribute(field, typeof(EnumMemberAttribute)) as EnumMemberAttribute;
+
+                if (attr != null && attr.Value == value)
+                    return (ProviderType)field.GetValue(null);
+            }
+
+            throw new Exception("Unknown Provider");
         }
     }
 }

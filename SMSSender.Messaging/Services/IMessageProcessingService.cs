@@ -8,6 +8,6 @@ namespace SMSSender.Messaging.Services
 {
     public interface IMessageProcessingService
     {
-        void Process(SmsMessagePure Message);
+        Task<bool> Process(SmsMessagePure Message);
     }
 }

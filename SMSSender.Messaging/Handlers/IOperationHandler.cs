@@ -1,4 +1,6 @@
-﻿using SMSSender.Messaging.Models;
+﻿using SMSSender.Entities.Common;
+using SMSSender.Entities.Models.Messaging;
+using SMSSender.Messaging.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +12,6 @@ namespace SMSSender.Messaging.Handlers
     public interface IOperationHandler
     {
         OperationType OperationType { get; }
-        void Handle(ParsedOperationMessage message);
+        Task Handle(MessageTransaction message);
     }
 }

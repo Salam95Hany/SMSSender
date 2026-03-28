@@ -1,4 +1,5 @@
-﻿using SMSSender.Messaging.Models;
+﻿using SMSSender.Entities.Models.Messaging;
+using SMSSender.Messaging.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace SMSSender.Messaging.Repositories
 {
     public interface IMessageLogRepository
     {
-        void LogMsgStatus(MessageStatusLog log);
+        Task LogMsgStatus(SmsMessageLog log);
     }
 }

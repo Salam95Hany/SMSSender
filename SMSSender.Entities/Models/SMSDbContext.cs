@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using SMSSender.Entities.Auth;
+using SMSSender.Entities.Models.Messaging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace SMSSender.Entities.Models
         {
         }
 
-        //public DbSet<Activity> Activities { get; set; }
+        public DbSet<SmsMessageLog> SmsMessageLogs { get; set; }
+        public DbSet<MessageTransaction> MessageTransactions { get; set; }
     }
 }

@@ -1,9 +1,11 @@
 ﻿using Microsoft.Extensions.Configuration;
+using SMSSender.Entities.Models.Messaging;
 using SMSSender.Interfaces.Common;
 using SMSSender.Messaging.Models;
 using SMSSender.Messaging.Services;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -19,32 +21,65 @@ namespace SMSSender.Messaging.Parsers
         {
             _appSettings = appSettings;
         }
-        public ProviderType Provider => ProviderType.VodafoneCash;
+        public ProviderType Provider => ProviderType.InstaPay;
 
-        public ParsedOperationMessage Parse(string message)
+        public MessageTransaction Parse(string message)
         {
-            var parsed = new ParsedOperationMessage { Provider = Provider.ToString() };
+            message = message.Normalize();
+            var parsed = new MessageTransaction { Provider = Provider.ToString() };
 
-            parsed.Amount = decimal.Parse(ExtractField(message, "Amount"));
-            parsed.FromPhone = ExtractField(message, "FromPhone");
-            parsed.SenderName = ExtractField(message, "SenderName");
-            parsed.BalanceAfter = decimal.Parse(ExtractField(message, "BalanceAfter"));
-            parsed.TransactionNumber = ExtractField(message, "TransactionNumber");
+            if (TryExtractField(message, "Amount", out var amountStr) && double.TryParse(amountStr, out var amount))
+                parsed.Amount = amount;
 
-            var date = ExtractField(message, "OperationDateTime", "date");
-            var time = ExtractField(message, "OperationDateTime", "time");
-            parsed.OperationMsgDateTime = DateTime.ParseExact($"{date} {time}", "dd-MM-yy HH:mm", null);
-            parsed.OperationServerDateTime = DateTime.Now.AddHours(2);
+            if (TryExtractField(message, "FromPhone", out var fromPhone))
+                parsed.FromPhone = fromPhone;
+
+            if (TryExtractField(message, "SenderName", out var senderName))
+                parsed.SenderName = senderName;
+
+            if (TryExtractField(message, "TransactionNumber", out var txnNumber))
+                parsed.TransactionNumber = txnNumber;
+
+            if (TryExtractField(message, "OperationDateTime", out var datetimeStr, "date") &&
+                TryExtractField(message, "OperationDateTime", out var timeStr, "time"))
+            {
+                var dateTimeText = $"{datetimeStr} {timeStr}";
+                string[] formats =
+                {
+                    "yy-MM-dd HH:mm",
+                    "dd-MM-yy HH:mm",
+                    "dd-MM-yyyy HH:mm",
+                    "yy/MM/dd HH:mm",
+                    "dd/MM/yy HH:mm",
+                    "dd/MM/yyyy HH:mm",
+                    "MMM dd, yyyy h:mm:ss tt",
+                    "MMM d, yyyy h:mm:ss tt",
+                    "M/d/yy HH:mm",
+                    "MM/dd/yy HH:mm",
+                };
+
+                if (DateTime.TryParseExact(dateTimeText, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out var parsedDateTime))
+                    parsed.OperationMsgDateTime = parsedDateTime;
+            }
+
+            parsed.OperationServerDateTime = DateTime.Now;
 
             return parsed;
         }
 
-        private string ExtractField(string message, string field, string group = "value")
+        private bool TryExtractField(string message, string field, out string value, string group = "value")
         {
+            value = null;
             var pattern = MessageParsingConfigService.GetFieldPattern(_appSettings, Provider.ToString(), field);
+            if (string.IsNullOrWhiteSpace(pattern))
+                throw new Exception($"Regex Field {field} Not Found In Settings File");
+
             var match = Regex.Match(message, pattern);
-            if (!match.Success) throw new Exception($"Field {field} not found");
-            return match.Groups[group].Value;
+            if (!match.Success)
+                return false;
+
+            value = match.Groups[group].Value;
+            return true;
         }
     }
 }

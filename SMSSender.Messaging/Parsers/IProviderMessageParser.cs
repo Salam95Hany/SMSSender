@@ -1,4 +1,5 @@
-﻿using SMSSender.Messaging.Models;
+﻿using SMSSender.Entities.Models.Messaging;
+using SMSSender.Messaging.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,6 @@ namespace SMSSender.Messaging.Parsers
     public interface IProviderMessageParser
     {
         ProviderType Provider { get; }
-        ParsedOperationMessage Parse(string message);
+        MessageTransaction Parse(string message);
     }
 }
