@@ -251,6 +251,9 @@ namespace SMSSender.Entities.Migrations
                     b.Property<DateTime?>("OperationMsgDateTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("OperationSentDateTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime>("OperationServerDateTime")
                         .HasColumnType("datetime2");
 
@@ -283,6 +286,34 @@ namespace SMSSender.Entities.Migrations
                     b.HasKey("MessageTransactionId");
 
                     b.ToTable("MessageTransactions", "sms");
+                });
+
+            modelBuilder.Entity("SMSSender.Entities.Models.Messaging.FailedSmsLog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ErrorReason")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Provider")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RawMessage")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FailedSmsLogs", "sms");
                 });
 
             modelBuilder.Entity("SMSSender.Entities.Models.Messaging.SmsMessageLog", b =>

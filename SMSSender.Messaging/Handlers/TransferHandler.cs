@@ -1,23 +1,19 @@
-﻿using SMSSender.Entities.Common;
+using SMSSender.Entities.Common;
 using SMSSender.Entities.Models.Messaging;
 using SMSSender.Interfaces.Repositories;
-using SMSSender.Messaging.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SMSSender.Messaging.Handlers
 {
-    public class WithdrawHandler : IOperationHandler
+    public class TransferHandler : IOperationHandler
     {
         private readonly IUnitOfWork _unitOfWork;
-        public WithdrawHandler(IUnitOfWork unitOfWork)
+
+        public TransferHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
-        public OperationType OperationType => OperationType.Withdraw;
+
+        public OperationType OperationType => OperationType.Transfer;
 
         public async Task Handle(MessageTransaction message)
         {

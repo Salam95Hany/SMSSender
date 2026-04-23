@@ -26,7 +26,7 @@ namespace SMSSender.Messaging.Handlers
                 await _unitOfWork.Repository<MessageTransaction>().AddAsync(message);
                 await _unitOfWork.CompleteAsync();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }

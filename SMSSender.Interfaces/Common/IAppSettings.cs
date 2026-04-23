@@ -30,11 +30,23 @@ namespace SMSSender.Interfaces.Common
 
     public class MessageParsingSettings
     {
+        public FailedSmsSettings FailedSms { get; set; } = new();
         public Dictionary<string, ProviderSettings> Providers { get; set; } = new();
+    }
+
+    public class FailedSmsSettings
+    {
+        public string RelativeDirectory { get; set; } = "sms-failures";
+        public string DateFolderFormat { get; set; } = "yyyy-MM-dd";
     }
 
     public class ProviderSettings
     {
+        public string DisplayName { get; set; } = string.Empty;
+        public int Priority { get; set; }
+        public string[] SenderAliases { get; set; } = Array.Empty<string>();
+        public string[] DetectionPatterns { get; set; } = Array.Empty<string>();
+        public string[] DateTimeFormats { get; set; } = Array.Empty<string>();
         public OperationKeywords OperationKeywords { get; set; } = new();
         public FieldPatterns FieldPatterns { get; set; } = new();
     }
@@ -43,17 +55,42 @@ namespace SMSSender.Interfaces.Common
     {
         public string[] Deposit { get; set; } = Array.Empty<string>();
         public string[] Withdraw { get; set; } = Array.Empty<string>();
-        public string[] Cash { get; set; } = Array.Empty<string>();
+        public string[] Transfer { get; set; } = Array.Empty<string>();
+        public string[] CashWithdrawal { get; set; } = Array.Empty<string>();
+        public string[] BalanceInquiry { get; set; } = Array.Empty<string>();
+
+        public IEnumerable<string> All()
+        {
+            return Deposit
+                .Concat(Withdraw)
+                .Concat(Transfer)
+                .Concat(CashWithdrawal)
+                .Concat(BalanceInquiry)
+                .Where(value => !string.IsNullOrWhiteSpace(value));
+        }
     }
 
     public class FieldPatterns
     {
-        public string Amount { get; set; }
-        public string FromPhone { get; set; }
-        public string SenderName { get; set; }
-        public string BalanceAfter { get; set; }
-        public string TransactionNumber { get; set; }
-        public string OperationDateTime { get; set; }
-        //public string ToAccountNumber { get; set; } // اختياري لبعض Providers
+        public string[] Amount { get; set; } = Array.Empty<string>();
+        public string[] FromPhone { get; set; } = Array.Empty<string>();
+        public string[] SenderName { get; set; } = Array.Empty<string>();
+        public string[] BalanceAfter { get; set; } = Array.Empty<string>();
+        public string[] TransactionNumber { get; set; } = Array.Empty<string>();
+        public string[] OperationDateTime { get; set; } = Array.Empty<string>();
+
+        public IReadOnlyList<string> GetPatterns(string fieldName)
+        {
+            return fieldName switch
+            {
+                nameof(Amount) => Amount,
+                nameof(FromPhone) => FromPhone,
+                nameof(SenderName) => SenderName,
+                nameof(BalanceAfter) => BalanceAfter,
+                nameof(TransactionNumber) => TransactionNumber,
+                nameof(OperationDateTime) => OperationDateTime,
+                _ => Array.Empty<string>()
+            };
+        }
     }
 }

@@ -37,7 +37,7 @@ namespace SMSSender.Controllers
                 if (secretKey != _appSettings.SecretKey)
                     return Unauthorized();
 
-                var AcceptedMsg = _messageService.GetMessageFiltered(model.Text);
+                var AcceptedMsg = _messageService.GetMessageFiltered(model.From, model.Text);
                 if (!AcceptedMsg)
                     return Ok();
 

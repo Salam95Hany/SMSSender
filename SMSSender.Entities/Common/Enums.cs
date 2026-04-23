@@ -11,6 +11,8 @@ namespace SMSSender.Entities.Common
     {
         Deposit = 1,  // إيداع
         Withdraw = 2, // سحب
-        Cash = 3      // سيولة نقدية
+        CashWithdrawal = 3, // سحب نقدي
+        Transfer = 4, // تحويل
+        BalanceInquiry = 5 // استعلام رصيد
     }
 }

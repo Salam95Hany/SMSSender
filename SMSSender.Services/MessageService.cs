@@ -1,34 +1,68 @@
-﻿using SMSSender.Interfaces;
+using System.Text.RegularExpressions;
+using SMSSender.Interfaces;
 using SMSSender.Interfaces.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SMSSender.Services
 {
     public class MessageService : IMessageService
     {
+        private static readonly TimeSpan RegexTimeout = TimeSpan.FromSeconds(2);
         private readonly IAppSettings _appSettings;
+
         public MessageService(IAppSettings appSettings)
         {
             _appSettings = appSettings;
         }
 
-        public bool GetMessageFiltered(string Message)
+        public bool GetMessageFiltered(string? provider, string message)
         {
-            if (string.IsNullOrWhiteSpace(Message)) return false;
-
-            var allKeywords = _appSettings.MessageParsing.Providers.SelectMany(p => new[]
+            var normalizedMessage = SmsTextNormalizer.Normalize(message);
+            if (string.IsNullOrWhiteSpace(normalizedMessage))
             {
-                p.Value.OperationKeywords.Deposit,
-                p.Value.OperationKeywords.Withdraw,
-                p.Value.OperationKeywords.Cash
-            }).SelectMany(x => x).Where(x => !string.IsNullOrWhiteSpace(x)).Distinct().ToList();
+                return false;
+            }
 
-            return allKeywords.Any(keyword => Message.Contains(keyword, StringComparison.OrdinalIgnoreCase));
+            var normalizedProvider = SmsTextNormalizer.Normalize(provider);
+
+            foreach (var providerSettings in _appSettings.MessageParsing.Providers.Values)
+            {
+                var senderMatched = providerSettings.SenderAliases.Any(alias =>
+                    !string.IsNullOrWhiteSpace(alias) &&
+                    normalizedProvider.Contains(alias, StringComparison.OrdinalIgnoreCase));
+
+                var keywordMatched = providerSettings.OperationKeywords.All()
+                    .Any(keyword => normalizedMessage.Contains(keyword, StringComparison.OrdinalIgnoreCase));
+
+                var detectionMatched = providerSettings.DetectionPatterns.Any(pattern => SafeIsMatch(normalizedMessage, pattern));
+
+                if ((senderMatched && (keywordMatched || detectionMatched)) || keywordMatched || detectionMatched)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool SafeIsMatch(string message, string pattern)
+        {
+            if (string.IsNullOrWhiteSpace(pattern))
+            {
+                return false;
+            }
+
+            try
+            {
+                return Regex.IsMatch(message, pattern, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant, RegexTimeout);
+            }
+            catch (ArgumentException)
+            {
+                return false;
+            }
+            catch (RegexMatchTimeoutException)
+            {
+                return false;
+            }
         }
     }
 }

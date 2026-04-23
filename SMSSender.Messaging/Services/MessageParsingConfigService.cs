@@ -1,54 +1,25 @@
-﻿using Microsoft.Extensions.Configuration;
 using SMSSender.Entities.Common;
 using SMSSender.Interfaces.Common;
-using SMSSender.Messaging.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SMSSender.Messaging.Services
 {
     public static class MessageParsingConfigService
     {
-        public static string[] GetOperationKeywords(IAppSettings appSettings, string provider, OperationType operation)
+        public static IReadOnlyDictionary<OperationType, string[]> GetOperationKeywords(ProviderSettings providerSettings)
         {
-            if (appSettings?.MessageParsing?.Providers != null
-                && appSettings.MessageParsing.Providers.TryGetValue(provider, out var providerSettings)
-                && providerSettings.OperationKeywords != null)
+            return new Dictionary<OperationType, string[]>
             {
-                return operation switch
-                {
-                    OperationType.Deposit => providerSettings.OperationKeywords.Deposit ?? Array.Empty<string>(),
-                    OperationType.Withdraw => providerSettings.OperationKeywords.Withdraw ?? Array.Empty<string>(),
-                    OperationType.Cash => providerSettings.OperationKeywords.Cash ?? Array.Empty<string>(),
-                    _ => Array.Empty<string>()
-                };
-            }
-
-            return Array.Empty<string>();
+                [OperationType.Deposit] = providerSettings.OperationKeywords.Deposit ?? Array.Empty<string>(),
+                [OperationType.Withdraw] = providerSettings.OperationKeywords.Withdraw ?? Array.Empty<string>(),
+                [OperationType.Transfer] = providerSettings.OperationKeywords.Transfer ?? Array.Empty<string>(),
+                [OperationType.CashWithdrawal] = providerSettings.OperationKeywords.CashWithdrawal ?? Array.Empty<string>(),
+                [OperationType.BalanceInquiry] = providerSettings.OperationKeywords.BalanceInquiry ?? Array.Empty<string>()
+            };
         }
 
-        public static string? GetFieldPattern(IAppSettings appSettings, string provider, string fieldName)
+        public static IReadOnlyList<string> GetFieldPatterns(ProviderSettings providerSettings, string fieldName)
         {
-            if (appSettings?.MessageParsing?.Providers != null
-                && appSettings.MessageParsing.Providers.TryGetValue(provider, out var providerSettings)
-                && providerSettings.FieldPatterns != null)
-            {
-                return fieldName switch
-                {
-                    "Amount" => providerSettings.FieldPatterns.Amount,
-                    "FromPhone" => providerSettings.FieldPatterns.FromPhone,
-                    "SenderName" => providerSettings.FieldPatterns.SenderName,
-                    "BalanceAfter" => providerSettings.FieldPatterns.BalanceAfter,
-                    "TransactionNumber" => providerSettings.FieldPatterns.TransactionNumber,
-                    "OperationDateTime" => providerSettings.FieldPatterns.OperationDateTime,
-                    _ => null
-                };
-            }
-
-            return null;
+            return providerSettings.FieldPatterns?.GetPatterns(fieldName) ?? Array.Empty<string>();
         }
     }
 }

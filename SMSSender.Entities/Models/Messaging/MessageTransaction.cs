@@ -25,6 +25,7 @@ namespace SMSSender.Entities.Models.Messaging
         public double? BalanceAfter { get; set; } // الرصيد بعد تنفيذ العملية
         public string? TransactionNumber { get; set; } // رقم العملية
         public DateTime OperationServerDateTime { get; set; } // تاريخ ووقت العملية في السيرفر
-        public DateTime? OperationMsgDateTime { get; set; } // تاريخ ووقت العملية في الرسالة
+        public DateTime? OperationMsgDateTime { get; set; } // تاريخ ووقت الاستلام من الـ ReceivedStamp
+        public DateTime? OperationSentDateTime { get; set; } // تاريخ ووقت الإرسال من الـ SentStamp
     }
 }

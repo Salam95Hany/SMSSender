@@ -1,19 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SMSSender.Entities.Models;
-using SMSSender.Interfaces.Auth;
-using SMSSender.Interfaces.Common;
-using SMSSender.Interfaces.Repositories;
 using SMSSender.Messaging.Handlers;
 using SMSSender.Messaging.Parsers;
-using SMSSender.Messaging.Providers;
 using SMSSender.Messaging.Repositories;
 using SMSSender.Messaging.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SMSSender.Messaging
 {
@@ -21,20 +10,21 @@ namespace SMSSender.Messaging
     {
         public static IServiceCollection Bootstrap(this IServiceCollection services)
         {
+            services.AddSingleton<IRegexEngine, RegexEngine>();
+            services.AddSingleton<IMessageProviderRegistry, MessageProviderRegistry>();
             services.AddScoped<IMessageProcessingService, MessageProcessingService>();
             services.AddScoped<IMessageLogRepository, MessageLogRepository>();
+            services.AddScoped<IFailedSmsLogger, FailedSmsLogger>();
 
-            services.AddScoped<IProviderMessageParser, VodafoneCashParser>();
-            services.AddScoped<IProviderMessageParser, VodafoneCashEnParser>();
-            services.AddScoped<IProviderMessageParser, InstaPayParser>();
-
-            services.AddScoped<IMessageProviderDetector, VodafoneCashDetector>();
-            services.AddScoped<IMessageProviderDetector, VodafoneCashEnDetector>();
-            services.AddScoped<IMessageProviderDetector, InstaPayDetector>();
+            services.AddScoped<IMessageParser, VodafoneCashParser>();
+            services.AddScoped<IMessageParser, VodafoneCashEnParser>();
+            services.AddScoped<IMessageParser, InstaPayParser>();
 
             services.AddScoped<IOperationHandler, DepositHandler>();
             services.AddScoped<IOperationHandler, WithdrawHandler>();
             services.AddScoped<IOperationHandler, CashHandler>();
+            services.AddScoped<IOperationHandler, TransferHandler>();
+            services.AddScoped<IOperationHandler, BalanceInquiryHandler>();
 
             return services;
         }

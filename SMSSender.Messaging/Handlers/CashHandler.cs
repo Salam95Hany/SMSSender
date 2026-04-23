@@ -17,7 +17,7 @@ namespace SMSSender.Messaging.Handlers
         {
             _unitOfWork = unitOfWork;
         }
-        public OperationType OperationType => OperationType.Cash;
+        public OperationType OperationType => OperationType.CashWithdrawal;
 
         public async Task Handle(MessageTransaction message)
         {

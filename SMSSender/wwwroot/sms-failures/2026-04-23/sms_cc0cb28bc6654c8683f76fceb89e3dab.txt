@@ -1,0 +1,5 @@
+﻿CreatedAt: 2026-04-23T04:01:48.8607158+02:00
+Provider: VF-Cash
+ErrorReason: An error occurred while saving the entity changes. See the inner exception for details.
+RawMessage:
+تم سحب 30000.0 ج بنجاح. رصيد حسابك في فودافون كاش الحالي 6553.41 جنيه. تاريخ العملية ‎02-12-25 23:28 رقم العملية 015881407716.

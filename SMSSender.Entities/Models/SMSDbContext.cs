@@ -17,6 +17,7 @@ namespace SMSSender.Entities.Models
         {
         }
 
+        public DbSet<FailedSmsLog> FailedSmsLogs { get; set; }
         public DbSet<SmsMessageLog> SmsMessageLogs { get; set; }
         public DbSet<MessageTransaction> MessageTransactions { get; set; }
     }
