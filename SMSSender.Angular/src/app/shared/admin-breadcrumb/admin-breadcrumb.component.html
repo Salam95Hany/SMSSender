@@ -1,25 +1,16 @@
 <section class="page-hero surface-card">
-  <div class="page-hero__icon" aria-hidden="true">
-    <i [class]="icon"></i>
-  </div>
-  <div class="page-hero__body">
-    <div class="page-hero__eyebrow" *ngIf="items.length">
-      {{ items[0].label }}
-    </div>
-    <h1>{{ title }}</h1>
-    <p *ngIf="subtitle">{{ subtitle }}</p>
-
-    <nav class="page-hero__breadcrumb" [attr.aria-label]="title || 'breadcrumb'" *ngIf="items.length">
-      <ol>
-        <li *ngFor="let item of items; let last = last">
-          <a *ngIf="item.route && !last; else currentCrumb" [routerLink]="item.route">
+    <div class="page-hero__body">
+        <nav class="page-hero__breadcrumb" [attr.aria-label]="title || 'breadcrumb'" *ngIf="items.length">
+            <ol>
+                <li *ngFor="let item of items; let last = last">
+                    <a *ngIf="item.route && !last; else currentCrumb" [routerLink]="item.route">
             {{ item.label }}
           </a>
-          <ng-template #currentCrumb>
-            <span [class.is-current]="last">{{ item.label }}</span>
-          </ng-template>
-        </li>
-      </ol>
-    </nav>
-  </div>
+                    <ng-template #currentCrumb>
+                        <span [class.is-current]="last">{{ item.label }}</span>
+                    </ng-template>
+                </li>
+            </ol>
+        </nav>
+    </div>
 </section>

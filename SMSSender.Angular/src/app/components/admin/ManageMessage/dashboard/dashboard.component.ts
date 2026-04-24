@@ -1,86 +1,72 @@
-import { NgFor, NgIf } from '@angular/common';
+import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
-import { NgbModal, NgbModule, NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
-import { ToastrService } from 'ngx-toastr';
-import { FilterModel } from '../../../../models/FilterModel';
-import { PagingFilterModel } from '../../../../models/PagingFilterModel';
+import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AdminService } from '../../../../services/admin.service';
 import { AdminBreadcrumbComponent } from '../../../../shared/admin-breadcrumb/admin-breadcrumb.component';
 import { AdminEmptyStateComponent } from '../../../../shared/admin-empty-state/admin-empty-state.component';
-import { AdminFilterComponent } from '../../../../shared/admin-filter/admin-filter.component';
-import { AdminPaginationComponent } from '../../../../shared/admin-pagination/admin-pagination.component';
 import { AdminStatsCardComponent } from '../../../../shared/admin-stats-card/admin-stats-card.component';
 import { MessageBoxPopupComponent } from '../../../../shared/message-box-popup/message-box-popup.component';
+import { ArabicDateWithTimePipe } from '../../../../pipes/arabic-date-with-time.pipe';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [
-    AdminPaginationComponent,
     NgFor,
     NgIf,
-    AdminFilterComponent,
     NgbModule,
     AdminStatsCardComponent,
     MessageBoxPopupComponent,
     AdminBreadcrumbComponent,
     AdminEmptyStateComponent,
+    ArabicDateWithTimePipe,
+    CommonModule
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent {
-  OrdersList: any[] = [];
-  FilterList: FilterModel[] = [
-    {
-      categoryDisplayName: 'بحث بالاسم',
-      categoryName: 'AdmissionSearchText',
-      filterType: 'SearchText',
-      filterItems: [{ categoryName: 'AdmissionSearchText', itemId: '', itemKey: '', itemValue: '', filterItems: [] }]
-    },
-    {
-      categoryDisplayName: 'فترة الوصول',
-      categoryName: 'AdmissionDate',
-      filterType: 'DateRange',
-      filterItems: [{ categoryName: 'AdmissionDate', itemId: '', itemKey: '', itemValue: '', filterItems: [] }]
-    },
-    {
-      categoryDisplayName: 'المحافظة',
-      categoryName: 'Governorate',
-      filterType: 'Checkbox',
-      filterItems: [
-        { categoryName: 'Governorate', itemId: 'Alexandria', itemKey: 'Alexandria', itemValue: '1', filterItems: [] },
-        { categoryName: 'Governorate', itemId: 'Cairo', itemKey: 'Cairo', itemValue: '6', filterItems: [] },
-        { categoryName: 'Governorate', itemId: 'Fayoum', itemKey: 'Fayoum', itemValue: '2', filterItems: [] },
-      ]
-    }
-  ];
-  UserModel: any;
-  filterList: FilterModel[] = [];
-  PagingFilter: PagingFilterModel = {
-    pagesize: 10,
-    currentpage: 1,
-    filterList: []
-  };
-  TotalCount = 0;
-  isFilter = false;
-
+  MessageList: any[] = [];
   statsInfo = [
-    { icon: 'fas fa-envelope', number: 26, text: 'إجمالي الرسائل', status: 'blue' },
-    { icon: 'fas fa-cash-register', number: 12, text: 'عمليات الإيداع', status: 'green' },
-    { icon: 'fas fa-arrow-right-arrow-left', number: 124, text: 'عمليات التحويل', status: 'orange' },
-    { icon: 'fas fa-money-bill-wave', number: 13, text: 'عمليات السحب', status: 'red' },
+    { icon: 'fas fa-envelope', number: 0, text: 'إجمالي الرسائل', status: 'blue', key: 'totalCount' },
+    { icon: 'fas fa-cash-register', number: 0, text: 'عمليات الإيداع', status: 'green', key: 'depositCount' },
+    { icon: 'fas fa-money-bill-wave', number: 0, text: 'عمليات السحب', status: 'orange', key: 'withdrawCount' },
+    { icon: 'fas fa-exchange-alt', number: 0, text: 'عمليات السيولة', status: 'red', key: 'cashWithdrawalCount' },
   ];
 
   constructor(
     private adminService: AdminService,
-    private offcanvasService: NgbOffcanvas,
-    private toaster: ToastrService,
     private modalService: NgbModal
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-    this.UserModel = JSON.parse(localStorage.getItem('UserModel') ?? 'null');
+    this.GetOperationCountDashboardSummary();
+    this.GetTodayLatestTransactions();
+  }
+
+  GetOperationCountDashboardSummary() {
+    this.adminService.GetOperationCountDashboardSummary().subscribe((data) => {
+      this.statsInfo.forEach(stat => {
+        stat.number = data.results[0][stat.key] || 0;
+      })
+    });
+  }
+
+  GetTodayLatestTransactions() {
+    this.adminService.GetTodayLatestTransactions().subscribe((data) => {
+      this.MessageList = data.results || [];
+    });
+  }
+
+   getOperationClass(type: number): string {
+    switch (type) {
+      case 1: return 'badge-success';
+      case 2: return 'badge-brown';
+      case 3: return 'badge-gold';
+      case 4: return 'badge-purple';
+      case 5: return 'badge-secondary';
+      default: return 'badge-light';
+    }
   }
 
   openMessageBoxModal(content: unknown): void {
@@ -90,6 +76,4 @@ export class DashboardComponent {
       windowClass: 'messages-modal',
     });
   }
-
-  pageChanged(page: number): void {}
 }

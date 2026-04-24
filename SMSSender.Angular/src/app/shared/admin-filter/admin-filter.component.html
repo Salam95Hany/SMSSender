@@ -1,68 +1,44 @@
 <div class="filter-toolbar">
-  <ng-container *ngFor="let filter of FilterList">
-    <div *ngIf="filter.filterType === 'SearchText'" class="filter-control">
-      <label class="filter-label">{{ filter.categoryDisplayName }}</label>
-      <div class="filter-input-shell">
-        <input
-          type="text"
-          [(ngModel)]="filter.itemId"
-          (keyup.enter)="updateFilters(filter)"
-          class="form-control"
-          [ngClass]="{ 'width-250': Page == '', 'width-420': Page == 'PatientsSearch' }"
-          [placeholder]="'بحث ' + filter.categoryDisplayName"
-        />
-        <button type="button" class="filter-icon-button" (click)="updateFilters(filter)" aria-label="بحث">
+    <ng-container *ngFor="let filter of FilterList">
+        <div *ngIf="filter.filterType === 'SearchText'" class="filter-control">
+            <div class="filter-input-shell">
+                <input type="text" [(ngModel)]="filter.itemId" (keyup.enter)="updateFilters(filter)" class="form-control width-300" [placeholder]="'بحث ' + filter.categoryDisplayName" />
+                <button type="button" class="filter-icon-button" (click)="updateFilters(filter)" aria-label="بحث">
           <i class="fas fa-search"></i>
         </button>
-      </div>
-    </div>
+            </div>
+        </div>
 
-    <div *ngIf="filter.filterType === 'Day'" class="filter-control">
-      <label class="filter-label">{{ filter.categoryDisplayName }}</label>
-      <input type="date" class="form-control width-250 cursor-pointer" [(ngModel)]="filter.itemId" (change)="updateFilters(filter)" />
-    </div>
+        <div *ngIf="filter.filterType === 'Day'" class="filter-control">
+            <input type="date" class="form-control width-250 cursor-pointer" [(ngModel)]="filter.itemId" (change)="updateFilters(filter)" />
+        </div>
 
-    <div *ngIf="filter.filterType === 'Month'" class="filter-control">
-      <label class="filter-label">{{ filter.categoryDisplayName }}</label>
-      <input type="month" class="form-control width-250 cursor-pointer" [(ngModel)]="filter.itemId" (change)="updateFilters(filter)" />
-    </div>
+        <div *ngIf="filter.filterType === 'Month'" class="filter-control">
+            <label class="filter-label">{{ filter.categoryDisplayName }}</label>
+            <input type="month" class="form-control width-250 cursor-pointer" [(ngModel)]="filter.itemId" (change)="updateFilters(filter)" />
+        </div>
 
-    <div *ngIf="filter.filterType === 'DateRange'" class="filter-control">
-      <label class="filter-label">{{ filter.categoryDisplayName }}</label>
-      <div class="date-range-shell">
-        <input
-          type="text"
-          ngxDaterangepickerMd
-          [(ngModel)]="filter.rangeValue"
-          (datesUpdated)="updateFilters(filter, $event)"
-          [locale]="{ applyLabel: 'Apply', format: 'YYYY-MM-DD' }"
-          [autoApply]="true"
-          autocomplete="off"
-          [placeholder]="filter.categoryDisplayName"
-          class="date-range-shell__input"
-        />
-        <i class="fas fa-calendar-alt"></i>
-      </div>
-    </div>
+        <div *ngIf="filter.filterType === 'DateRange'" class="filter-control">
+            <div class="date-range-shell">
+                <input type="text" ngxDaterangepickerMd [(ngModel)]="filter.rangeValue" (datesUpdated)="updateFilters(filter, $event)" [locale]="{ applyLabel: 'Apply', format: 'YYYY-MM-DD' }" [autoApply]="true" autocomplete="off" [placeholder]="filter.categoryDisplayName"
+                    class="date-range-shell__input" />
+                <i class="fas fa-calendar-alt"></i>
+            </div>
+        </div>
 
-    <div *ngIf="filter.filterType === 'Checkbox'" class="filter-control" ngbDropdown #dd="ngbDropdown" display="dynamic" [autoClose]="'outside'">
-      <label class="filter-label">{{ filter.categoryDisplayName }}</label>
-      <button type="button" class="btn btn-outline-secondary filter-dropdown-button" ngbDropdownToggle>
+        <div *ngIf="filter.filterType === 'Checkbox'" class="filter-control" ngbDropdown #dd="ngbDropdown" display="dynamic" [autoClose]="'outside'">
+            <button type="button" class="btn btn-outline-secondary filter-dropdown-button" ngbDropdownToggle>
         <span>{{ filter.categoryDisplayName }}</span>
         <i class="fas fa-chevron-down"></i>
       </button>
 
-      <div ngbDropdownMenu class="filter-dropdown-menu">
-        <div class="filter-dropdown-search">
-          <input type="text" class="form-control form-control-sm" [(ngModel)]="filter.searchText" placeholder="بحث سريع" />
-        </div>
+            <div ngbDropdownMenu class="filter-dropdown-menu">
+                <div class="filter-dropdown-search">
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="filter.searchText" placeholder="بحث سريع" />
+                </div>
 
-        <div class="filter-dropdown-list min-width-230 max-height-180 small-scroll">
-          <label
-            class="filter-dropdown-item"
-            *ngFor="let fItem of filter.filterItems | searchArry: filter.searchText:['itemKey']; let x = index"
-            [for]="filter.categoryName + '_' + fItem.itemKey + '_' + x"
-          >
+                <div class="filter-dropdown-list min-width-230 max-height-180 small-scroll">
+                    <label class="filter-dropdown-item" *ngFor="let fItem of filter.filterItems | searchArry: filter.searchText:['itemKey']; let x = index" [for]="filter.categoryName + '_' + fItem.itemKey + '_' + x">
             <span class="filter-dropdown-item__check">
               <input
                 class="form-check-input"
@@ -75,19 +51,14 @@
             </span>
             <strong>{{ fItem.itemValue }}</strong>
           </label>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </ng-container>
+    </ng-container>
 </div>
 
 <div class="selected-filters" *ngIf="SelectedFilter.length > 0">
-  <button
-    type="button"
-    class="badge badge-sky selected-filter-chip"
-    *ngFor="let selected of SelectedFilter; let i = index"
-    (click)="removeSelectedFilter(selected, i)"
-  >
+    <button type="button" class="badge badge-sky selected-filter-chip" *ngFor="let selected of SelectedFilter; let i = index" (click)="removeSelectedFilter(selected, i)">
     <i class="fas fa-times-circle"></i>
     <span>{{ selected.categoryDisplayName || selected.categoryName }}</span>
     <strong>
@@ -100,7 +71,7 @@
     </strong>
   </button>
 
-  <button type="button" class="badge badge-danger selected-filter-chip" (click)="removeAllFilters()">
+    <button type="button" class="badge badge-danger selected-filter-chip" (click)="removeAllFilters()">
     <i class="fas fa-trash-alt"></i>
     <span>مسح الكل</span>
   </button>

@@ -1,103 +1,65 @@
 <section class="page-shell">
-  <app-admin-breadcrumb
-    title="لوحة التحكم"
-    subtitle="نظرة سريعة على الرسائل والعمليات اليومية مع وصول مباشر لأهم الأدوات."
-    icon="fas fa-chart-pie"
-    [items]="[
+    <app-admin-breadcrumb title="لوحة التحكم" subtitle="نظرة سريعة على الرسائل والعمليات اليومية مع وصول مباشر لأهم الأدوات." icon="fas fa-chart-pie" [items]="[
       { label: 'إدارة الرسائل', route: '/admin/dashboard' },
       { label: 'لوحة التحكم' }
-    ]"
-  ></app-admin-breadcrumb>
+    ]"></app-admin-breadcrumb>
 
-  <div class="dashboard-stats">
-    <div class="dashboard-stats__item" *ngFor="let stats of statsInfo">
-      <app-admin-stats-card [statsInfo]="stats"></app-admin-stats-card>
+    <div class="dashboard-stats">
+        <div class="dashboard-stats__item" *ngFor="let stats of statsInfo">
+            <app-admin-stats-card [statsInfo]="stats"></app-admin-stats-card>
+        </div>
     </div>
-  </div>
-
-  <div class="surface-card page-panel">
-    <div class="page-toolbar">
-      <div class="page-toolbar__meta">
-        <h2>آخر العمليات</h2>
-        <p>إدارة سريعة للرسائل مع فلاتر مرنة وحاوية جدول متجاوبة بالكامل.</p>
-      </div>
-
-      <div class="page-toolbar__actions">
-        <button type="button" class="btn btn-secondary" (click)="openMessageBoxModal(MessageBoxModal)">
-          <i class="fas fa-inbox"></i>
-          <span>فتح صندوق الرسائل</span>
-        </button>
-
-        <button type="button" class="btn btn-outline-secondary" (click)="isFilter = !isFilter">
-          <i class="fas fa-filter"></i>
-          <span>{{ isFilter ? 'عرض الفلاتر' : 'إخفاء الفلاتر' }}</span>
-        </button>
-
-        <app-admin-pagination
-          (pageChanged)="pageChanged($event)"
-          [currentPage]="PagingFilter.currentpage"
-          [pageSize]="PagingFilter.pagesize"
-          [totalCount]="TotalCount"
-        ></app-admin-pagination>
-      </div>
-    </div>
-
-    <div class="page-section-grid" [ngbCollapse]="isFilter">
-      <app-admin-filter [FilterList]="FilterList"></app-admin-filter>
-    </div>
-
-    <div class="admin-table-wrapper" *ngIf="OrdersList.length > 0; else emptyState">
-      <div class="table-responsive table-responsive-card">
-        <table class="table align-middle table-hover">
-          <thead>
-            <tr>
-              <th>رقم الطلب</th>
-              <th>المورّد</th>
-              <th>التاريخ</th>
-              <th>الإجمالي الفرعي</th>
-              <th>الخصم</th>
-              <th>الضريبة</th>
-              <th>الإجمالي</th>
-              <th class="text-center">الإجراءات</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let item of OrdersList">
-              <td data-label="رقم الطلب">{{ item.orderNumber }}</td>
-              <td data-label="المورّد">{{ item.supplierNameEn }}</td>
-              <td data-label="التاريخ">{{ item.orderDate | date: 'yyyy/MM/dd' }}</td>
-              <td data-label="الإجمالي الفرعي">{{ item.subTotal }}</td>
-              <td data-label="الخصم">{{ item.discountAmount }}</td>
-              <td data-label="الضريبة">{{ item.tax }}</td>
-              <td data-label="الإجمالي">{{ item.totalValue }}</td>
-              <td data-label="الإجراءات" class="table-actions-cell">
-                <div class="table-actions-row">
-                  <button class="btn btn-outline-secondary">
-                    <i class="far fa-eye"></i>
-                    <span>عرض</span>
-                  </button>
-                  <button class="btn btn-danger">
-                    <i class="fas fa-times"></i>
-                    <span>إلغاء</span>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    <div class="surface-card page-panel">
+        <div class="page-toolbar">
+            <div class="page-toolbar__meta">
+                <h2>آخر العمليات</h2>
+                <p>إدارة سريعة للرسائل مع فلاتر مرنة وحاوية جدول متجاوبة بالكامل.</p>
+            </div>
+        </div>
+        <div class="admin-table-wrapper" *ngIf="MessageList.length > 0; else emptyState">
+            <div class="table-responsive table-responsive-card">
+                <table class="table align-middle table-hover">
+                    <thead>
+                        <tr>
+                            <th>نوع المحفظة</th>
+                            <th>اسم المحفظة</th>
+                            <th>رقم المحفظة</th>
+                            <th>نوع العملية</th>
+                            <th>المبلغ</th>
+                            <th>رقم تلفون المرسل</th>
+                            <th>اسم المرسل</th>
+                            <th>رصيد المحفظة</th>
+                            <th>العمولة</th>
+                            <th>تاريخ الوصول</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of MessageList">
+                            <td data-label="نوع المحفظة">
+                                <span class="status-chip" [ngClass]="{'badge-danger': item.provider == 'فودافون كاش','badge-primary':item.provider == 'انستا باي'}">{{item.provider }}</span>
+                            </td>
+                            <td data-label="اسم المحفظة">{{ item.providerName ?? '-' }}</td>
+                            <td data-label="رقم المحفظة">{{ item.providerPhone ?? '-' }}</td>
+                            <td data-label="نوع العملية">
+                                <span class="status-chip" [ngClass]="getOperationClass(item.operationType)">{{ item.operationTypeName }}</span>
+                            </td>
+                            <td data-label="المبلغ">{{ item.amount ?? 0 | number:'1.0-0'}}</td>
+                            <td data-label="رقم تلفون المرسل">{{ item.fromPhone ?? '-' }}</td>
+                            <td data-label="اسم المرسل">{{ item.senderName ?? '-' }}</td>
+                            <td data-label="رصيد المحفظة">{{ item.balanceAfter ?? 0 | number:'1.0-0'}}</td>
+                            <td data-label="العمولة">{{ item.commission ?? 0 | number:'1.0-0'}}</td>
+                            <td data-label="تاريخ الوصول">{{ item.operationServerDateTime ?? '-' | arabicDateWithTime}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <ng-template #emptyState>
+            <app-admin-empty-state icon="fas fa-chart-line" title="لا توجد عمليات حديثة" description="عند وصول رسائل أو تنفيذ عمليات جديدة ستظهر هنا داخل جدول واضح ومتجاوب."></app-admin-empty-state>
+        </ng-template>
     </div>
 
-    <ng-template #emptyState>
-      <app-admin-empty-state
-        icon="fas fa-chart-line"
-        title="لا توجد عمليات حديثة"
-        description="عند وصول رسائل أو تنفيذ عمليات جديدة ستظهر هنا داخل جدول واضح ومتجاوب."
-      ></app-admin-empty-state>
+    <ng-template #MessageBoxModal>
+        <app-message-box-popup></app-message-box-popup>
     </ng-template>
-  </div>
-
-  <ng-template #MessageBoxModal>
-    <app-message-box-popup></app-message-box-popup>
-  </ng-template>
 </section>

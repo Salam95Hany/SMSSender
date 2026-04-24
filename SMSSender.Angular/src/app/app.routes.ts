@@ -33,27 +33,50 @@ export const routes: Routes = [
         path: 'all-message',
         loadComponent: () => import('./components/admin/ManageMessage/all-message/all-message.component').then((m) => m.AllMessageComponent),
         data: {
-          section: 'إدارة الرسائل',
+          section: 'سجل الرسائل',
           title: 'الرسائل',
           description: 'استعرض الرسائل الواردة ونفذ عمليات المتابعة من واجهة واضحة وقابلة للتصفية.',
+          opreationType:0
         },
       },
       {
         path: 'deposit',
-        loadComponent: () => import('./components/admin/ManageMessage/deposit/deposit.component').then((m) => m.DepositComponent),
+        loadComponent: () => import('./components/admin/ManageMessage/all-message/all-message.component').then((m) => m.AllMessageComponent),
         data: {
-          section: 'إدارة الرسائل',
-          title: 'الإيداعات',
+          section: 'عمليات الإيداع',
+          title: 'الإيداع',
           description: 'راقب عمليات الإيداع وحدد النتائج بسرعة على مختلف أحجام الشاشات.',
+          opreationType:1
         },
       },
       {
-        path: 'transformation',
-        loadComponent: () => import('./components/admin/ManageMessage/transformation/transformation.component').then((m) => m.TransformationComponent),
+        path: 'withdraw',
+        loadComponent: () => import('./components/admin/ManageMessage/all-message/all-message.component').then((m) => m.AllMessageComponent),
+        data: {
+          section: 'عمليات السحب',
+          title: 'السحب',
+          description: 'راجع العمليات الدورية مع أدوات تصفية سريعة وتجربة قراءة مناسبة للهاتف والكمبيوتر.',
+          opreationType:2
+        },
+      },
+       {
+        path: 'cash-withdrawal',
+        loadComponent: () => import('./components/admin/ManageMessage/all-message/all-message.component').then((m) => m.AllMessageComponent),
         data: {
           section: 'إدارة الرسائل',
-          title: 'التحويلات',
-          description: 'تحكم في التحويلات وتابع مؤشرات الأداء اليومية ضمن صفحة مركزة وسهلة القراءة.',
+          title: 'السيولة',
+          description: 'راجع العمليات الدورية مع أدوات تصفية سريعة وتجربة قراءة مناسبة للهاتف والكمبيوتر.',
+          opreationType:3
+        },
+      },
+       {
+        path: 'balance-inquiry',
+        loadComponent: () => import('./components/admin/ManageMessage/all-message/all-message.component').then((m) => m.AllMessageComponent),
+        data: {
+          section: 'إدارة الرسائل',
+          title: 'الرصيد',
+          description: 'راجع العمليات الدورية مع أدوات تصفية سريعة وتجربة قراءة مناسبة للهاتف والكمبيوتر.',
+          opreationType:5
         },
       },
       {
@@ -63,24 +86,6 @@ export const routes: Routes = [
           section: 'إدارة الرسائل',
           title: 'رصيد المحافظ',
           description: 'لوحة بطاقات مرنة لعرض المحافظ والأرصدة الحالية بتوزيع متجاوب وواضح.',
-        },
-      },
-      {
-        path: 'wallet-operation',
-        loadComponent: () => import('./components/admin/ManageMessage/wallet-operations/wallet-operations.component').then((m) => m.WalletOperationsComponent),
-        data: {
-          section: 'إدارة الرسائل',
-          title: 'العمليات الشهرية',
-          description: 'راجع العمليات الدورية مع أدوات تصفية سريعة وتجربة قراءة مناسبة للهاتف والكمبيوتر.',
-        },
-      },
-      {
-        path: 'withdraw',
-        loadComponent: () => import('./components/admin/ManageMessage/withdraw/withdraw.component').then((m) => m.WithdrawComponent),
-        data: {
-          section: 'إدارة الرسائل',
-          title: 'السحوبات',
-          description: 'إدارة السحوبات بواجهة موحدة تسهل الفحص والمراجعة واتخاذ الإجراء المناسب.',
         },
       },
       {

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { FilterModel } from '../../models/FilterModel';
-import { NgClass, NgFor, NgIf } from '@angular/common';
+import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { SearchArryPipe } from '../../pipes/search-arry.pipe';
@@ -9,7 +9,7 @@ import { NgxDaterangepickerMd, LocaleService, LOCALE_CONFIG } from 'ngx-daterang
 @Component({
   selector: 'app-admin-filter',
   standalone: true,
-  imports: [NgIf, NgFor, FormsModule, NgbDropdownModule, SearchArryPipe, NgxDaterangepickerMd, NgClass],
+  imports: [NgIf, NgFor, FormsModule, NgbDropdownModule, SearchArryPipe, NgxDaterangepickerMd,CommonModule],
   templateUrl: './admin-filter.component.html',
   styleUrl: './admin-filter.component.css',
   providers: [
@@ -30,6 +30,7 @@ import { NgxDaterangepickerMd, LocaleService, LOCALE_CONFIG } from 'ngx-daterang
 })
 export class AdminFilterComponent {
   @Input() FilterList: FilterModel[] = [];
+  @Input() AppliedFilters: FilterModel[] = [];
   @Input() ReloadFilter = false;
   @Input() Page = '';
   @Output() FilterChecked = new EventEmitter<FilterModel[]>();
@@ -38,8 +39,13 @@ export class AdminFilterComponent {
   constructor() { }
 
   ngOnChanges(changes: SimpleChanges): void {
+    debugger
     if (this.OriginalFilterCache.length === 0 && this.FilterList.length > 0) {
       this.OriginalFilterCache = JSON.parse(JSON.stringify(this.FilterList));
+    }
+
+    if (changes['AppliedFilters']) {
+      this.SelectedFilter = JSON.parse(JSON.stringify(this.AppliedFilters || []));
     }
 
     this.mergeFiltersWithCache();
@@ -104,8 +110,6 @@ export class AdminFilterComponent {
     }
 
     this.SelectedFilter = updatedFilters;
-    console.log(this.SelectedFilter);
-
     this.FilterChecked.emit(this.SelectedFilter);
   }
 
@@ -122,8 +126,8 @@ export class AdminFilterComponent {
         f.itemKey = '';
         f.itemId = '';
       }
-      if (filter.filterType === 'DateRange') {
-        f.rangeValue = null;
+      if (f.filterType === 'DateRange' && f.categoryName === filter.categoryName) {
+        f.rangeValue = this.createEmptyRangeValue();
       }
     });
 
@@ -136,7 +140,10 @@ export class AdminFilterComponent {
       f.itemKey = '';
       f.itemId = '';
       if (f.filterItems) f.filterItems.forEach(i => i.isChecked = false);
-      if (f.filterType === 'DateRange') f.rangeValue = null;
+
+      if (f.filterType === 'DateRange') {
+        f.rangeValue = this.createEmptyRangeValue();
+      }
     });
     this.FilterChecked.emit(this.SelectedFilter);
   }
@@ -145,16 +152,21 @@ export class AdminFilterComponent {
     this.FilterList.forEach(f => {
       const selected = this.SelectedFilter.find(sf => sf.categoryName === f.categoryName);
 
-      if (!selected) return;
+      if (!selected) {
+        if (f.filterType === 'DateRange') {
+          f.rangeValue = this.createEmptyRangeValue();
+        }
+        return;
+      }
 
       if (f.filterType === 'SearchText' || f.filterType === 'Day' || f.filterType === 'Month') {
         f.itemId = selected.itemId;
       }
       if (f.filterType === 'DateRange') {
-        f.rangeValue = {
+        f.rangeValue = selected.from && selected.to ? {
           startDate: selected.from,
           endDate: selected.to
-        };
+        } : this.createEmptyRangeValue();
       }
       if (f.filterType === 'Checkbox' && f.filterItems) {
         f.filterItems.forEach(item => {
@@ -188,5 +200,9 @@ export class AdminFilterComponent {
     });
 
     this.FilterList = JSON.parse(JSON.stringify(this.OriginalFilterCache));
+  }
+
+  private createEmptyRangeValue(): null {
+    return null;
   }
 }

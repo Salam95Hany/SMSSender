@@ -1,71 +1,78 @@
 <section class="page-shell">
-  <app-admin-breadcrumb
-    title="الرسائل"
-    subtitle="عرض موحد للرسائل الواردة مع فلاتر واضحة وتجربة قراءة أفضل على الهاتف والكمبيوتر."
-    icon="fas fa-envelope-open-text"
-    [items]="[
-      { label: 'إدارة الرسائل', route: '/admin/dashboard' },
-      { label: 'الرسائل' }
-    ]"
-  ></app-admin-breadcrumb>
+    <app-admin-breadcrumb title="الرسائل" subtitle="عرض موحد للرسائل الواردة مع فلاتر واضحة وتجربة قراءة أفضل على الهاتف والكمبيوتر." icon="fas fa-envelope-open-text" [items]="[
+      { label: 'الصفحة الرئيسية', route: '/admin/dashboard' },
+      { label: 'الرسائل' },
+      { label: Title }
+    ]"></app-admin-breadcrumb>
 
-  <div class="surface-card page-panel">
-    <div class="page-toolbar">
-      <div class="page-toolbar__meta">
-        <h2>سجل الرسائل</h2>
-        <p>استخدم الفلاتر والتنقل بين الصفحات للوصول السريع إلى الرسائل المطلوبة.</p>
-      </div>
-      <div class="page-toolbar__actions">
-        <button type="button" class="btn btn-outline-secondary" (click)="isFilter = !isFilter">
+    <div class="surface-card page-panel">
+        <div class="page-toolbar">
+            <div class="page-toolbar__meta">
+                <h2>{{Title}}</h2>
+                <p>استخدم الفلاتر والتنقل بين الصفحات للوصول السريع إلى الرسائل المطلوبة.</p>
+            </div>
+            <div class="page-toolbar__actions">
+                <button type="button" class="btn btn-outline-secondary" (click)="isFilter = !isFilter">
           <i class="fas fa-filter"></i>
           <span>{{ isFilter ? 'عرض الفلاتر' : 'إخفاء الفلاتر' }}</span>
         </button>
-        <app-admin-pagination (pageChanged)="pageChanged($event)" [currentPage]="PagingFilter.currentpage" [pageSize]="PagingFilter.pagesize" [totalCount]="TotalCount"></app-admin-pagination>
-      </div>
-    </div>
+                <app-admin-pagination (pageChanged)="PageChanged($event)" [currentPage]="PagingFilter.currentpage" [pageSize]="PagingFilter.pagesize" [totalCount]="TotalCount"></app-admin-pagination>
+            </div>
+        </div>
 
-    <div class="page-section-grid" [ngbCollapse]="isFilter">
-      <app-admin-filter [FilterList]="FilterList"></app-admin-filter>
-    </div>
+        <div class="page-section-grid mb-2" [ngbCollapse]="isFilter">
+            <app-admin-filter [FilterList]="FilterList" (FilterChecked)="FilterChecked($event)"></app-admin-filter>
+        </div>
 
-    <div class="admin-table-wrapper" *ngIf="OrdersList.length > 0; else emptyState">
-      <div class="table-responsive table-responsive-card">
-        <table class="table align-middle table-hover">
-          <thead>
-            <tr>
-              <th>رقم الطلب</th>
-              <th>المورّد</th>
-              <th>التاريخ</th>
-              <th>الإجمالي الفرعي</th>
-              <th>الخصم</th>
-              <th>الضريبة</th>
-              <th>الإجمالي</th>
-              <th class="text-center">الإجراءات</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let item of OrdersList">
-              <td data-label="رقم الطلب">{{ item.orderNumber }}</td>
-              <td data-label="المورّد">{{ item.supplierNameEn }}</td>
-              <td data-label="التاريخ">{{ item.orderDate | date: 'yyyy/MM/dd' }}</td>
-              <td data-label="الإجمالي الفرعي">{{ item.subTotal }}</td>
-              <td data-label="الخصم">{{ item.discountAmount }}</td>
-              <td data-label="الضريبة">{{ item.tax }}</td>
-              <td data-label="الإجمالي">{{ item.totalValue }}</td>
-              <td data-label="الإجراءات" class="table-actions-cell">
-                <div class="table-actions-row">
-                  <button class="btn btn-outline-secondary"><i class="far fa-eye"></i><span>عرض</span></button>
-                  <button class="btn btn-danger"><i class="fas fa-times"></i><span>إلغاء</span></button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+        <div class="admin-table-wrapper" *ngIf="MessageList.length > 0; else emptyState">
+            <div class="table-responsive table-responsive-card">
+                <table class="table align-middle table-hover">
+                    <thead>
+                        <tr>
+                            <th>نوع المحفظة</th>
+                            <th>اسم المحفظة</th>
+                            <th>رقم المحفظة</th>
+                            <th>نوع العملية</th>
+                            <th>المبلغ</th>
+                            <th>رقم تلفون المرسل</th>
+                            <th>اسم المرسل</th>
+                            <th>رصيد المحفظة</th>
+                            <th>العمولة</th>
+                            <th>تاريخ الوصول</th>
+                            <th class="text-center">الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of MessageList">
+                            <td data-label="نوع المحفظة">
+                                <span class="status-chip" [ngClass]="{'badge-danger': item.provider == 'فودافون كاش','badge-primary':item.provider == 'انستا باي'}">{{item.provider }}</span>
+                            </td>
+                            <td data-label="اسم المحفظة">{{ item.providerName ?? '-' }}</td>
+                            <td data-label="رقم المحفظة">{{ item.providerPhone ?? '-' }}</td>
+                            <td data-label="نوع العملية">
 
-    <ng-template #emptyState>
-      <app-admin-empty-state icon="fas fa-envelope-open-text" title="لا توجد رسائل حاليا" description="ستظهر الرسائل هنا بمجرد توفر نتائج مطابقة للصفحة أو للفلاتر المختارة."></app-admin-empty-state>
-    </ng-template>
-  </div>
+                                <span class="status-chip" [ngClass]="getOperationClass(item.operationType)">{{ item.operationTypeName }}</span>
+                            </td>
+                            <td data-label="المبلغ">{{ item.amount ?? 0 | number:'1.0-0'}}</td>
+                            <td data-label="رقم تلفون المرسل">{{ item.fromPhone ?? '-' }}</td>
+                            <td data-label="اسم المرسل">{{ item.senderName ?? '-' }}</td>
+                            <td data-label="رصيد المحفظة">{{ item.balanceAfter ?? 0 | number:'1.0-0'}}</td>
+                            <td data-label="العمولة">{{ item.commission ?? 0 | number:'1.0-0'}}</td>
+                            <td data-label="تاريخ الوصول">{{ item.operationServerDateTime ?? '-' | arabicDateWithTime}}</td>
+                            <td data-label="الإجراءات" class="table-actions-cell">
+                                <div class="table-actions-row">
+                                    <button class="btn btn-outline-secondary"><i class="far fa-eye"></i><span>تفاصيل</span></button>
+                                    <!-- <button class="btn btn-danger"><i class="fas fa-times"></i><span>إلغاء</span></button> -->
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <ng-template #emptyState>
+            <app-admin-empty-state></app-admin-empty-state>
+        </ng-template>
+    </div>
 </section>

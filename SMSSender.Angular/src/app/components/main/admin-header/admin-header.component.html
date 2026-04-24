@@ -19,16 +19,14 @@
                 <span>الإعدادات</span>
             </a>
 
-            <div class="user-menu" ngbDropdown placement="bottom-start">
+            <div class="user-menu" ngbDropdown placement="bottom-end">
                 <button type="button" class="user-menu__trigger" ngbDropdownToggle>
-          <span class="user-menu__avatar">{{ userInitials }}</span>
-          <span class="user-menu__details">
-            <strong>{{ userName }}</strong>
-            <small>{{ companyName }}</small>
-          </span>
-          <i class="fas fa-chevron-down"></i>
-        </button>
-
+                    <span class="user-menu__avatar">{{ userInitials }}</span>
+                    <span class="user-menu__details">
+                        <strong>{{ userName }}</strong>
+                    </span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
                 <div ngbDropdownMenu class="user-menu__dropdown">
                     <div class="user-menu__summary">
                         <strong>{{ userName }}</strong>

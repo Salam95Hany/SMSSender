@@ -1,12 +1,11 @@
 import { NgClass, NgFor, NgIf } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { ADMIN_NAVIGATION } from '../../../core/navigation/admin-navigation';
 
 @Component({
   selector: 'app-admin-side-menu',
   standalone: true,
-  imports: [NgClass, NgFor, NgIf, RouterLink, RouterLinkActive],
+  imports: [NgClass, NgIf, RouterLink, RouterLinkActive],
   templateUrl: './admin-side-menu.component.html',
   styleUrl: './admin-side-menu.component.css'
 })
@@ -16,7 +15,6 @@ export class AdminSideMenuComponent {
   @Output() collapseToggle = new EventEmitter<void>();
   @Output() closeMobile = new EventEmitter<void>();
 
-  readonly navigation = ADMIN_NAVIGATION;
   userModel: any = null;
 
   ngOnInit(): void {

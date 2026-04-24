@@ -12,9 +12,21 @@ export class AdminService {
 
   constructor(private http: HttpClient) { }
 
-  // ============================== Admissions ==============================
+  // ============================== Message ==============================
 
-  GetAllAdmissionData(PagingFilter: PagingFilterModel, PatientId: number) {
-    return this.http.post<ApiResponseModel<any>>(this.Url + 'Admissions/GetAllAdmissionData?PatientId=' + PatientId, PagingFilter);
+  GetSmsDataByOperationType(PagingFilter: PagingFilterModel) {
+    return this.http.post<ApiResponseModel<any>>(this.Url + 'Message/GetSmsDataByOperationType', PagingFilter);
+  }
+
+  GetSmsFilterByOperationType(PagingFilter: PagingFilterModel) {
+    return this.http.post<ApiResponseModel<any>>(this.Url + 'Message/GetSmsFilterByOperationType', PagingFilter);
+  }
+
+  GetOperationCountDashboardSummary() {
+    return this.http.get<ApiResponseModel<any>>(this.Url + 'Message/GetOperationCountDashboardSummary');
+  }
+
+  GetTodayLatestTransactions() {
+    return this.http.get<ApiResponseModel<any>>(this.Url + 'Message/GetTodayLatestTransactions');
   }
 }

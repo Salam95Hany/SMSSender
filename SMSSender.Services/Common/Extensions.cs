@@ -101,9 +101,7 @@ namespace SMSSender.Services.Common
             var simpleList = filterList.Select(i => new
             {
                 CategoryName = i.CategoryName,
-                ItemId = i.ItemId,
-                FromDate = i.From,
-                ToDate = i.To
+                ItemId = i.ItemId
             }).ToList();
 
             return simpleList.ToDataTable();

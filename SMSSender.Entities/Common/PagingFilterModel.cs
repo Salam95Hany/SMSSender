@@ -14,6 +14,7 @@ namespace SMSSender.Entities.Common
         }
         public int Pagesize { get; set; }
         public int Currentpage { get; set; }
+        public int OperationType { get; set; }
         public List<FilterModel> FilterList { get; set; }
         public string? UserId { get; set; }
     }

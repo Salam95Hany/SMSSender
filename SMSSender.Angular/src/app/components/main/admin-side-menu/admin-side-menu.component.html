@@ -1,60 +1,102 @@
-<aside
-  class="app-sidebar"
-  [ngClass]="{
+<aside class="app-sidebar" [ngClass]="{
     'app-sidebar--collapsed': isCollapsed,
     'app-sidebar--mobile-open': isMobileOpen
-  }"
->
-  <div class="app-sidebar__top">
-    <a class="app-sidebar__brand" routerLink="/admin/dashboard" (click)="onLinkClick()">
-      <img src="logo.png" alt="SMS Sender" />
-      <div *ngIf="!isCollapsed" class="app-sidebar__brand-copy">
-        <strong>SMS Sender</strong>
-        <span>لوحة الإدارة</span>
-      </div>
-    </a>
-
-    <button
-      type="button"
-      class="app-sidebar__toggle"
-      (click)="collapseToggle.emit()"
-      [attr.aria-label]="isCollapsed ? 'توسيع القائمة' : 'طي القائمة'"
-    >
-      <i class="fas" [ngClass]="isCollapsed ? 'fa-angles-left' : 'fa-angles-right'"></i>
-    </button>
-  </div>
-
-  <div class="app-sidebar__body small-scroll">
-    <section class="app-sidebar__profile" *ngIf="!isCollapsed">
-      <div class="app-sidebar__avatar">{{ userInitials }}</div>
-      <div class="app-sidebar__profile-copy">
-        <strong>{{ userModel?.fullName || userModel?.userName || 'مشرف النظام' }}</strong>
-        <span>{{ userModel?.companyName || 'SMS Sender' }}</span>
-      </div>
-    </section>
-
-    <div class="nav-group" *ngFor="let section of navigation">
-      <div class="nav-group__label" *ngIf="!isCollapsed">{{ section.label }}</div>
-
-      <div class="nav-group__items">
-        <a
-          *ngFor="let item of section.items"
-          class="nav-item"
-          [routerLink]="item.route"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: item.exact ?? true }"
-          [title]="item.label"
-          (click)="onLinkClick()"
-        >
-          <i [class]="item.icon"></i>
-          <span *ngIf="!isCollapsed">{{ item.label }}</span>
+  }">
+    <div class="app-sidebar__top">
+        <a class="app-sidebar__brand" routerLink="/admin/dashboard" (click)="onLinkClick()">
+            <img src="logo.png" alt="SMS Sender" />
+            <div *ngIf="!isCollapsed" class="app-sidebar__brand-copy">
+                <strong>سلام البدوي</strong>
+                <span>لوحة الإدارة</span>
+            </div>
         </a>
-      </div>
+        <button type="button" class="app-sidebar__toggle" (click)="collapseToggle.emit()">
+      <i class="fas fa-bars"></i>
+    </button>
     </div>
-  </div>
 
-  <div class="app-sidebar__footer" *ngIf="!isCollapsed">
-    <span>لوحة تشغيل متجاوبة</span>
-    <strong>v1.0</strong>
-  </div>
+    <div class="app-sidebar__body small-scroll">
+
+        <!-- إدارة الرسائل -->
+        <div class="nav-group">
+            <div class="nav-group__label" *ngIf="!isCollapsed">إدارة الرسائل</div>
+            <div class="nav-group__items">
+                <a class="nav-item" routerLink="/admin/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                    <i class="fas fa-chart-pie"></i>
+                    <span *ngIf="!isCollapsed">الصفحة الرئيسية</span>
+                </a>
+                <a class="nav-item" routerLink="/admin/all-message" routerLinkActive="active">
+                    <i class="fas fa-envelope-open-text"></i>
+                    <span *ngIf="!isCollapsed">الرسائل</span>
+                </a>
+                <a class="nav-item" routerLink="/admin/deposit" routerLinkActive="active">
+                    <i class="fas fa-cash-register"></i>
+                    <span *ngIf="!isCollapsed">الإيداع</span>
+                </a>
+                <a class="nav-item" routerLink="/admin/withdraw" routerLinkActive="active">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <span *ngIf="!isCollapsed">السحب</span>
+                </a>
+                <a class="nav-item" routerLink="/admin/cash-withdrawal" routerLinkActive="active">
+                    <i class="fas fa-exchange-alt"></i>
+                    <span *ngIf="!isCollapsed">السيولة</span>
+                </a>
+                <a class="nav-item" routerLink="/admin/balance-inquiry" routerLinkActive="active">
+                    <i class="fas fa-coins"></i>
+                    <span *ngIf="!isCollapsed">الرصيد</span>
+                </a>
+                <a class="nav-item" routerLink="/admin/wallet-account" routerLinkActive="active">
+                    <i class="fas fa-wallet"></i>
+                    <span *ngIf="!isCollapsed">رصيد المحافظ</span>
+                </a>
+                <a class="nav-item" routerLink="/admin/cash-box" routerLinkActive="active">
+                    <i class="fas fa-cash-register"></i>
+                    <span *ngIf="!isCollapsed">الصندوق</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- التقارير -->
+        <div class="nav-group">
+            <div class="nav-group__label" *ngIf="!isCollapsed">التقارير</div>
+            <div class="nav-group__items">
+                <a class="nav-item" routerLink="/admin/deposit-report" routerLinkActive="active">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    <span *ngIf="!isCollapsed">تقرير الإيداعات</span>
+                </a>
+                <a class="nav-item" routerLink="/admin/withdraw-report" routerLinkActive="active">
+                    <i class="fas fa-chart-column"></i>
+                    <span *ngIf="!isCollapsed">تقرير السحوبات</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- الإعدادات -->
+        <div class="nav-group">
+            <div class="nav-group__label" *ngIf="!isCollapsed">الإعدادات</div>
+
+            <div class="nav-group__items">
+                <a class="nav-item" routerLink="/admin/user" routerLinkActive="active">
+                    <i class="fas fa-users-cog"></i>
+                    <span *ngIf="!isCollapsed">المستخدمون</span>
+                </a>
+
+                <a class="nav-item" routerLink="/admin/user-profile" routerLinkActive="active">
+                    <i class="fas fa-id-card"></i>
+                    <span *ngIf="!isCollapsed">الملف الشخصي</span>
+                </a>
+
+                <a class="nav-item" routerLink="/admin/factory" routerLinkActive="active">
+                    <i class="fas fa-rotate-left"></i>
+                    <span *ngIf="!isCollapsed">إعادة ضبط المصنع</span>
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="app-sidebar__footer" *ngIf="!isCollapsed">
+        <span>لوحة تشغيل متجاوبة</span>
+        <strong>v1.0</strong>
+    </div>
 </aside>

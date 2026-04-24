@@ -11,7 +11,7 @@
 }
 
 .app-shell.sidebar-collapsed {
-    grid-template-columns: minmax(0, 1fr) var(--layout-sidebar-collapsed-width);
+    grid-template-columns: var(--layout-sidebar-width) minmax(0, 1fr);
 }
 
 app-admin-side-menu {
@@ -31,7 +31,7 @@ app-admin-side-menu {
 .app-shell__content {
     flex: 1;
     min-width: 0;
-    padding: clamp(1rem, 2vw, 1.75rem);
+    padding: 10px;
 }
 
 .app-shell__backdrop {

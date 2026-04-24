@@ -194,7 +194,7 @@ button:disabled {
 
 .table th {
     color: var(--text-muted);
-    font-size: 0.78rem;
+    font-size: 1rem;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -349,6 +349,21 @@ button:disabled {
     font-weight: 700;
 }
 
+.badge-danger {
+    color: #b91c1c;
+    background: rgba(239, 68, 68, 0.12);
+}
+
+.badge-primary {
+    color: #2563eb;
+    background: rgba(37, 99, 235, 0.12);
+}
+
+.badge-success {
+    background: #28a745;
+    color: #fff;
+}
+
 .badge-success {
     color: var(--color-success);
     background: rgba(21, 128, 61, 0.12);
@@ -470,6 +485,41 @@ button:disabled {
     color: #fff;
     border-color: rgba(15, 118, 110, 0.22);
     background: linear-gradient(135deg, var(--color-primary), var(--color-primary-strong));
+}
+
+.dropdown-toggle::after {
+    display: none !important;
+}
+
+.badge-brown {
+    background: #8d6e63;
+    color: #fff;
+}
+
+.badge-gold {
+    background: #d4af37;
+    color: #fff;
+}
+
+.badge-purple {
+    background: #6f42c1;
+    color: #fff;
+}
+
+.badge-secondary {
+    background: #6c757d;
+    color: #fff;
+}
+
+.status-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 34px;
+    padding: 0.4rem 0.9rem;
+    border-radius: 999px;
+    font-size: 1rem;
+    font-weight: 700;
 }
 
 @media (max-width: 991.98px) {

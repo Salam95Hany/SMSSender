@@ -6,7 +6,6 @@
 }
 
 .app-header {
-    padding: 1rem clamp(1rem, 2vw, 1.75rem);
     backdrop-filter: blur(16px);
     background: linear-gradient(180deg, rgba(238, 244, 247, 0.92), rgba(238, 244, 247, 0.72));
 }
@@ -16,7 +15,6 @@
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    padding: 1rem 1.25rem;
     border: 1px solid rgba(255, 255, 255, 0.8);
     border-radius: 1.5rem;
     background: rgba(255, 255, 255, 0.82);
@@ -125,7 +123,6 @@
     display: inline-flex;
     align-items: center;
     gap: 0.75rem;
-    padding: 0.35rem 0.5rem;
     color: var(--text-strong);
 }
 
@@ -187,11 +184,9 @@
     .app-header {
         padding-inline: 0;
     }
-
     .app-header__inner {
         padding: 0.9rem 1rem;
     }
-
     .app-header__headline p,
     .app-header__shortcut span,
     .user-menu__details small {
@@ -204,17 +199,14 @@
         align-items: flex-start;
         flex-direction: column;
     }
-
     .app-header__start,
     .app-header__end {
         width: 100%;
         justify-content: space-between;
     }
-
     .app-header__headline {
         flex: 1;
     }
-
     .user-menu__details {
         display: none;
     }
