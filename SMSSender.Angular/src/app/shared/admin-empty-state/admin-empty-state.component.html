@@ -1,0 +1,17 @@
+<section class="empty-state-card" aria-live="polite">
+  <div class="empty-state-card__icon">
+    <i [class]="icon"></i>
+  </div>
+  <div class="empty-state-card__content">
+    <h3>{{ title }}</h3>
+    <p>{{ description }}</p>
+  </div>
+  <button
+    *ngIf="actionLabel"
+    type="button"
+    class="btn btn-outline-secondary"
+    (click)="actionTriggered.emit()"
+  >
+    {{ actionLabel }}
+  </button>
+</section>

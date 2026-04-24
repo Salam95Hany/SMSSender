@@ -1,98 +1,129 @@
-<div class="reset-container">
+<section class="page-shell">
+  <app-admin-breadcrumb
+    title="إعادة ضبط المصنع"
+    subtitle="واجهة أكثر وضوحا للعمليات الحساسة مع إبراز المخاطر والخطوات المطلوبة قبل التنفيذ."
+    icon="fas fa-rotate-left"
+    [items]="[
+      { label: 'الإعدادات', route: '/admin/user' },
+      { label: 'إعادة ضبط المصنع' }
+    ]"
+  ></app-admin-breadcrumb>
 
-    <!-- Initial Screen -->
-    <div *ngIf="screen === 'initial'" class="initial-screen text-center">
-        <div class="icon-container">
-            <i class="fas fa-redo"></i>
+  <div class="factory-layout">
+    <aside class="surface-card page-panel factory-overview">
+      <h2>قبل بدء العملية</h2>
+      <p>راجع هذه النقاط قبل التنفيذ لضمان وضوح الأثر المتوقع على النظام والبيانات.</p>
+
+      <div class="factory-overview__list">
+        <div>
+          <i class="fas fa-database"></i>
+          <div>
+            <strong>حذف البيانات التشغيلية</strong>
+            <span>سيتم مسح السجلات والملفات والإعدادات المرتبطة بالنظام الحالي.</span>
+          </div>
         </div>
 
-        <h1 class="title">إعادة ضبط المصنع</h1>
-        <p class="subtitle">
-            هذه العملية ستقوم بحذف جميع البيانات والإعدادات واستعادة النظام إلى حالته الأصلية
+        <div>
+          <i class="fas fa-shield-alt"></i>
+          <div>
+            <strong>لا يمكن التراجع</strong>
+            <span>هذه العملية نهائية، لذلك يجب التأكد من وجود نسخ احتياطية قبل البدء.</span>
+          </div>
+        </div>
+
+        <div>
+          <i class="fas fa-user-check"></i>
+          <div>
+            <strong>تأكيد يدوي</strong>
+            <span>لن يتم التنفيذ إلا بعد الموافقة الصريحة وعدٍّ تنازلي واضح للمستخدم.</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <div class="reset-container surface-card">
+      <div *ngIf="screen === 'initial'" class="factory-screen text-center">
+        <div class="factory-icon danger">
+          <i class="fas fa-redo"></i>
+        </div>
+
+        <h1 class="factory-title">إعادة ضبط المصنع</h1>
+        <p class="factory-subtitle">
+          ستقوم هذه العملية بحذف جميع البيانات والإعدادات واستعادة النظام إلى حالته الأصلية.
         </p>
 
-        <div class="warning-box">
-            <div class="warning-title">
-                <i class="bi bi-exclamation-triangle-fill"></i> تحذير هام
-            </div>
-            <p class="warning-text">
-                هذه العملية لا يمكن التراجع عنها! سيتم حذف جميع بياناتك بشكل نهائي.
-            </p>
+        <div class="factory-warning">
+          <strong>تحذير مهم</strong>
+          <p>هذه العملية لا يمكن التراجع عنها. تأكد من وجود نسخة احتياطية قبل المتابعة.</p>
         </div>
 
-        <h5 style="font-weight: 700; color: #1f2937; margin-bottom: 20px;">سيتم حذف البيانات التالية:</h5>
-
-        <ul class="info-list text-start">
-            <li><i class="fas fa-cog"></i> الإعدادات والتفضيلات المخصصة</li>
-            <li><i class="fas fa-folder"></i> الملفات والمستندات المحفوظة</li>
-            <li><i class="fas fa-database"></i> قواعد البيانات والسجلات</li>
+        <ul class="factory-info-list">
+          <li><i class="fas fa-cog"></i> الإعدادات والتفضيلات المخصصة</li>
+          <li><i class="fas fa-folder"></i> الملفات والمستندات المحفوظة</li>
+          <li><i class="fas fa-database"></i> قواعد البيانات والسجلات</li>
         </ul>
 
-        <div class="confirmation-section form-check mt-3">
-            <input type="checkbox" class="form-check-input" id="confirmCheck" [(ngModel)]="isConfirmed">
-            <label class="form-check-label" for="confirmCheck">
-        أوافق على حذف جميع البيانات وأدرك أن هذه العملية لا رجعة فيها
-      </label>
+        <label class="factory-confirmation">
+          <input type="checkbox" class="form-check-input" [(ngModel)]="isConfirmed" />
+          <span>أوافق على حذف جميع البيانات وأدرك أن هذه العملية نهائية.</span>
+        </label>
+
+        <div class="factory-actions">
+          <button class="btn btn-danger" [disabled]="!isConfirmed" (click)="startCountdown()">
+            <i class="fas fa-trash"></i>
+            <span>بدء إعادة الضبط</span>
+          </button>
+
+          <button class="btn btn-outline-secondary" (click)="goBack()">
+            <i class="fas fa-arrow-right"></i>
+            <span>إلغاء العملية</span>
+          </button>
         </div>
+      </div>
 
-        <button class="btn btn-reset mt-3" [disabled]="!isConfirmed" (click)="startCountdown()">
-      <i class="fas fa-trash me-2"></i> بدء إعادة ضبط المصنع
-    </button>
-
-        <button class="btn btn-cancel mt-2" (click)="goBack()">
-      <i class="fas fa-times-circle me-2"></i> إلغاء العملية
-    </button>
-    </div>
-
-    <!-- Countdown Screen -->
-    <div *ngIf="screen === 'countdown'" class="countdown-screen text-center">
-        <div class="icon-container">
-            <i class="bi bi-hourglass-split"></i>
+      <div *ngIf="screen === 'countdown'" class="factory-screen text-center">
+        <div class="factory-icon warning">
+          <i class="fas fa-hourglass-half"></i>
         </div>
-        <h2 class="title">الاستعداد لإعادة الضبط</h2>
-        <p class="subtitle">سيتم بدء العملية خلال</p>
-        <div class="countdown">{{countdown}}</div>
-        <p style="color: #6b7280; font-size: 14px;">اضغط إلغاء لوقف العملية</p>
-        <button class="btn btn-cancel" (click)="cancelCountdown()">
-      <i class="fas fa-times-circle me-2"></i> إلغاء
-    </button>
-    </div>
-
-    <!-- Progress Screen -->
-    <div *ngIf="screen === 'progress'" class="progress-screen text-center">
-        <div class="icon-container">
-            <i class="fas fa-cog" style="animation: spin 2s linear infinite;"></i>
-        </div>
-        <h2 class="title">جاري إعادة ضبط المصنع</h2>
-        <p class="subtitle">الرجاء عدم إيقاف تشغيل الجهاز أو إغلاق النافذة</p>
-
-        <div class="progress mt-3">
-            <div class="progress-bar" role="progressbar" [style.width.%]="progress">
-                {{progress}}%
-            </div>
-        </div>
-
-        <div class="status-text mt-2">{{statusText}}</div>
-    </div>
-
-    <!-- Success Screen -->
-    <div *ngIf="screen === 'success'" class="success-screen text-center">
-        <div class="success-icon">
-            <i class="fas fa-check"></i>
-        </div>
-        <h2 class="success-title">تمت إعادة الضبط بنجاح!</h2>
-        <p class="success-text">
-            تم إعادة ضبط النظام إلى حالة المصنع بنجاح.
-        </p>
-
-        <div class="progress mt-3">
-            <div class="progress-bar" role="progressbar" style="width: 100%">
-                <i class="fas fa-check-circle me-2"></i> 100% - مكتمل
-            </div>
-        </div>
-
-        <button class="btn btn-reset mt-3" routerLink="/admin/dashboard">
-            <i class="fas fa-redo me-2"></i> العودة للرئيسية
+        <h2 class="factory-title">الاستعداد لإعادة الضبط</h2>
+        <p class="factory-subtitle">سيبدأ التنفيذ خلال ثوانٍ قليلة. يمكنك الإلغاء قبل المتابعة.</p>
+        <div class="factory-countdown">{{ countdown }}</div>
+        <button class="btn btn-outline-secondary" (click)="cancelCountdown()">
+          <i class="fas fa-times-circle"></i>
+          <span>إلغاء</span>
         </button>
+      </div>
+
+      <div *ngIf="screen === 'progress'" class="factory-screen text-center">
+        <div class="factory-icon neutral">
+          <i class="fas fa-cog fa-spin"></i>
+        </div>
+        <h2 class="factory-title">جارٍ تنفيذ إعادة الضبط</h2>
+        <p class="factory-subtitle">الرجاء عدم إغلاق النافذة أو إيقاف تشغيل الجهاز أثناء التنفيذ.</p>
+
+        <div class="factory-progress">
+          <div class="factory-progress__bar" [style.width.%]="progress">{{ progress }}%</div>
+        </div>
+
+        <div class="factory-status">{{ statusText }}</div>
+      </div>
+
+      <div *ngIf="screen === 'success'" class="factory-screen text-center">
+        <div class="factory-icon success">
+          <i class="fas fa-check"></i>
+        </div>
+        <h2 class="factory-title">تمت إعادة الضبط بنجاح</h2>
+        <p class="factory-subtitle">تمت استعادة النظام إلى حالة المصنع بنجاح ويمكنك متابعة العمل من البداية.</p>
+
+        <div class="factory-progress">
+          <div class="factory-progress__bar" style="width: 100%">100%</div>
+        </div>
+
+        <a class="btn btn-secondary" routerLink="/admin/dashboard">
+          <i class="fas fa-home"></i>
+          <span>العودة إلى لوحة التحكم</span>
+        </a>
+      </div>
     </div>
-</div>
+  </div>
+</section>

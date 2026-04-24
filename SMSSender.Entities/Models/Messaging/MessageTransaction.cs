@@ -20,6 +20,7 @@ namespace SMSSender.Entities.Models.Messaging
         public string ProviderPhone { get; set; } // رقم مزوّد الخدمة
         public OperationType OperationType { get; set; } // نوع العملية: إيداع / سحب / كاش
         public double? Amount { get; set; } // مبلغ العملية
+        public decimal? Commission { get; set; }
         public string? FromPhone { get; set; } // رقم هاتف المرسل
         public string? SenderName { get; set; } // اسم المرسل
         public double? BalanceAfter { get; set; } // الرصيد بعد تنفيذ العملية

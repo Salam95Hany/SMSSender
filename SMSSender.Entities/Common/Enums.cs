@@ -12,7 +12,7 @@ namespace SMSSender.Entities.Common
         Deposit = 1,  // إيداع
         Withdraw = 2, // سحب
         CashWithdrawal = 3, // سحب نقدي
-        Transfer = 4, // تحويل
+        Transfer = 4, // دخلت في المحفظة ولم تخصم من الصندوق
         BalanceInquiry = 5 // استعلام رصيد
     }
 }

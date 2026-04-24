@@ -1,21 +1,64 @@
-.content {
-    position: relative;
-    top: var(--navbar-height);
-    width: calc(100% - var(--sidebar-width));
-    margin-right: var(--sidebar-width);
-    padding: 15px;
-    transition: var(--transition-toggled);
+:host {
+    display: block;
+    min-height: 100dvh;
 }
 
-.content.toggle {
-    width: calc(100% - var(--toggled-value));
-    margin-right: var(--toggled-value);
+.app-shell {
+    min-height: 100dvh;
+    display: grid;
+    grid-template-columns: var(--layout-sidebar-width) minmax(0, 1fr);
+    transition: grid-template-columns 220ms ease;
 }
 
-@media (max-width: 1199px) {
-    .content,
-    .content.toggle {
-        width: 100%;
-        margin-right: 0;
+.app-shell.sidebar-collapsed {
+    grid-template-columns: minmax(0, 1fr) var(--layout-sidebar-collapsed-width);
+}
+
+app-admin-side-menu {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.app-shell__main {
+    grid-column: 2;
+    grid-row: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
+}
+
+.app-shell__content {
+    flex: 1;
+    min-width: 0;
+    padding: clamp(1rem, 2vw, 1.75rem);
+}
+
+.app-shell__backdrop {
+    display: none;
+}
+
+@media (max-width: 1199.98px) {
+    .app-shell,
+    .app-shell.sidebar-collapsed {
+        grid-template-columns: 1fr;
+    }
+    .app-shell__content {
+        padding: 1rem;
+    }
+    .app-shell__backdrop {
+        position: fixed;
+        inset: 0;
+        display: block;
+        border: 0;
+        background: rgba(15, 23, 42, 0.44);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 180ms ease;
+        z-index: 1040;
+    }
+    .app-shell__backdrop.active {
+        opacity: 1;
+        pointer-events: auto;
     }
 }

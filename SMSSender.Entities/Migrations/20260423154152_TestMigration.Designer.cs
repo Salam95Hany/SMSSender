@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SMSSender.Entities.Models;
 
@@ -11,9 +12,11 @@ using SMSSender.Entities.Models;
 namespace SMSSender.Entities.Migrations
 {
     [DbContext(typeof(SMSDbContext))]
-    partial class SMSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260423154152_TestMigration")]
+    partial class TestMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -243,9 +246,6 @@ namespace SMSSender.Entities.Migrations
 
                     b.Property<double?>("BalanceAfter")
                         .HasColumnType("float");
-
-                    b.Property<decimal?>("Commission")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("FromPhone")
                         .HasColumnType("nvarchar(max)");

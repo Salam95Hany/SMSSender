@@ -1,40 +1,72 @@
-import { Component, Input } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../../auth/auth.service';
-import { NgClass } from '@angular/common';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import { NgClass, NgIf } from '@angular/common';
+import { ActivatedRoute, NavigationEnd, Router, RouterLink } from '@angular/router';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { filter } from 'rxjs';
+import { AuthService } from '../../../auth/auth.service';
 
 @Component({
   selector: 'app-admin-header',
   standalone: true,
-  imports: [NgClass,NgbDropdownModule,RouterLink],
+  imports: [NgClass, NgbDropdownModule, RouterLink],
   templateUrl: './admin-header.component.html',
   styleUrl: './admin-header.component.css'
 })
 export class AdminHeaderComponent {
-  defaultImage = 'http://themes.iamabdus.com/dealsy/1.0/img/user/user-thumb.jpg'
-  @Input() isMenuCollapse!: boolean;
-  toggleMenu = false;
-  UserName: any;
-  CompanyName: any;
-  UserModel: any;
-  constructor(private router: Router, private authService: AuthService) { }
+  @Input() isSidebarCollapsed = false;
+  @Input() isMobileMenuOpen = false;
+  @Output() menuToggle = new EventEmitter<void>();
+
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+  private readonly authService = inject(AuthService);
+
+  userModel: any = null;
+  userName = 'مشرف النظام';
+  companyName = 'SMS Sender';
+  roleName = 'Administrator';
+  pageTitle = 'واجهة الإدارة';
 
   ngOnInit(): void {
-    this.UserModel = this.authService.UserModel;
-    this.UserName = this.UserModel?.fullName;
-    this.CompanyName = this.UserModel?.companyName;
+    this.refreshUser();
+    this.syncRouteMeta();
+
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe(() => {
+        this.refreshUser();
+        this.syncRouteMeta();
+      });
   }
 
-  onToggle() {
+  get userInitials(): string {
+    const source = this.userName || this.userModel?.userName || 'SM';
+    const parts = source
+      .split(' ')
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part: string) => part[0]);
 
+    return parts.join('').toUpperCase() || 'SM';
   }
 
-  getImageEvent(imageSrc: any) {
+  private refreshUser(): void {
+    this.userModel = this.authService.UserModel;
+    this.userName = this.userModel?.fullName || this.userModel?.userName || 'مشرف النظام';
+    this.companyName = this.userModel?.companyName || 'SMS Sender';
+    this.roleName = this.userModel?.role || 'Administrator';
   }
 
-  LogOut() {
+  private syncRouteMeta(): void {
+    let currentRoute = this.route.firstChild;
+
+    while (currentRoute?.firstChild) {
+      currentRoute = currentRoute.firstChild;
+    }
+  }
+
+  logOut(): void {
     localStorage.removeItem('UserModel');
-    this.router.navigateByUrl('');
+    this.router.navigate(['/login']);
   }
 }

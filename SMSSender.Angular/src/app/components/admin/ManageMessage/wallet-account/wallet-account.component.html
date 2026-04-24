@@ -1,222 +1,41 @@
-<nav aria-label="breadcrumb" class="min-breadcrumb py-2 px-2 mb-3 rounded">
-    <ol class="breadcrumb m-0">
-        <li class="me-2">
-            <i class="fa fa-layer-group"></i>
-        </li>
-        <li class="breadcrumb-item">إدارة الرسائل</li>
-        <li class="breadcrumb-item">رصيد المحافظ</li>
-    </ol>
-</nav>
+<section class="page-shell">
+  <app-admin-breadcrumb
+    title="رصيد المحافظ"
+    subtitle="بطاقات مرنة لعرض المحافظ والأرصدة الحالية مع توزيع متجاوب مناسب للهاتف والكمبيوتر."
+    icon="fas fa-wallet"
+    [items]="[
+      { label: 'إدارة الرسائل', route: '/admin/dashboard' },
+      { label: 'رصيد المحافظ' }
+    ]"
+  ></app-admin-breadcrumb>
 
-<div class="row g-4">
-    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-        <div class="wallet-card stats-card-red">
-            <div class="d-flex justify-content-between">
-                <div class="wallet-icon">
-                    <i class="fas fa-wallet"></i>
-                </div>
-                <div class="wallet-name">سلام هاني البدوي</div>
-            </div>
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="wallet-number">فودافون كاش</div>
-                <div class="wallet-number">01124564843</div>
-            </div>
-            <div class="divider"></div>
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="balance-label">الرصيد المتاح</div>
-                <div class="wallet-balance">25,450.00 ج.م</div>
-            </div>
-        </div>
-    </div>
-    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-        <div class="wallet-card stats-card-red">
-            <div class="d-flex justify-content-between">
-                <div class="wallet-icon">
-                    <i class="fas fa-wallet"></i>
-                </div>
-                <div class="wallet-name">سلام هاني البدوي</div>
-            </div>
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="wallet-number">فودافون كاش</div>
-                <div class="wallet-number">01124564843</div>
-            </div>
-            <div class="divider"></div>
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="balance-label">الرصيد المتاح</div>
-                <div class="wallet-balance">25,450.00 ج.م</div>
-            </div>
-        </div>
-    </div>
-    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-        <div class="wallet-card stats-card-red">
-            <div class="d-flex justify-content-between">
-                <div class="wallet-icon">
-                    <i class="fas fa-wallet"></i>
-                </div>
-                <div class="wallet-name">سلام هاني البدوي</div>
-            </div>
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="wallet-number">فودافون كاش</div>
-                <div class="wallet-number">01124564843</div>
-            </div>
-            <div class="divider"></div>
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="balance-label">الرصيد المتاح</div>
-                <div class="wallet-balance">25,450.00 ج.م</div>
-            </div>
-        </div>
-    </div>
-    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-        <div class="wallet-card stats-card-red">
-            <div class="d-flex justify-content-between">
-                <div class="wallet-icon">
-                    <i class="fas fa-wallet"></i>
-                </div>
-                <div class="wallet-name">سلام هاني البدوي</div>
-            </div>
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="wallet-number">فودافون كاش</div>
-                <div class="wallet-number">01124564843</div>
-            </div>
-            <div class="divider"></div>
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="balance-label">الرصيد المتاح</div>
-                <div class="wallet-balance">25,450.00 ج.م</div>
-            </div>
-        </div>
-    </div>
-    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-        <div class="wallet-card stats-card-red">
-            <div class="d-flex justify-content-between">
-                <div class="wallet-icon">
-                    <i class="fas fa-wallet"></i>
-                </div>
-                <div class="wallet-name">سلام هاني البدوي</div>
-            </div>
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="wallet-number">فودافون كاش</div>
-                <div class="wallet-number">01124564843</div>
-            </div>
-            <div class="divider"></div>
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="balance-label">الرصيد المتاح</div>
-                <div class="wallet-balance">25,450.00 ج.م</div>
-            </div>
-        </div>
-    </div>
-    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-        <div class="wallet-card stats-card-red">
-            <div class="d-flex justify-content-between">
-                <div class="wallet-icon">
-                    <i class="fas fa-wallet"></i>
-                </div>
-                <div class="wallet-name">سلام هاني البدوي</div>
-            </div>
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="wallet-number">فودافون كاش</div>
-                <div class="wallet-number">01124564843</div>
-            </div>
-            <div class="divider"></div>
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="balance-label">الرصيد المتاح</div>
-                <div class="wallet-balance">25,450.00 ج.م</div>
-            </div>
-        </div>
-    </div>
-    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-        <div class="wallet-card stats-card-red">
-            <div class="d-flex justify-content-between">
-                <div class="wallet-icon">
-                    <i class="fas fa-wallet"></i>
-                </div>
-                <div class="wallet-name">سلام هاني البدوي</div>
-            </div>
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="wallet-number">فودافون كاش</div>
-                <div class="wallet-number">01124564843</div>
-            </div>
-            <div class="divider"></div>
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="balance-label">الرصيد المتاح</div>
-                <div class="wallet-balance">25,450.00 ج.م</div>
-            </div>
-        </div>
-    </div>
-    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-        <div class="wallet-card stats-card-red">
-            <div class="d-flex justify-content-between">
-                <div class="wallet-icon">
-                    <i class="fas fa-wallet"></i>
-                </div>
-                <div class="wallet-name">سلام هاني البدوي</div>
-            </div>
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="wallet-number">فودافون كاش</div>
-                <div class="wallet-number">01124564843</div>
-            </div>
-            <div class="divider"></div>
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="balance-label">الرصيد المتاح</div>
-                <div class="wallet-balance">25,450.00 ج.م</div>
-            </div>
-        </div>
+  <div class="surface-card page-panel">
+    <div class="page-toolbar">
+      <div class="page-toolbar__meta">
+        <h2>المحافظ المتاحة</h2>
+        <p>عرض منسق للأرصدة يساعد على المقارنة السريعة بين القنوات المختلفة.</p>
+      </div>
     </div>
 
-    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-        <div class="wallet-card stats-card-blue">
-            <div class="d-flex justify-content-between">
-                <div class="wallet-icon">
-                    <i class="fas fa-wallet"></i>
-                </div>
-                <div class="wallet-name">سلام هاني البدوي</div>
-            </div>
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="wallet-number">انستا باي</div>
-                <div class="wallet-number">01124564843</div>
-            </div>
-            <div class="divider"></div>
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="balance-label">الرصيد المتاح</div>
-                <div class="wallet-balance">25,450.00 ج.م</div>
-            </div>
+    <div class="wallet-grid">
+      <article class="wallet-card" *ngFor="let wallet of wallets" [ngClass]="wallet.theme">
+        <div class="wallet-card__top">
+          <div class="wallet-card__icon">
+            <i class="fas fa-wallet"></i>
+          </div>
+          <div class="wallet-card__owner">
+            <h3>{{ wallet.owner }}</h3>
+            <span>{{ wallet.provider }}</span>
+          </div>
         </div>
-    </div>
-    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-        <div class="wallet-card stats-card-blue">
-            <div class="d-flex justify-content-between">
-                <div class="wallet-icon">
-                    <i class="fas fa-wallet"></i>
-                </div>
-                <div class="wallet-name">سلام هاني البدوي</div>
-            </div>
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="wallet-number">انستا باي</div>
-                <div class="wallet-number">01124564843</div>
-            </div>
-            <div class="divider"></div>
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="balance-label">الرصيد المتاح</div>
-                <div class="wallet-balance">25,450.00 ج.م</div>
-            </div>
+
+        <div class="wallet-card__number">{{ wallet.number }}</div>
+
+        <div class="wallet-card__footer">
+          <span>الرصيد المتاح</span>
+          <strong>{{ wallet.balance }}</strong>
         </div>
+      </article>
     </div>
-    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-        <div class="wallet-card stats-card-blue">
-            <div class="d-flex justify-content-between">
-                <div class="wallet-icon">
-                    <i class="fas fa-wallet"></i>
-                </div>
-                <div class="wallet-name">سلام هاني البدوي</div>
-            </div>
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="wallet-number">انستا باي</div>
-                <div class="wallet-number">01124564843</div>
-            </div>
-            <div class="divider"></div>
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="balance-label">الرصيد المتاح</div>
-                <div class="wallet-balance">25,450.00 ج.م</div>
-            </div>
-        </div>
-    </div>
-</div>
+  </div>
+</section>

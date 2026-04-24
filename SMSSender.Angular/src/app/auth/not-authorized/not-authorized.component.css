@@ -1,0 +1,60 @@
+:host {
+    display: block;
+    min-height: 100dvh;
+}
+
+.state-shell {
+    min-height: 100dvh;
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+}
+
+.state-card {
+    width: min(560px, 100%);
+    display: grid;
+    justify-items: center;
+    gap: 1rem;
+    padding: clamp(1.5rem, 4vw, 2.4rem);
+    text-align: center;
+}
+
+.state-card__icon {
+    width: 5.5rem;
+    height: 5.5rem;
+    display: grid;
+    place-items: center;
+    border-radius: 1.75rem;
+    color: #fff;
+    font-size: 2rem;
+    background: linear-gradient(135deg, #0f6cbd, #1d4ed8);
+}
+
+.state-card__eyebrow {
+    display: inline-flex;
+    padding: 0.45rem 0.85rem;
+    border-radius: 999px;
+    color: var(--color-secondary);
+    background: rgba(15, 108, 189, 0.12);
+    font-size: 0.82rem;
+    font-weight: 800;
+}
+
+.state-card h1 {
+    margin: 0;
+    color: var(--text-strong);
+    font-size: clamp(1.7rem, 4vw, 2.4rem);
+    font-weight: 800;
+}
+
+.state-card p {
+    margin: 0;
+    color: var(--text-muted);
+}
+
+.state-card__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+}

@@ -1,71 +1,87 @@
 import { CommonModule, NgIf } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from "@angular/router";
+import { RouterLink } from '@angular/router';
+import { AdminBreadcrumbComponent } from '../../../../shared/admin-breadcrumb/admin-breadcrumb.component';
 
 @Component({
   selector: 'app-factory',
   standalone: true,
-  imports: [NgIf, FormsModule, RouterLink],
+  imports: [CommonModule, NgIf, FormsModule, RouterLink, AdminBreadcrumbComponent],
   templateUrl: './factory.component.html',
   styleUrl: './factory.component.css'
 })
-export class FactoryComponent {
+export class FactoryComponent implements OnDestroy {
   screen: 'initial' | 'countdown' | 'progress' | 'success' = 'initial';
   isConfirmed = false;
   countdown = 3;
-  countdownInterval?: any;
+  countdownInterval?: ReturnType<typeof setInterval>;
   progress = 0;
-  statusText = 'جاري تحضير العملية...';
-  progressInterval?: any;
+  statusText = 'جارٍ تحضير العملية...';
+  progressInterval?: ReturnType<typeof setInterval>;
   steps = [
-    { percent: 30, text: 'جاري حذف الملفات والمستندات...' },
-    { percent: 60, text: 'جاري مسح قواعد البيانات...' },
-    { percent: 75, text: 'جاري إعادة تعيين الإعدادات...' },
-    { percent: 100, text: 'جاري إنهاء العملية...' }
+    { percent: 30, text: 'جارٍ حذف الملفات والمستندات...' },
+    { percent: 60, text: 'جارٍ مسح قواعد البيانات...' },
+    { percent: 75, text: 'جارٍ إعادة تعيين الإعدادات...' },
+    { percent: 100, text: 'جارٍ إنهاء العملية...' }
   ];
 
-  startCountdown() {
+  startCountdown(): void {
     this.screen = 'countdown';
     this.countdown = 3;
+    this.clearIntervals();
+
     this.countdownInterval = setInterval(() => {
       this.countdown--;
+
       if (this.countdown === 0) {
-        clearInterval(this.countdownInterval);
+        this.clearIntervals();
         this.startReset();
       }
     }, 1000);
   }
 
-  cancelCountdown() {
-    clearInterval(this.countdownInterval);
+  cancelCountdown(): void {
+    this.clearIntervals();
     this.screen = 'initial';
   }
 
-  startReset() {
+  startReset(): void {
     this.screen = 'progress';
     let stepIndex = 0;
+
     this.progressInterval = setInterval(() => {
       if (stepIndex < this.steps.length) {
         this.progress = this.steps[stepIndex].percent;
         this.statusText = this.steps[stepIndex].text;
         stepIndex++;
-      } else {
-        clearInterval(this.progressInterval);
-        this.showSuccess();
+        return;
       }
+
+      this.clearIntervals();
+      this.showSuccess();
     }, 1500);
   }
 
-  showSuccess() {
+  showSuccess(): void {
     this.screen = 'success';
   }
 
-  restartSystem() {
-    location.reload();
+  goBack(): void {
+    window.history.back();
   }
 
-  goBack() {
-    window.history.back();
+  ngOnDestroy(): void {
+    this.clearIntervals();
+  }
+
+  private clearIntervals(): void {
+    if (this.countdownInterval) {
+      clearInterval(this.countdownInterval);
+    }
+
+    if (this.progressInterval) {
+      clearInterval(this.progressInterval);
+    }
   }
 }

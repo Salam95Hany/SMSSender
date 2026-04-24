@@ -1,0 +1,44 @@
+:host {
+    display: block;
+}
+
+.empty-state-card {
+    display: grid;
+    justify-items: center;
+    gap: 1rem;
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+    text-align: center;
+    border: 1px dashed var(--border-subtle);
+    border-radius: 1.5rem;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(240, 248, 248, 0.92));
+}
+
+.empty-state-card__icon {
+    width: 4.5rem;
+    height: 4.5rem;
+    display: grid;
+    place-items: center;
+    border-radius: 1.25rem;
+    background: rgba(15, 118, 110, 0.12);
+    color: var(--color-primary);
+    font-size: 1.5rem;
+}
+
+.empty-state-card__content {
+    display: grid;
+    gap: 0.5rem;
+    max-width: 34rem;
+}
+
+.empty-state-card__content h3 {
+    margin: 0;
+    color: var(--text-strong);
+    font-size: 1.125rem;
+    font-weight: 800;
+}
+
+.empty-state-card__content p {
+    margin: 0;
+    color: var(--text-muted);
+    line-height: 1.7;
+}

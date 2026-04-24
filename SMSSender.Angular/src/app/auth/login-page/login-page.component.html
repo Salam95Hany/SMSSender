@@ -1,1 +1,87 @@
-<p>login-page works!</p>
+<section class="auth-shell">
+  <div class="auth-shell__content">
+    <div class="auth-shell__intro">
+      <span class="auth-shell__badge">واجهة إنتاجية محدثة</span>
+      <h1>لوحة إدارة حديثة لمتابعة الرسائل والعمليات من أي جهاز.</h1>
+      <p>
+        تم تحسين التنقل، توزيع المحتوى، واستجابة الواجهة لتكون أكثر وضوحا وسرعة على الهاتف،
+        الجهاز اللوحي، وشاشات العمل الكبيرة.
+      </p>
+
+      <div class="auth-highlights">
+        <article class="auth-highlight surface-card">
+          <i class="fas fa-mobile-alt"></i>
+          <div>
+            <strong>تجربة متجاوبة</strong>
+            <span>الجداول، البطاقات، والأدوات تتكيف بسلاسة مع كل المقاسات.</span>
+          </div>
+        </article>
+
+        <article class="auth-highlight surface-card">
+          <i class="fas fa-layer-group"></i>
+          <div>
+            <strong>هيكل أوضح</strong>
+            <span>مكونات مشتركة، تنقل منظم، وتحميل كسول لمسارات الإدارة.</span>
+          </div>
+        </article>
+
+        <article class="auth-highlight surface-card">
+          <i class="fas fa-bolt"></i>
+          <div>
+            <strong>سير عمل أسرع</strong>
+            <span>وصول مباشر للشاشات الحرجة مع واجهات أقل ازدحاما وأكثر تركيزا.</span>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <article class="auth-card surface-card">
+      <div class="auth-card__media">
+        <img src="login-img.png" alt="واجهة تسجيل الدخول" />
+      </div>
+
+      <div class="auth-card__body">
+        <span class="auth-card__eyebrow">بوابة الإدارة</span>
+        <h2>{{ hasSession ? 'متابعة الجلسة الحالية' : 'ابدأ من لوحة التحكم' }}</h2>
+        <p *ngIf="hasSession; else previewMode">
+          تم العثور على جلسة محفوظة باسم <strong>{{ displayName }}</strong>. يمكنك متابعة العمل مباشرة
+          من الواجهة الرئيسية.
+        </p>
+
+        <ng-template #previewMode>
+          <p>
+            الواجهة جاهزة لربط شاشة الدخول الفعلية عند تفعيل مسار المصادقة، وفي الوقت الحالي يمكنك
+            متابعة التنقل داخل النظام مباشرة.
+          </p>
+        </ng-template>
+
+        <div class="auth-card__session" *ngIf="hasSession">
+          <div>
+            <span>المستخدم</span>
+            <strong>{{ displayName }}</strong>
+          </div>
+          <div>
+            <span>الجهة</span>
+            <strong>{{ userModel?.companyName || 'SMS Sender' }}</strong>
+          </div>
+          <div>
+            <span>الدور</span>
+            <strong>{{ userModel?.role || 'Administrator' }}</strong>
+          </div>
+        </div>
+
+        <div class="auth-card__actions">
+          <a class="btn btn-secondary" routerLink="/admin/dashboard">
+            <i class="fas fa-arrow-left"></i>
+            <span>{{ hasSession ? 'متابعة إلى لوحة التحكم' : 'الدخول إلى لوحة التحكم' }}</span>
+          </a>
+
+          <a class="btn btn-outline-secondary" routerLink="/not-authorized">
+            <i class="fas fa-shield-alt"></i>
+            <span>معاينة حالة عدم الصلاحية</span>
+          </a>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>

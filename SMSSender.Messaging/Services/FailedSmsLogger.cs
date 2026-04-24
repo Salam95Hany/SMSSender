@@ -1,7 +1,9 @@
 using System.Text;
+using Newtonsoft.Json;
 using SMSSender.Entities.Models.Messaging;
 using SMSSender.Interfaces.Common;
 using SMSSender.Interfaces.Repositories;
+using SMSSender.Messaging.Models;
 
 namespace SMSSender.Messaging.Services
 {
@@ -16,18 +18,25 @@ namespace SMSSender.Messaging.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task LogAsync(string rawMessage, string provider, string errorReason)
+        public async Task LogAsync(SmsMessagePure model, string errorReason)
         {
             var createdAt = DateTime.Now;
 
             try
             {
-                await _unitOfWork.Repository<FailedSmsLog>().AddAsync(new FailedSmsLog
+                await _unitOfWork.Repository<SmsMessageLog>().AddAsync(new SmsMessageLog
                 {
-                    RawMessage = rawMessage ?? string.Empty,
-                    Provider = provider ?? string.Empty,
-                    ErrorReason = errorReason ?? string.Empty,
-                    CreatedAt = createdAt
+                    TransactionId = Guid.NewGuid(),
+                    Message = model.Message ?? string.Empty,
+                    ErrorMessage = errorReason,
+                    MsgStatus = MsgStatus.Failure.ToString(),
+                    Provider = model.ProviderStr ?? string.Empty,
+                    ProviderName = model.DeviceName ?? string.Empty,
+                    ProviderPhone = model.PhoneNumber ?? string.Empty,
+                    SentStamp = model.SentStamp ?? string.Empty,
+                    ReceivedStamp = model.ReceivedStamp ?? string.Empty,
+                    Sim = model.Sim ?? string.Empty,
+                    CreatedDate = createdAt,
                 });
 
                 await _unitOfWork.CompleteAsync();
@@ -49,13 +58,11 @@ namespace SMSSender.Messaging.Services
 
                 Directory.CreateDirectory(targetDirectory);
 
-                var filePath = Path.Combine(targetDirectory, $"sms_{Guid.NewGuid():N}.txt");
+                var filePath = Path.Combine(targetDirectory, $"sms_{createdAt:HH-mm-ss-fff}.txt");
                 var fileContent = new StringBuilder()
                     .AppendLine($"CreatedAt: {createdAt:O}")
-                    .AppendLine($"Provider: {provider}")
                     .AppendLine($"ErrorReason: {errorReason}")
-                    .AppendLine("RawMessage:")
-                    .AppendLine(rawMessage)
+                    .AppendLine($"InputParam: {JsonConvert.SerializeObject(model, Formatting.Indented)}")
                     .ToString();
 
                 await File.WriteAllTextAsync(filePath, fileContent, Encoding.UTF8);

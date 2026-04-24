@@ -6,61 +6,43 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
 @Component({
   selector: 'app-admin-pagination',
   standalone: true,
-  imports: [CommonModule,FormsModule,PaginationModule],
+  imports: [CommonModule, FormsModule, PaginationModule],
   templateUrl: './admin-pagination.component.html',
   styleUrl: './admin-pagination.component.css'
 })
 export class AdminPaginationComponent {
-@Input() currentPage: number;
-  @Input() pageSize: number;
-  @Input() totalCount: number;
-  @Input() totalPages: number;
+  @Input() currentPage = 1;
+  @Input() pageSize = 10;
+  @Input() totalCount = 0;
   @Output() pageChanged = new EventEmitter<number>();
-  maxSize = 3;
-  showingStr = '';
-  constructor() { }
+
+  readonly maxSize = 3;
+  showingStr = '0-0';
 
   ngOnInit(): void {
     this.resetShowingStr();
   }
 
-  ngOnChanges() {
+  ngOnChanges(): void {
     this.resetShowingStr();
   }
 
-  resetShowingStr() {
-    let showingStr = '';
-    const lPage = this.currentPage * this.pageSize;
-    if (lPage >= this.totalCount) {
-      const fNum = (this.pageSize * (this.currentPage - 1)) + 1;
-      const lNum = (this.totalCount - fNum);
-      showingStr = (fNum) + '-' + (lNum + fNum);
-    } else {
-      if (this.totalPages === this.currentPage) {
-        if (this.currentPage === 1 || this.currentPage === 0) {
-          showingStr = this.currentPage + '-' + this.totalCount;
-        }
-        const fNum = (this.pageSize * (this.currentPage - 1));
-        const lNum = (this.totalCount - fNum);
-        showingStr = (fNum + 1) + '-' + (lNum + fNum);
-      } else {
-        if (this.currentPage === 1 || this.currentPage === 0) {
-          if (this.totalCount !== 0 && (this.pageSize > this.totalCount)) {
-            showingStr = this.currentPage + '-' + this.totalCount;
-          } else {
-            showingStr = '1-' + this.pageSize;
-          }
-        } else {
-          showingStr = (this.pageSize * (this.currentPage - 1)) + 1 + '-' + (this.currentPage * this.pageSize);
-        }
-      }
+  private resetShowingStr(): void {
+    if (!this.totalCount || !this.pageSize) {
+      this.showingStr = '0-0';
+      return;
     }
-    this.showingStr = showingStr;
+
+    const safeCurrentPage = this.currentPage || 1;
+    const start = ((safeCurrentPage - 1) * this.pageSize) + 1;
+    const end = Math.min(safeCurrentPage * this.pageSize, this.totalCount);
+
+    this.showingStr = `${start}-${end}`;
   }
 
-  pageChangeEvevnt(event: any): void {
+  pageChangeEvent(event: { page: number }): void {
     this.currentPage = event.page;
-    this.pageChanged.emit(event);
+    this.pageChanged.emit(event.page);
     this.resetShowingStr();
   }
 }

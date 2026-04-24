@@ -61,9 +61,10 @@ namespace SMSSender.Controllers
                 {
                     await BroadcastAsync("Message_Added");
                     return Ok();
-                }else
+                }
+                else
                     return BadRequest();
-                
+
             }
             catch (Exception)
             {

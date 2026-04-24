@@ -1,36 +1,42 @@
-import { NgClass } from '@angular/common';
-import { Component, EventEmitter, Output } from '@angular/core';
+import { NgClass, NgFor, NgIf } from '@angular/common';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { NgbAccordionConfig, NgbAccordionModule } from "@ng-bootstrap/ng-bootstrap";
+import { ADMIN_NAVIGATION } from '../../../core/navigation/admin-navigation';
 
 @Component({
   selector: 'app-admin-side-menu',
   standalone: true,
-  imports: [NgClass,NgbAccordionModule,RouterLink,RouterLinkActive],
+  imports: [NgClass, NgFor, NgIf, RouterLink, RouterLinkActive],
   templateUrl: './admin-side-menu.component.html',
   styleUrl: './admin-side-menu.component.css'
 })
 export class AdminSideMenuComponent {
-@Output() toggleMenuEvent = new EventEmitter<boolean>();
-  isMenuCollapse = false;
-  isSmMenuCollapse = false;
-  UserModel: any;
+  @Input() isCollapsed = false;
+  @Input() isMobileOpen = false;
+  @Output() collapseToggle = new EventEmitter<void>();
+  @Output() closeMobile = new EventEmitter<void>();
 
-  constructor(config: NgbAccordionConfig) {
-    // config.closeOthers = true;
-    config.type = 'info';
-  }
+  readonly navigation = ADMIN_NAVIGATION;
+  userModel: any = null;
 
   ngOnInit(): void {
-    this.UserModel = JSON.parse(localStorage.getItem('UserModel'));
+    this.userModel = JSON.parse(localStorage.getItem('UserModel') ?? 'null');
   }
 
-  onToggle() {
-    this.isMenuCollapse = !this.isMenuCollapse;
-    this.toggleMenuEvent.emit(this.isMenuCollapse);
+  get userInitials(): string {
+    const source = this.userModel?.fullName || this.userModel?.userName || 'SM';
+    return source
+      .split(' ')
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part: string) => part[0])
+      .join('')
+      .toUpperCase();
   }
 
-  onSmallToggle() {
-    this.isSmMenuCollapse = !this.isSmMenuCollapse
+  onLinkClick(): void {
+    if (typeof window !== 'undefined' && window.innerWidth < 1200) {
+      this.closeMobile.emit();
+    }
   }
 }

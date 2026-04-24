@@ -46,6 +46,7 @@ namespace SMSSender.Messaging.Services
                     return await FailAsync(transactionId, model, $"Parser is not registered for provider '{providerDefinition.ProviderType}'.");
                 }
 
+                model.Provider = providerDefinition.ProviderType;
                 var parsedMessage = parser.Parse(model);
                 if (!parsedMessage.OperationType.HasValue)
                 {
@@ -66,6 +67,7 @@ namespace SMSSender.Messaging.Services
                     ProviderPhone = model.PhoneNumber,
                     OperationType = parsedMessage.OperationType.Value,
                     Amount = parsedMessage.Amount.HasValue ? (double)parsedMessage.Amount.Value : null,
+                    Commission = parsedMessage.Commission.HasValue ? parsedMessage.Commission.Value : null,
                     FromPhone = parsedMessage.FromPhone,
                     SenderName = parsedMessage.SenderName,
                     BalanceAfter = parsedMessage.BalanceAfter.HasValue ? (double)parsedMessage.BalanceAfter.Value : null,
@@ -87,8 +89,7 @@ namespace SMSSender.Messaging.Services
 
         private async Task<bool> FailAsync(Guid transactionId, SmsMessagePure model, string reason)
         {
-            await _failedSmsLogger.LogAsync(model.Message ?? string.Empty, model.ProviderStr ?? string.Empty, reason);
-            await TryLogMessageStatusAsync(model, transactionId, MsgStatus.Failure.ToString(), reason);
+            await _failedSmsLogger.LogAsync(model, reason);
             return false;
         }
 

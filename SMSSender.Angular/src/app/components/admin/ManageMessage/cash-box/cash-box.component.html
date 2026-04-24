@@ -1,70 +1,9 @@
-<nav aria-label="breadcrumb" class="min-breadcrumb py-2 px-2 mb-3 rounded">
-    <ol class="breadcrumb m-0">
-        <li class="me-2">
-            <i class="fa fa-layer-group"></i>
-        </li>
-        <li class="breadcrumb-item">إدارة الرسائل</li>
-        <li class="breadcrumb-item">الصندوق</li>
-    </ol>
-</nav>
-
-<div class="card radius-10 border-0 card-shadow">
-    <div class="card-body">
-        <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
-            <div class="d-flex align-items-center flex-wrap gap-2">
-                <button class="btn btn-secondary me-2">
-                    <i class="fas fa-plus-circle"></i>
-                    <span class="ms-2">اضافة</span>
-                </button>
-                <button class="btn btn-secondary" (click)="isFilter = !isFilter" [attr.aria-expanded]="!isFilter">
-                    <i class="fas fa-filter"></i>
-                    <span class="ms-2">{{ isFilter ? 'عرض' : 'اخفاء' }} الفلاتر</span>
-                </button>
-            </div>
-            <div>
-                <app-admin-pagination (pageChanged)="pageChanged($event)" [currentPage]="PagingFilter.currentpage" [pageSize]="PagingFilter.pagesize" [totalCount]="TotalCount"></app-admin-pagination>
-            </div>
-        </div>
-        <div class="py-2" #collapse="ngbCollapse" [(ngbCollapse)]="isFilter">
-            <app-admin-filter [FilterList]="FilterList"></app-admin-filter>
-        </div>
-        <hr>
-        <div class="table-responsive">
-            <table class="table align-middle mb-0 table-hover">
-                <thead class="table-light">
-                    <tr>
-                        <th>Order Number</th>
-                        <th>Supplier</th>
-                        <th>Order Date</th>
-                        <th>Sub Total</th>
-                        <th>Discount</th>
-                        <th>Tax</th>
-                        <th>Total Value</th>
-                        <th class="text-center">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let item of OrdersList">
-                        <td>{{item.orderNumber}}</td>
-                        <td>{{item.supplierNameEn}}</td>
-                        <td>{{item.orderDate | date}}</td>
-                        <td>{{item.subTotal}}</td>
-                        <td>{{item.discountAmount}}</td>
-                        <td>{{item.tax}}</td>
-                        <td>{{item.totalValue}}</td>
-                        <td class="text-center">
-                            <button class="btn btn-secondary me-2">
-                                <i class="far fa-eye"></i>
-                                <span class="ms-2">View</span>
-                            </button>
-                            <button class="btn btn-danger">
-                                <i class="fas fa-times"></i>
-                                <span class="ms-2">Cancel</span>
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
+<section class="page-shell">
+  <app-admin-breadcrumb title="الصندوق" subtitle="إدارة الصندوق من مساحة عمل واضحة مع أزرار إجراءات متناسقة وحاوية جدول مرنة." icon="fas fa-vault" [items]="[{ label: 'إدارة الرسائل', route: '/admin/dashboard' }, { label: 'الصندوق' }]"></app-admin-breadcrumb>
+  <div class="surface-card page-panel">
+    <div class="page-toolbar"><div class="page-toolbar__meta"><h2>متابعة الصندوق</h2><p>تنسيق موحد للإجراءات والفلاتر والنتائج مع دعم أفضل للأجهزة المحمولة.</p></div><div class="page-toolbar__actions"><button type="button" class="btn btn-secondary"><i class="fas fa-plus-circle"></i><span>إضافة عملية</span></button><button type="button" class="btn btn-outline-secondary" (click)="isFilter = !isFilter"><i class="fas fa-filter"></i><span>{{ isFilter ? 'عرض الفلاتر' : 'إخفاء الفلاتر' }}</span></button><app-admin-pagination (pageChanged)="pageChanged($event)" [currentPage]="PagingFilter.currentpage" [pageSize]="PagingFilter.pagesize" [totalCount]="TotalCount"></app-admin-pagination></div></div>
+    <div class="page-section-grid" [ngbCollapse]="isFilter"><app-admin-filter [FilterList]="FilterList"></app-admin-filter></div>
+    <div class="admin-table-wrapper" *ngIf="OrdersList.length > 0; else emptyState"><div class="table-responsive table-responsive-card"><table class="table align-middle table-hover"><thead><tr><th>رقم الطلب</th><th>المورّد</th><th>التاريخ</th><th>الإجمالي الفرعي</th><th>الخصم</th><th>الضريبة</th><th>الإجمالي</th><th class="text-center">الإجراءات</th></tr></thead><tbody><tr *ngFor="let item of OrdersList"><td data-label="رقم الطلب">{{ item.orderNumber }}</td><td data-label="المورّد">{{ item.supplierNameEn }}</td><td data-label="التاريخ">{{ item.orderDate | date: 'yyyy/MM/dd' }}</td><td data-label="الإجمالي الفرعي">{{ item.subTotal }}</td><td data-label="الخصم">{{ item.discountAmount }}</td><td data-label="الضريبة">{{ item.tax }}</td><td data-label="الإجمالي">{{ item.totalValue }}</td><td data-label="الإجراءات" class="table-actions-cell"><div class="table-actions-row"><button class="btn btn-outline-secondary"><i class="far fa-eye"></i><span>عرض</span></button><button class="btn btn-danger"><i class="fas fa-times"></i><span>إلغاء</span></button></div></td></tr></tbody></table></div></div>
+    <ng-template #emptyState><app-admin-empty-state icon="fas fa-vault" title="لا توجد حركات بالصندوق" description="يمكنك إضافة عملية جديدة أو انتظار تحميل النتائج المطابقة للمعايير الحالية."></app-admin-empty-state></ng-template>
+  </div>
+</section>

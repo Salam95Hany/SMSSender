@@ -1,1 +1,105 @@
-<p>user-profile works!</p>
+<section class="page-shell">
+  <app-admin-breadcrumb
+    title="الملف الشخصي"
+    subtitle="عرض سريع لبيانات المستخدم والجلسة الحالية ضمن بطاقة واضحة وسهلة القراءة."
+    icon="fas fa-user-circle"
+    [items]="[
+      { label: 'الإعدادات', route: '/admin/user' },
+      { label: 'الملف الشخصي' }
+    ]"
+  ></app-admin-breadcrumb>
+
+  <ng-container *ngIf="userModel; else emptyProfile">
+    <div class="profile-layout">
+      <article class="surface-card profile-summary">
+        <div class="profile-summary__avatar">{{ initials }}</div>
+        <div class="profile-summary__content">
+          <span class="profile-summary__eyebrow">الحساب الحالي</span>
+          <h2>{{ userModel?.fullName || userModel?.userName }}</h2>
+          <p>{{ userModel?.companyName || 'SMS Sender' }}</p>
+        </div>
+
+        <div class="profile-summary__metrics">
+          <div>
+            <span>الدور</span>
+            <strong>{{ userModel?.role || 'Administrator' }}</strong>
+          </div>
+          <div>
+            <span>الحالة</span>
+            <strong>{{ sessionState }}</strong>
+          </div>
+          <div>
+            <span>المعرّف</span>
+            <strong>{{ userModel?.userId || 'غير متاح' }}</strong>
+          </div>
+        </div>
+
+        <div class="profile-summary__actions">
+          <a class="btn btn-secondary" routerLink="/admin/user">
+            <i class="fas fa-cog"></i>
+            <span>إدارة الإعدادات</span>
+          </a>
+          <a class="btn btn-outline-secondary" routerLink="/admin/dashboard">
+            <i class="fas fa-chart-pie"></i>
+            <span>العودة إلى لوحة التحكم</span>
+          </a>
+        </div>
+      </article>
+
+      <section class="surface-card page-panel profile-details">
+        <div class="page-toolbar">
+          <div class="page-toolbar__meta">
+            <h2>تفاصيل الحساب</h2>
+            <p>جميع الحقول معروضة بصيغة للقراءة فقط للحفاظ على البنية الحالية دون تغيير في المنطق.</p>
+          </div>
+        </div>
+
+        <div class="profile-form-grid">
+          <app-admin-general-input
+            label="الاسم الكامل"
+            [valueBind]="userModel?.fullName || userModel?.userName"
+            [disabled]="true"
+          ></app-admin-general-input>
+
+          <app-admin-general-input
+            label="اسم المستخدم"
+            [valueBind]="userModel?.userName || 'غير متاح'"
+            [disabled]="true"
+          ></app-admin-general-input>
+
+          <app-admin-general-input
+            label="الجهة"
+            [valueBind]="userModel?.companyName || 'SMS Sender'"
+            [disabled]="true"
+          ></app-admin-general-input>
+
+          <app-admin-general-input
+            label="الدور"
+            [valueBind]="userModel?.role || 'Administrator'"
+            [disabled]="true"
+          ></app-admin-general-input>
+
+          <app-admin-general-input
+            label="معرف المستخدم"
+            [valueBind]="userModel?.userId || 'غير متاح'"
+            [disabled]="true"
+          ></app-admin-general-input>
+
+          <app-admin-general-input
+            label="حالة الجلسة"
+            [valueBind]="sessionState"
+            [disabled]="true"
+          ></app-admin-general-input>
+        </div>
+      </section>
+    </div>
+  </ng-container>
+
+  <ng-template #emptyProfile>
+    <app-admin-empty-state
+      icon="fas fa-user-slash"
+      title="لا توجد بيانات مستخدم محفوظة"
+      description="يمكن العودة إلى البوابة أو تفعيل تسجيل الدخول الفعلي لإظهار بيانات الحساب هنا."
+    ></app-admin-empty-state>
+  </ng-template>
+</section>

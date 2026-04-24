@@ -1,7 +1,13 @@
-<main id="app" class="app">
-    <app-admin-header [isMenuCollapse]="isMenuCollapse"></app-admin-header>
-    <app-admin-side-menu (toggleMenuEvent)="isMenuCollapse = $event"></app-admin-side-menu>
-    <section class="content" [ngClass]="{'toggle': isMenuCollapse}">
-        <router-outlet></router-outlet>
-    </section>
+<main class="app-shell" [ngClass]="{ 'sidebar-collapsed': isSidebarCollapsed }">
+    <app-admin-side-menu [isCollapsed]="isSidebarCollapsed" [isMobileOpen]="isMobileMenuOpen" (collapseToggle)="toggleSidebar()" (closeMobile)="closeMobileMenu()"></app-admin-side-menu>
+
+    <button type="button" class="app-shell__backdrop" [ngClass]="{ active: isMobileMenuOpen }" (click)="closeMobileMenu()" aria-label="إغلاق القائمة الجانبية"></button>
+
+    <div class="app-shell__main">
+        <app-admin-header [isSidebarCollapsed]="isSidebarCollapsed" [isMobileMenuOpen]="isMobileMenuOpen" (menuToggle)="toggleSidebar()"></app-admin-header>
+
+        <section class="app-shell__content">
+            <router-outlet></router-outlet>
+        </section>
+    </div>
 </main>

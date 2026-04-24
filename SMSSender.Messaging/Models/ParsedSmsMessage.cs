@@ -7,6 +7,7 @@ namespace SMSSender.Messaging.Models
         public string Provider { get; set; } = string.Empty;
         public OperationType? OperationType { get; set; }
         public decimal? Amount { get; set; }
+        public decimal? Commission { get; set; }
         public string? FromPhone { get; set; }
         public string? SenderName { get; set; }
         public decimal? BalanceAfter { get; set; }

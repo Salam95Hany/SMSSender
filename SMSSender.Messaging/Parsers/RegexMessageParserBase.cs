@@ -42,12 +42,15 @@ namespace SMSSender.Messaging.Parsers
             }
 
             var settings = providerDefinition.Settings;
+            var amount = ParseDecimal(ExtractField(normalizedMessage, settings, nameof(FieldPatterns.Amount)));
+            var operationType = DetectOperationType(normalizedMessage, settings);
 
             return new ParsedSmsMessage
             {
                 Provider = Provider.ToString(),
                 OperationType = DetectOperationType(normalizedMessage, settings),
-                Amount = ParseDecimal(ExtractField(normalizedMessage, settings, nameof(FieldPatterns.Amount))),
+                Amount = amount,
+                Commission = amount.HasValue ? CalculateFee(amount.Value, operationType.Value, message.Provider) : null,
                 FromPhone = ExtractField(normalizedMessage, settings, nameof(FieldPatterns.FromPhone)),
                 SenderName = ExtractField(normalizedMessage, settings, nameof(FieldPatterns.SenderName)),
                 BalanceAfter = ParseDecimal(ExtractField(normalizedMessage, settings, nameof(FieldPatterns.BalanceAfter))),
@@ -191,6 +194,85 @@ namespace SMSSender.Messaging.Parsers
                 : DateTime.TryParse(normalizedValue, CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces, out var parsedDateTime)
                     ? parsedDateTime
                     : null;
+        }
+
+        public decimal CalculateFee(decimal amount, OperationType type, ProviderType Provider)
+        {
+            decimal fee = 0;
+
+            if (Provider == ProviderType.VodafoneCash || Provider == ProviderType.VodafoneCashEnglish)
+            {
+                switch (type)
+                {
+                    case OperationType.Withdraw:
+
+                        if (amount < 400)
+                            return 5;
+
+                        while (amount > 0)
+                        {
+                            if (amount <= 1000)
+                            {
+                                if (amount == 100)
+                                    break;
+
+                                if (amount >= 700)
+                                    fee += 15;
+                                else if (amount >= 400)
+                                    fee += 10;
+                                else if (amount > 100)
+                                    fee += 5;
+
+                                break;
+                            }
+
+                            fee += 15;
+                            amount -= 1000;
+                        }
+
+                        break;
+
+                    case OperationType.Deposit:
+
+                        while (amount > 0)
+                        {
+                            decimal chunk = Math.Min(amount, 1000);
+
+                            if (chunk >= 500)
+                                fee += 10;
+                            else
+                                fee += 5;
+
+                            amount -= chunk;
+                        }
+
+                        break;
+
+                    case OperationType.CashWithdrawal:
+
+                        decimal chunks = Math.Ceiling(amount / 1000m);
+                        fee = chunks * 8.5m;
+
+                        break;
+                }
+            }
+            else
+            {
+                while (amount > 0)
+                {
+                    decimal chunk = Math.Min(amount, 1000);
+
+                    if (chunk >= 500)
+                        fee += 10;
+                    else
+                        fee += 5;
+
+                    amount -= chunk;
+                }
+            }
+                
+
+            return fee;
         }
     }
 }

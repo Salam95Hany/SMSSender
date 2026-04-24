@@ -1,152 +1,83 @@
-<div class="modal-header">
-    <h5 class="modal-title">
-        <i class="fas fa-envelope-open"></i> صندوق الرسائل
-    </h5>
-    <button type="button" class="btn-close" (click)="DismissModal()"></button>
-</div>
-<div class="modal-dialog-scrollable">
-    <div class="search-box position-relative">
-        <i class="fas fa-search search-icon"></i>
-        <input type="text" class="form-control search-input" placeholder="ابحث في الرسائل...">
+<section class="message-center">
+  <header class="message-center__header">
+    <div>
+      <span class="message-center__eyebrow">مركز الرسائل</span>
+      <h2>صندوق المتابعة</h2>
+      <p>كل الرسائل في مساحة واحدة مع بحث سريع وفرز واضح للحالات غير المقروءة.</p>
     </div>
-    <div class="filter-tabs">
-        <button class="filter-tab active">
-            <i class="fas fa-inbox"></i> الكل
-        </button>
-        <button class="filter-tab">
-            <i class="fas fa-envelope"></i> غير مقروء
-        </button>
-    </div>
-    <div class="modal-body p-0">
-        <div class="message-list">
-            <div class="message-card unread">
-                <div class="message-header">
-                    <div class="sender-info">
-                        <div class="sender-avatar">أ</div>
-                        <div class="sender-details">
-                            <div class="sender-name">أحمد محمد</div>
-                            <div class="sender-number">+966 50 123 4567</div>
-                        </div>
-                    </div>
-                    <div class="message-time">
-                        <span class="time-text">
-                                        <i class="fas fa-clock"></i> منذ 5 دقائق
-                                    </span>
-                        <span class="unread-badge">جديد</span>
-                    </div>
-                </div>
-                <div class="message-body">
-                    مرحباً، أرجو منك التأكيد على موعد الاجتماع القادم. هل سيكون متاحاً لك يوم الأحد الساعة 10 صباحاً؟ في انتظار ردك.
-                </div>
-                <div class="message-actions">
-                    <button class="action-btn btn-mark-read">
-                                    <i class="fas fa-check2-all"></i> تم الاستلام
-                            </button>
-                </div>
-            </div>
-            <div class="message-card">
-                <div class="message-header">
-                    <div class="sender-info">
-                        <div class="sender-avatar" style="background: linear-gradient(135deg, #f093fb, #f5576c);">س</div>
-                        <div class="sender-details">
-                            <div class="sender-name">سارة أحمد</div>
-                            <div class="sender-number">+966 55 987 6543</div>
-                        </div>
-                    </div>
-                    <div class="message-time">
-                        <span class="time-text">
-                                        <i class="fas fa-clock"></i> منذ ساعة
-                                    </span>
-                    </div>
-                </div>
-                <div class="message-body">
-                    شكراً لك على المساعدة في المشروع الأخير. النتائج كانت رائعة والجميع معجب بالعمل المنجز.
-                </div>
-                <div class="message-actions">
-                    <button class="action-btn btn-mark-read">
-                                    <i class="fas fa-check2-all"></i> تم الاستلام
-                            </button>
-                </div>
-            </div>
-            <div class="message-card">
-                <div class="message-header">
-                    <div class="sender-info">
-                        <div class="sender-avatar" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">م</div>
-                        <div class="sender-details">
-                            <div class="sender-name">محمد علي</div>
-                            <div class="sender-number">+966 54 456 7890</div>
-                        </div>
-                    </div>
-                    <div class="message-time">
-                        <span class="time-text">
-                                        <i class="fas fa-clock"></i> منذ 3 ساعات
-                                    </span>
-                    </div>
-                </div>
-                <div class="message-body">
-                    تم إرسال الملفات المطلوبة عبر البريد الإلكتروني. يرجى مراجعتها وإبلاغي بأي ملاحظات.
-                </div>
-                <div class="message-actions">
-                    <button class="action-btn btn-mark-read">
-                                    <i class="fas fa-check2-all"></i> تم الاستلام
-                            </button>
-                </div>
-            </div>
-            <div class="message-card unread">
-                <div class="message-header">
-                    <div class="sender-info">
-                        <div class="sender-avatar" style="background: linear-gradient(135deg, #fa709a, #fee140);">ن</div>
-                        <div class="sender-details">
-                            <div class="sender-name">نور الدين</div>
-                            <div class="sender-number">+966 56 789 0123</div>
-                        </div>
-                    </div>
-                    <div class="message-time">
-                        <span class="time-text">
-                                        <i class="fas fa-clock"></i> منذ 6 ساعات
-                                    </span>
-                        <span class="unread-badge">جديد</span>
-                    </div>
-                </div>
-                <div class="message-body">
-                    هل يمكنك مساعدتي في حل المشكلة التقنية التي واجهتها؟ أحتاج لاستشارتك بأسرع وقت ممكن.
-                </div>
-                <div class="message-actions">
-                    <button class="action-btn btn-mark-read">
-                                    <i class="fas fa-check2-all"></i> تم الاستلام
-                            </button>
-                </div>
-            </div>
-            <div class="message-card">
-                <div class="message-header">
-                    <div class="sender-info">
-                        <div class="sender-avatar" style="background: linear-gradient(135deg, #30cfd0, #330867);">خ</div>
-                        <div class="sender-details">
-                            <div class="sender-name">خالد إبراهيم</div>
-                            <div class="sender-number">+966 53 234 5678</div>
-                        </div>
-                    </div>
-                    <div class="message-time">
-                        <span class="time-text">
-                            <i class="fas fa-clock"></i> أمس
-                        </span>
-                    </div>
-                </div>
-                <div class="message-body">
-                    تذكير: موعد التسليم النهائي للمشروع هو يوم الخميس القادم. أرجو الالتزام بالموعد المحدد.
-                </div>
-                <div class="message-actions">
-                    <button class="action-btn btn-mark-read">
-                        <i class="fas fa-check2-all"></i> تم الاستلام
-                    </button>
-                </div>
-            </div>
 
+    <button type="button" class="message-center__close" (click)="dismissModal()" aria-label="إغلاق">
+      <i class="fas fa-times"></i>
+    </button>
+  </header>
+
+  <div class="message-center__toolbar">
+    <div class="message-search">
+      <i class="fas fa-search"></i>
+      <input type="text" [(ngModel)]="searchTerm" placeholder="ابحث في الرسائل أو الأرقام" />
+    </div>
+
+    <div class="message-filters">
+      <button type="button" [class.active]="activeFilter === 'all'" (click)="setFilter('all')">
+        الكل
+        <span>{{ messages.length }}</span>
+      </button>
+      <button type="button" [class.active]="activeFilter === 'unread'" (click)="setFilter('unread')">
+        غير مقروء
+        <span>{{ unreadCount }}</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="message-center__body" *ngIf="filteredMessages.length > 0; else emptyState">
+    <article
+      class="message-card"
+      *ngFor="let message of filteredMessages"
+      [class.message-card--unread]="message.unread"
+      [style.--message-accent]="message.accent"
+    >
+      <div class="message-card__header">
+        <div class="message-card__sender">
+          <div class="message-card__avatar">{{ message.initial }}</div>
+          <div>
+            <strong>{{ message.senderName }}</strong>
+            <span>{{ message.senderNumber }}</span>
+          </div>
         </div>
+
+        <div class="message-card__meta">
+          <small>{{ message.time }}</small>
+          <span *ngIf="message.unread">جديد</span>
+        </div>
+      </div>
+
+      <p>{{ message.preview }}</p>
+
+      <div class="message-card__actions">
+        <button type="button" class="btn btn-outline-secondary">
+          <i class="fas fa-eye"></i>
+          <span>عرض</span>
+        </button>
+        <button type="button" class="btn btn-secondary">
+          <i class="fas fa-check-double"></i>
+          <span>تم الاستلام</span>
+        </button>
+      </div>
+    </article>
+  </div>
+
+  <ng-template #emptyState>
+    <div class="message-center__empty">
+      <i class="fas fa-inbox"></i>
+      <h3>لا توجد رسائل مطابقة</h3>
+      <p>جرّب تغيير البحث أو التبديل بين عوامل التصفية للوصول إلى النتائج المطلوبة.</p>
     </div>
-    <div class="modal-footer-style">
-        <span class="message-count">
-            <i class="fas fa-envelope"></i> إجمالي الرسائل: <strong>5</strong> |  غير مقروء: <strong>2</strong>
-        </span>
-    </div>
-</div>
+  </ng-template>
+
+  <footer class="message-center__footer">
+    <span>إجمالي الرسائل</span>
+    <strong>{{ messages.length }}</strong>
+    <span>غير المقروءة</span>
+    <strong>{{ unreadCount }}</strong>
+  </footer>
+</section>

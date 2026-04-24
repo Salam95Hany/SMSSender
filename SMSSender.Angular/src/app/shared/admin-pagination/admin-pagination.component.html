@@ -1,10 +1,21 @@
-<div class="pagination-container d-flex align-items-center flex-wrap" dir="rtl">
-    <span class="me-2">
-    <span class="CrossRef_2_Info me-1">عرض {{showingStr}} من</span>
-    <span class="CrossRef_2_InfoTotal me-1">{{totalCount}}</span>
-    </span>
-    <div class="pull-right NewPaging">
-        <pagination [(ngModel)]="currentPage" [boundaryLinks]="true" [totalItems]="totalCount" [maxSize]="maxSize" (pageChanged)="pageChangeEvevnt($event)" [itemsPerPage]="pageSize" previousText="السابق" nextText="التالي" firstText="الأول" lastText="الأخير">
-        </pagination>
-    </div>
+<div class="pagination-container" dir="rtl">
+  <div class="pagination-summary">
+    <span>عرض</span>
+    <strong>{{ showingStr }}</strong>
+    <span>من أصل</span>
+    <strong>{{ totalCount }}</strong>
+  </div>
+
+  <pagination
+    [(ngModel)]="currentPage"
+    [boundaryLinks]="true"
+    [totalItems]="totalCount"
+    [itemsPerPage]="pageSize"
+    [maxSize]="maxSize"
+    previousText="السابق"
+    nextText="التالي"
+    firstText="الأول"
+    lastText="الأخير"
+    (pageChanged)="pageChangeEvent($event)"
+  ></pagination>
 </div>

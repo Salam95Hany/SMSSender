@@ -1,270 +1,56 @@
-<header class="header fixed-top" [ngClass]="{'toggle': isMenuCollapse, 'z-high-index': toggleMenu}">
-    <nav class="navbar navbar-expand-lg bg-white border-0">
-        <div class="container-fluid">
-            <button class="hamburger hamburger--spin navbar-toggler border-0 cursor-pointer w-100" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerMenu" aria-controls="navbarTogglerMenu" aria-expanded="false" aria-label="Toggle navigation" (click)="toggleMenu = !toggleMenu"
-                [ngClass]="{'is-active': toggleMenu}">
-        <div class="d-flex align-items-center justify-content-between">
-          <span class="d-flex">
-            <span class="hamburger-box">
-              <span class="hamburger-inner"></span>
-            </span>
-          </span>
-          <div class="brand-logo">
-            <img src="https://cdn.freebiesupply.com/logos/large/2x/master-3-logo-png-transparent.png" class="logo-img"
-              alt="Sidebar-Image" loading="lazy" />
-          </div>
-        </div>
+<header class="app-header" [ngClass]="{ 'app-header--menu-open': isMobileMenuOpen }">
+    <div class="app-header__inner">
+        <div class="app-header__start">
+            <button type="button" class="app-header__icon-button" (click)="menuToggle.emit()" [attr.aria-label]="isMobileMenuOpen ? 'إغلاق القائمة' : 'فتح القائمة'">
+        <i class="fas" [ngClass]="isMobileMenuOpen ? 'fa-times' : 'fa-bars'"></i>
       </button>
-            <div class="collapse navbar-collapse" id="navbarTogglerMenu" [ngClass]="{'show': toggleMenu}">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item user-dropdown user-notifications" ngbDropdown display="dynamic" placement="bottom-start">
-                        <a class="nav-link without-arrow dropdown-toggle d-flex align-items-center text-white" role="button" tabindex="0" id="userDropdown" ngbDropdownToggle>
-                            <span class="position-relative">
-                              <span class="alert-count">0</span>
-                            <i class="far fa-bell"></i>
-                            </span>
-                        </a>
-                        <div ngbDropdownMenu aria-labelledby="userDropdown" class="dropdown-menu dropdown-user-menu w-100 min-width-360 py-0">
-                            <div class="msg-header">
-                                <p class="msg-header-clear m-0 ms-auto">كل الرسائل</p>
-                            </div>
-                            <div class="header-message-list small-scroll overflow-auto max-height-300">
-                                <a class="dropdown-item">
-                                    <div class="d-flex align-items-center">
-                                        <div class="notify me-2 bg-light-danger text-danger me-2"><i class="fas fa-wallet"></i></div>
-                                        <div class="flex-grow-1">
-                                            <h6 class="msg-name">New Orders <span class="msg-time float-end">2 min ago</span></h6>
-                                            <p class="msg-info">You have recived new orders</p>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item">
-                                    <div class="d-flex align-items-center">
-                                        <div class="notify me-2 bg-light-primary text-primary"><i class="fas fa-wallet"></i></div>
-                                        <div class="flex-grow-1">
-                                            <h6 class="msg-name">New 24 authors<span class="msg-time float-end">1 day ago</span></h6>
-                                            <p class="msg-info">24 new authors joined last week</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="text-center msg-footer">عرض جميع الرسائل</div>
-                        </div>
-                    </li>
 
-                    <!-- <li class="nav-item user-dropdown user-notifications" ngbDropdown display="dynamic" placement="bottom-end">
-            <a class="nav-link without-arrow dropdown-toggle d-flex align-items-center" role="button" tabindex="0"
-              id="userDropdown" ngbDropdownToggle>
-              <i class="fas fa-th-large"></i>
-            </a>
-            <div ngbDropdownMenu aria-labelledby="userDropdown"
-              class="dropdown-menu dropdown-user-menu w-100 min-width-360 py-0">
-              <div class="header-message-list small-scroll overflow-auto max-height-300 py-3 px-2">
-                <div class="row row-cols-3 g-3">
-                  <div class="col text-center">
-                    <div class="app-box mx-auto bg-gradient-cosmic text-white"><i class="fas fa-users"></i></div>
-                    <div class="app-title">Teams</div>
-                  </div>
-                  <div class="col text-center">
-                    <div class="app-box mx-auto bg-gradient-burning text-white"><i class="fas fa-atom"></i></div>
-                    <div class="app-title">Projects</div>
-                  </div>
-                  <div class="col text-center">
-                    <div class="app-box mx-auto bg-gradient-lush text-white"><i class="fas fa-shield-virus"></i></div>
-                    <div class="app-title">Tasks</div>
-                  </div>
-                  <div class="col text-center">
-                    <div class="app-box mx-auto bg-gradient-kyoto text-white"><i class="fas fa-comment-alt"></i></div>
-                    <div class="app-title">Feeds</div>
-                  </div>
-                  <div class="col text-center">
-                    <div class="app-box mx-auto bg-gradient-blues text-white"><i class="fas fa-file-alt"></i></div>
-                    <div class="app-title">Files</div>
-                  </div>
-                  <div class="col text-center">
-                    <div class="app-box mx-auto bg-gradient-moonlit text-white"><i class="fas fa-filter"></i></div>
-                    <div class="app-title">Alerts</div>
-                  </div>
+            <a class="app-header__brand" routerLink="/admin/dashboard">
+                <img src="logo.png" alt="SMS Sender" />
+                <div>
+                    <strong>قارئ الرسائل</strong>
                 </div>
-
-              </div>
-            </div>
-          </li> -->
-
-
-                    <li class="nav-item user-dropdown">
-                        <a class="nav-link without-arrow dropdown-toggle d-flex align-items-center text-white" routerLink="/admin/user">
-                            <i class="fas fa-cog"></i>
-                        </a>
-                    </li>
-                    <li class="nav-item user-dropdown" ngbDropdown display="dynamic" placement="bottom-end">
-                        <a class="nav-link dropdown-toggle d-flex align-items-center" role="button" tabindex="0" id="userDropdown" ngbDropdownToggle>
-                            <div class="w-100 d-flex align-items-center me-2 user-head">
-                                <img src="http://themes.iamabdus.com/dealsy/1.0/img/user/user-thumb.jpg" alt="User-Image" class="user-img" loading="lazy" />
-                                <div class="ms-3 me-2">
-                                    <h6 class="m-0 dark-color fw-bold user-name text-white">Salam Hany</h6>
-                                    <div class="user-title text-white">Alshami Center</div>
-                                </div>
-                            </div>
-                        </a>
-                        <div ngbDropdownMenu aria-labelledby="userDropdown" class="dropdown-menu dropdown-user-menu w-100">
-                            <a class="dropdown-item" routerLink="/admin/user-profile">
-                                <i class="fas fa-user"></i>
-                                <span class="ms-3">الملف الشخصي</span>
-                            </a>
-                            <a class="dropdown-item" routerLink="/admin/user">
-                                <i class="fas fa-cog"></i>
-                                <span class="ms-3">الاعدادات</span>
-                            </a>
-                            <hr class="dropdown-divider">
-                            <a class="dropdown-item" (click)="LogOut()">
-                                <i class="fas fa-power-off"></i>
-                                <span class="ms-3">تسجيل الخروج</span>
-                            </a>
-                        </div>
-                    </li>
-                    <!-- <li class="nav-item user-dropdown user-notifications" ngbDropdown display="dynamic" placement="bottom-end">
-            <a class="nav-link without-arrow dropdown-toggle d-flex align-items-center" role="button" tabindex="0"
-              id="userDropdown" ngbDropdownToggle>
-              <span class="position-relative">
-                <span class="alert-count">8</span>
-                <i class="far fa-comment-alt"></i>
-              </span>
             </a>
-            <div ngbDropdownMenu aria-labelledby="userDropdown"
-              class="dropdown-menu dropdown-user-menu w-100 min-width-360 py-0">
-              <div class="msg-header">
-                <p class="msg-header-title m-0">الرسائل</p>
-                <p class="msg-header-clear m-0 ms-auto">تعليم الكل كمقروء</p>
-              </div>
-              <div class="header-message-list small-scroll overflow-auto max-height-300">
-                <a class="dropdown-item">
-                  <div class="d-flex align-items-center">
-                    <div class="user-online position-relative">
-                      <img src="../../assets/avatars/avatar-1.png" class="msg-avatar me-2" alt="user avatar" />
-                    </div>
-                    <div class="flex-grow-1">
-                      <h6 class="msg-name">Daisy Anderson <span class="msg-time">5 sec ago</span></h6>
-                      <p class="msg-info">The standard chunk of lorem</p>
-                    </div>
-                  </div>
-                </a>
-                <a class="dropdown-item">
-                  <div class="d-flex align-items-center">
-                    <div class="user-online position-relative">
-                      <img src="../../assets/avatars/avatar-2.png" class="msg-avatar me-2" alt="user avatar" />
-                    </div>
-                    <div class="flex-grow-1">
-                      <h6 class="msg-name">Althea Cabardo <span class="msg-time">14 sec ago</span></h6>
-                      <p class="msg-info">Many desktop publishing packages</p>
-                    </div>
-                  </div>
-                </a>
-                <a class="dropdown-item">
-                  <div class="d-flex align-items-center">
-                    <div class="user-online position-relative">
-                      <img src="../../assets/avatars/avatar-3.png" class="msg-avatar me-2" alt="user avatar" />
-                    </div>
-                    <div class="flex-grow-1">
-                      <h6 class="msg-name">Oscar Garner <span class="msg-time">8 min ago</span></h6>
-                      <p class="msg-info">Various versions have evolved over</p>
-                    </div>
-                  </div>
-                </a>
-                <a class="dropdown-item">
-                  <div class="d-flex align-items-center">
-                    <div class="user-online position-relative">
-                      <img src="../../assets/avatars/avatar-4.png" class="msg-avatar me-2" alt="user avatar" />
-                    </div>
-                    <div class="flex-grow-1">
-                      <h6 class="msg-name">Katherine Pechon <span class="msg-time">15 min ago</span></h6>
-                      <p class="msg-info">Making this the first true generator</p>
-                    </div>
-                  </div>
-                </a>
-                <a class="dropdown-item">
-                  <div class="d-flex align-items-center">
-                    <div class="user-online position-relative">
-                      <img src="../../assets/avatars/avatar-5.png" class="msg-avatar me-2" alt="user avatar" />
-                    </div>
-                    <div class="flex-grow-1">
-                      <h6 class="msg-name">Amelia Doe <span class="msg-time">22 min ago</span></h6>
-                      <p class="msg-info">Duis aute irure dolor in reprehenderit</p>
-                    </div>
-                  </div>
-                </a>
-                <a class="dropdown-item">
-                  <div class="d-flex align-items-center">
-                    <div class="user-online position-relative">
-                      <img src="../../assets/avatars/avatar-6.png" class="msg-avatar me-2" alt="user avatar" />
-                    </div>
-                    <div class="flex-grow-1">
-                      <h6 class="msg-name">Cristina Jhons <span class="msg-time">2 hrs ago</span></h6>
-                      <p class="msg-info">The passage is attributed to an unknown</p>
-                    </div>
-                  </div>
-                </a>
-                <a class="dropdown-item">
-                  <div class="d-flex align-items-center">
-                    <div class="user-online position-relative">
-                      <img src="../../assets/avatars/avatar-7.png" class="msg-avatar me-2" alt="user avatar" />
-                    </div>
-                    <div class="flex-grow-1">
-                      <h6 class="msg-name">James Caviness <span class="msg-time">4 hrs ago</span></h6>
-                      <p class="msg-info">The point of using Lorem</p>
-                    </div>
-                  </div>
-                </a>
-                <a class="dropdown-item">
-                  <div class="d-flex align-items-center">
-                    <div class="user-online position-relative">
-                      <img src="../../assets/avatars/avatar-8.png" class="msg-avatar me-2" alt="user avatar" />
-                    </div>
-                    <div class="flex-grow-1">
-                      <h6 class="msg-name">Peter Costanzo <span class="msg-time">6 hrs ago</span></h6>
-                      <p class="msg-info">It was popularised in the 1960s</p>
-                    </div>
-                  </div>
-                </a>
-                <a class="dropdown-item">
-                  <div class="d-flex align-items-center">
-                    <div class="user-online position-relative">
-                      <img src="../../assets/avatars/avatar-9.png" class="msg-avatar me-2" alt="user avatar" />
-                    </div>
-                    <div class="flex-grow-1">
-                      <h6 class="msg-name">David Buckley <span class="msg-time">2 hrs ago</span></h6>
-                      <p class="msg-info">Various versions have evolved over</p>
-                    </div>
-                  </div>
-                </a>
-                <a class="dropdown-item">
-                  <div class="d-flex align-items-center">
-                    <div class="user-online position-relative">
-                      <img src="../../assets/avatars/avatar-10.png" class="msg-avatar me-2" alt="user avatar" />
-                    </div>
-                    <div class="flex-grow-1">
-                      <h6 class="msg-name">Thomas Wheeler <span class="msg-time">2 days ago</span></h6>
-                      <p class="msg-info">If you are going to use a passage</p>
-                    </div>
-                  </div>
-                </a>
-                <a class="dropdown-item">
-                  <div class="d-flex align-items-center">
-                    <div class="user-online position-relative">
-                      <img src="../../assets/avatars/avatar-11.png" class="msg-avatar me-2" alt="user avatar" />
-                    </div>
-                    <div class="flex-grow-1">
-                      <h6 class="msg-name">Johnny Seitz <span class="msg-time">5 days ago</span></h6>
-                      <p class="msg-info">All the Lorem Ipsum generators</p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </li> -->
+        </div>
 
-                </ul>
+        <div class="app-header__end">
+            <a class="app-header__shortcut" routerLink="/admin/user">
+                <i class="fas fa-sliders-h"></i>
+                <span>الإعدادات</span>
+            </a>
+
+            <div class="user-menu" ngbDropdown placement="bottom-start">
+                <button type="button" class="user-menu__trigger" ngbDropdownToggle>
+          <span class="user-menu__avatar">{{ userInitials }}</span>
+          <span class="user-menu__details">
+            <strong>{{ userName }}</strong>
+            <small>{{ companyName }}</small>
+          </span>
+          <i class="fas fa-chevron-down"></i>
+        </button>
+
+                <div ngbDropdownMenu class="user-menu__dropdown">
+                    <div class="user-menu__summary">
+                        <strong>{{ userName }}</strong>
+                        <span>{{ roleName }}</span>
+                    </div>
+
+                    <a ngbDropdownItem routerLink="/admin/user-profile">
+                        <i class="fas fa-user-circle"></i>
+                        <span>الملف الشخصي</span>
+                    </a>
+
+                    <a ngbDropdownItem routerLink="/admin/user">
+                        <i class="fas fa-cog"></i>
+                        <span>إعدادات النظام</span>
+                    </a>
+
+                    <button type="button" ngbDropdownItem class="text-danger" (click)="logOut()">
+            <i class="fas fa-right-from-bracket"></i>
+            <span>تسجيل الخروج</span>
+          </button>
+                </div>
             </div>
         </div>
-    </nav>
+    </div>
 </header>
