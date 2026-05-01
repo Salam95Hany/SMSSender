@@ -74,29 +74,16 @@
         <!-- الإعدادات -->
         <div class="nav-group">
             <div class="nav-group__label" *ngIf="!isCollapsed">الإعدادات</div>
-
             <div class="nav-group__items">
                 <a class="nav-item" routerLink="/admin/user" routerLinkActive="active">
                     <i class="fas fa-users-cog"></i>
                     <span *ngIf="!isCollapsed">المستخدمون</span>
                 </a>
-
-                <a class="nav-item" routerLink="/admin/user-profile" routerLinkActive="active">
-                    <i class="fas fa-id-card"></i>
-                    <span *ngIf="!isCollapsed">الملف الشخصي</span>
-                </a>
-
                 <a class="nav-item" routerLink="/admin/factory" routerLinkActive="active">
-                    <i class="fas fa-rotate-left"></i>
+                    <i class="fas fa-undo"></i>
                     <span *ngIf="!isCollapsed">إعادة ضبط المصنع</span>
                 </a>
             </div>
         </div>
-
-    </div>
-
-    <div class="app-sidebar__footer" *ngIf="!isCollapsed">
-        <span>لوحة تشغيل متجاوبة</span>
-        <strong>v1.0</strong>
     </div>
 </aside>
