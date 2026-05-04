@@ -4,12 +4,23 @@ namespace SMSSender.Interfaces.Common
 {
     public static class SmsTextNormalizer
     {
+        private static readonly HashSet<char> RemoveChars = new()
+        {
+            '\u200E', '\u200F',
+            '\u202A', '\u202B', '\u202C', '\u202D', '\u202E',
+            '\u2066', '\u2067', '\u2068', '\u2069',
+            '\uFEFF',
+            '\u200B', '\u200C', '\u200D',
+            '\u180E',
+            '\u00AD'
+        };
+
         public static string Normalize(string? input)
         {
             if (string.IsNullOrWhiteSpace(input))
-            {
                 return string.Empty;
-            }
+
+            input = input.Normalize(NormalizationForm.FormKC);
 
             var builder = new StringBuilder(input.Length);
             var previousWasWhitespace = false;
@@ -17,17 +28,14 @@ namespace SMSSender.Interfaces.Common
             foreach (var rawCharacter in input)
             {
                 var character = NormalizeCharacter(rawCharacter);
+
                 if (character == '\0')
-                {
                     continue;
-                }
 
                 if (char.IsWhiteSpace(character))
                 {
                     if (previousWasWhitespace)
-                    {
                         continue;
-                    }
 
                     builder.Append(' ');
                     previousWasWhitespace = true;
@@ -43,6 +51,9 @@ namespace SMSSender.Interfaces.Common
 
         private static char NormalizeCharacter(char value)
         {
+            if (IsIgnorableCharacter(value))
+                return '\0';
+
             return value switch
             {
                 '\u0660' => '0',
@@ -70,20 +81,19 @@ namespace SMSSender.Interfaces.Common
                 '\u060C' => ',',
                 '\u061B' => ';',
                 '\u00A0' => ' ',
-                '\u200E' => '\0',
-                '\u200F' => '\0',
-                '\u202A' => '\0',
-                '\u202B' => '\0',
-                '\u202C' => '\0',
-                '\u202D' => '\0',
-                '\u202E' => '\0',
-                '\u2066' => '\0',
-                '\u2067' => '\0',
-                '\u2068' => '\0',
-                '\u2069' => '\0',
-                '\uFEFF' => '\0',
+
                 _ => value
             };
+        }
+
+        private static bool IsIgnorableCharacter(char c)
+        {
+            if (RemoveChars.Contains(c))
+                return true;
+
+            return (c >= '\u2000' && c <= '\u200F') ||
+                   (c >= '\u2028' && c <= '\u202F') ||
+                   (c >= '\u2060' && c <= '\u206F');
         }
     }
 }

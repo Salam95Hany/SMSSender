@@ -1,87 +1,98 @@
-<section class="auth-shell">
-  <div class="auth-shell__content">
-    <div class="auth-shell__intro">
-      <span class="auth-shell__badge">واجهة إنتاجية محدثة</span>
-      <h1>لوحة إدارة حديثة لمتابعة الرسائل والعمليات من أي جهاز.</h1>
-      <p>
-        تم تحسين التنقل، توزيع المحتوى، واستجابة الواجهة لتكون أكثر وضوحا وسرعة على الهاتف،
-        الجهاز اللوحي، وشاشات العمل الكبيرة.
-      </p>
+<div class="page-container">
+    <div class="page-wrapper">
+        <div class="login-card">
 
-      <div class="auth-highlights">
-        <article class="auth-highlight surface-card">
-          <i class="fas fa-mobile-alt"></i>
-          <div>
-            <strong>تجربة متجاوبة</strong>
-            <span>الجداول، البطاقات، والأدوات تتكيف بسلاسة مع كل المقاسات.</span>
-          </div>
-        </article>
+            <!-- Hero Panel -->
+            <div class="hero-panel">
+                <div class="hero-badge">
+                    <i class="fas fa-shield-alt"></i> بوابة الإدارة
+                </div>
+                <h1 class="hero-title">لوحة إدارة حديثة لمتابعة الرسائل والعمليات</h1>
+                <p class="hero-sub">
+                    تم تحسين التنقّل وتوزيع المحتوى واستجابة الواجهة لتكون أكثر وضوحاً وسرعة.
+                </p>
+                <div class="hero-features">
+                    <div class="hero-feat">
+                        <div class="feat-icon"><i class="fas fa-mobile-alt"></i></div>
+                        <span>تجربة متجاوبة مع كل المقاسات</span>
+                    </div>
+                    <div class="hero-feat">
+                        <div class="feat-icon"><i class="fas fa-layer-group"></i></div>
+                        <span>هيكل أوضح وتحميل أسرع لمسارات الإدارة</span>
+                    </div>
+                    <div class="hero-feat">
+                        <div class="feat-icon"><i class="fas fa-bolt"></i></div>
+                        <span>وصول مباشر للمشكلات المُرجأة بأكثر تركيزاً</span>
+                    </div>
+                </div>
+            </div>
 
-        <article class="auth-highlight surface-card">
-          <i class="fas fa-layer-group"></i>
-          <div>
-            <strong>هيكل أوضح</strong>
-            <span>مكونات مشتركة، تنقل منظم، وتحميل كسول لمسارات الإدارة.</span>
-          </div>
-        </article>
+            <!-- Form Panel -->
+            <div class="form-panel">
 
-        <article class="auth-highlight surface-card">
-          <i class="fas fa-bolt"></i>
-          <div>
-            <strong>سير عمل أسرع</strong>
-            <span>وصول مباشر للشاشات الحرجة مع واجهات أقل ازدحاما وأكثر تركيزا.</span>
-          </div>
-        </article>
-      </div>
+                <div class="avatar-wrap">
+                    <svg width="84" height="84" viewBox="0 0 84 84">
+          <circle cx="42" cy="42" r="42" fill="#7ab8d8"/>
+          <ellipse cx="42" cy="55" rx="22" ry="14" fill="#3a6b8a"/>
+          <circle cx="42" cy="36" r="15" fill="#f0c8a0"/>
+        </svg>
+                </div>
+
+                <h2 class="form-heading">ابدأ من لوحة التحكم</h2>
+                <p class="form-sub">أدخل بياناتك للوصول إلى لوحة الإدارة</p>
+
+                <!-- Alert -->
+                <div class="alert-custom show" *ngIf="showAlert">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span>{{ alertMessage }}</span>
+                </div>
+
+                <form [formGroup]="loginForm" (ngSubmit)="Login()">
+
+                    <!-- Email -->
+                    <div class="input-group-custom">
+                        <label>اسم المستخدم</label>
+                        <div class="input-wrap">
+                            <input type="email" formControlName="userName" placeholder="اسم المستخدم" style="text-align: end;" required/>
+                            <span class="input-icon">
+              <i class="fas fa-envelope"></i>
+            </span>
+                        </div>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="input-group-custom">
+                        <label>كلمة المرور</label>
+                        <div class="input-wrap">
+                            <input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="••••••••" required/>
+
+                            <span class="input-icon">
+              <i class="fas fa-lock"></i>
+            </span>
+
+                            <button type="button" class="toggle-pass" (click)="togglePassword()">
+              <i
+                class="fas"
+                [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"
+              ></i>
+            </button>
+                        </div>
+                    </div>
+
+                    <!-- Submit -->
+                    <button class="btn-login" type="submit" [disabled]="isLoading">
+          <ng-container *ngIf="!isLoading">
+            <i class="fas fa-sign-in-alt"></i>
+            تسجيل الدخول
+          </ng-container>
+
+          <ng-container *ngIf="isLoading">
+            <i class="fas fa-spinner fa-spin"></i>
+            جارٍ التحقق...
+          </ng-container>
+        </button>
+                </form>
+            </div>
+        </div>
     </div>
-
-    <article class="auth-card surface-card">
-      <div class="auth-card__media">
-        <img src="login-img.png" alt="واجهة تسجيل الدخول" />
-      </div>
-
-      <div class="auth-card__body">
-        <span class="auth-card__eyebrow">بوابة الإدارة</span>
-        <h2>{{ hasSession ? 'متابعة الجلسة الحالية' : 'ابدأ من لوحة التحكم' }}</h2>
-        <p *ngIf="hasSession; else previewMode">
-          تم العثور على جلسة محفوظة باسم <strong>{{ displayName }}</strong>. يمكنك متابعة العمل مباشرة
-          من الواجهة الرئيسية.
-        </p>
-
-        <ng-template #previewMode>
-          <p>
-            الواجهة جاهزة لربط شاشة الدخول الفعلية عند تفعيل مسار المصادقة، وفي الوقت الحالي يمكنك
-            متابعة التنقل داخل النظام مباشرة.
-          </p>
-        </ng-template>
-
-        <div class="auth-card__session" *ngIf="hasSession">
-          <div>
-            <span>المستخدم</span>
-            <strong>{{ displayName }}</strong>
-          </div>
-          <div>
-            <span>الجهة</span>
-            <strong>{{ userModel?.companyName || 'SMS Sender' }}</strong>
-          </div>
-          <div>
-            <span>الدور</span>
-            <strong>{{ userModel?.role || 'Administrator' }}</strong>
-          </div>
-        </div>
-
-        <div class="auth-card__actions">
-          <a class="btn btn-secondary" routerLink="/admin/dashboard">
-            <i class="fas fa-arrow-left"></i>
-            <span>{{ hasSession ? 'متابعة إلى لوحة التحكم' : 'الدخول إلى لوحة التحكم' }}</span>
-          </a>
-
-          <a class="btn btn-outline-secondary" routerLink="/not-authorized">
-            <i class="fas fa-shield-alt"></i>
-            <span>معاينة حالة عدم الصلاحية</span>
-          </a>
-        </div>
-      </div>
-    </article>
-  </div>
-</section>
+</div>

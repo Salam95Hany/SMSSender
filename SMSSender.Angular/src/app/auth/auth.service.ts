@@ -69,4 +69,37 @@ apiURL = environment.apiUrl;
     let ckeckRole = roles.some(i => i == userModel?.role);
     return ckeckRole;
   }
+
+   resolveReturnUrl(returnUrl?: string | null, fallbackUrl = '/admin'): string {
+    const localReturnUrl = this.getLocalReturnUrl(returnUrl);
+    if (!localReturnUrl)
+      return fallbackUrl;
+
+    if (localReturnUrl === '/login' || localReturnUrl.startsWith('/login?')) {
+      const nestedReturnUrl = this.getNestedReturnUrl(localReturnUrl);
+      return this.resolveReturnUrl(nestedReturnUrl, fallbackUrl);
+    }
+
+    return localReturnUrl;
+  }
+
+  private getLocalReturnUrl(returnUrl?: string | null): string | null {
+    if (!returnUrl)
+      return null;
+
+    const trimmedReturnUrl = returnUrl.trim();
+    if (!trimmedReturnUrl || !trimmedReturnUrl.startsWith('/') || trimmedReturnUrl.startsWith('//'))
+      return null;
+
+    return trimmedReturnUrl;
+  }
+
+  private getNestedReturnUrl(loginUrl: string): string | null {
+    try {
+      const parsedUrl = this.router.parseUrl(loginUrl);
+      return parsedUrl.queryParams['returnUrl'] ?? null;
+    } catch {
+      return null;
+    }
+  }
 }

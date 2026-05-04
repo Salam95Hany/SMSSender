@@ -32,7 +32,6 @@ export class AllMessageComponent implements OnInit {
   constructor(private adminService: AdminService, private toaster: ToastrService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    debugger;
     const data = this.route.snapshot.data;
     this.PagingFilter.operationType = data['opreationType'];
     this.Title = data['title'];
@@ -54,7 +53,8 @@ export class AllMessageComponent implements OnInit {
   }
 
   PageChanged(obj: any) {
-    this.PagingFilter.currentpage = obj.page;
+    debugger;
+    this.PagingFilter.currentpage = obj;
     this.GetSmsDataByOperationType();
   }
 

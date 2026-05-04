@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    apiUrl: 'https://urology-cairo-api.runasp.net/api/',
+    apiUrl: 'https://smsreader-api.runasp.net/api/',
 };

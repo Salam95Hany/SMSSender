@@ -39,7 +39,6 @@ export class AdminFilterComponent {
   constructor() { }
 
   ngOnChanges(changes: SimpleChanges): void {
-    debugger
     if (this.OriginalFilterCache.length === 0 && this.FilterList.length > 0) {
       this.OriginalFilterCache = JSON.parse(JSON.stringify(this.FilterList));
     }
