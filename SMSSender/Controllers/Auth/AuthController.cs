@@ -54,7 +54,7 @@ namespace SMSSender.Controllers.Auth
 
         [HttpPost]
         [Route("CreateUser")]
-        [Authorize]
+      
         public async Task<ApiResponseModel<string>> CreateUser(AddUserModel model)
         {
             var results = await _authService.CreateUser(model);

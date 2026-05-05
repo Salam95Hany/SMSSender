@@ -53,15 +53,15 @@
 
                                 <span class="status-chip" [ngClass]="getOperationClass(item.operationType)">{{ item.operationTypeName }}</span>
                             </td>
-                            <td data-label="المبلغ">{{ item.amount ?? 0 | number:'1.0-0'}}</td>
+                            <td data-label="المبلغ">{{ item.amount ?? 0 | number:'1.2-2'}}</td>
                             <td data-label="رقم تلفون المرسل">{{ item.fromPhone ?? '-' }}</td>
                             <td data-label="اسم المرسل">{{ item.senderName ?? '-' }}</td>
-                            <td data-label="رصيد المحفظة">{{ item.balanceAfter ?? 0 | number:'1.0-0'}}</td>
-                            <td data-label="العمولة">{{ item.commission ?? 0 | number:'1.0-0'}}</td>
+                            <td data-label="رصيد المحفظة">{{ item.balanceAfter ?? 0 | number:'1.2-2'}}</td>
+                            <td data-label="العمولة">{{ item.commission ?? 0 | number:'1.2-2'}}</td>
                             <td data-label="تاريخ الوصول">{{ item.operationServerDateTime ?? '-' | arabicDateWithTime}}</td>
                             <td data-label="الإجراءات" class="table-actions-cell">
                                 <div class="table-actions-row">
-                                    <button class="btn btn-outline-secondary"><i class="far fa-eye"></i><span>تفاصيل</span></button>
+                                    <button class="btn btn-outline-secondary" (click)="openSidePanel(DetailsSidePanel,item)"><i class="far fa-eye"></i><span>تفاصيل</span></button>
                                     <!-- <button class="btn btn-danger"><i class="fas fa-times"></i><span>إلغاء</span></button> -->
                                 </div>
                             </td>
@@ -76,3 +76,114 @@
         </ng-template>
     </div>
 </section>
+
+
+<ng-template #DetailsSidePanel let-offcanvas>
+    <div class="offcanvas-header pb-0 d-flex align-items-center justify-content-between admin-order-panel-header">
+        <div>
+            <h4 class="offcanvas-title m-0 d-flex align-items-center w-100"><i class="uil uil-document-info text-success"></i> ({{MessageDetails.providerName}}) - ({{MessageDetails.providerPhone}})</h4>
+        </div>
+        <button type="button" class="btn-panel bg-danger text-white rounded" aria-label="Close" (click)="offcanvas.dismiss()">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    <div class="offcanvas-body pt-0 admin-order-panel-body">
+        <div class="container pt-3">
+            <div class="message-center__body mb-3">
+                <article class="message-card">
+                    <div class="message-card__header">
+                        <div class="message-card__sender">
+                            <div>
+                                <strong class="mb-1">{{MessageDetails.senderName}}</strong>
+                                <span>{{MessageDetails.fromPhone}}</span>
+                            </div>
+                        </div>
+
+                        <div class="message-card__meta">
+                            <strong>{{MessageDetails.operationServerDateTime ?? '-' | arabicDateWithTime}}</strong>
+                        </div>
+                    </div>
+                    <p style="font-size: 1.5rem;line-height: 1.5;">{{MessageLog?.message}}</p>
+                </article>
+            </div>
+            <div class="admin-table-wrapper mb-3">
+                <div class="table-responsive table-responsive-card">
+                    <table class="table align-middle table-hover">
+                        <thead>
+                            <tr>
+                                <th>نوع المحفظة</th>
+                                <th>اسم المحفظة</th>
+                                <th>رقم المحفظة</th>
+                                <th>نوع العملية</th>
+                                <th>المبلغ</th>
+                                <th>رقم تلفون المرسل</th>
+                                <th>اسم المرسل</th>
+                                <th>رصيد المحفظة</th>
+                                <th>العمولة</th>
+                                <th>تاريخ الوصول</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td data-label="نوع المحفظة">
+                                    <span class="status-chip" [ngClass]="{'badge-danger': MessageDetails.provider == 'فودافون كاش','badge-primary':MessageDetails.provider == 'انستا باي'}">{{MessageDetails.provider }}</span>
+                                </td>
+                                <td data-label="اسم المحفظة">{{ MessageDetails.providerName ?? '-' }}</td>
+                                <td data-label="رقم المحفظة">{{ MessageDetails.providerPhone ?? '-' }}</td>
+                                <td data-label="نوع العملية">
+
+                                    <span class="status-chip" [ngClass]="getOperationClass(MessageDetails.operationType)">{{ MessageDetails.operationTypeName }}</span>
+                                </td>
+                                <td data-label="المبلغ">{{ MessageDetails.amount ?? 0 | number:'1.2-2'}}</td>
+                                <td data-label="رقم تلفون المرسل">{{ MessageDetails.fromPhone ?? '-' }}</td>
+                                <td data-label="اسم المرسل">{{ MessageDetails.senderName ?? '-' }}</td>
+                                <td data-label="رصيد المحفظة">{{ MessageDetails.balanceAfter ?? 0 | number:'1.2-2'}}</td>
+                                <td data-label="العمولة">{{ MessageDetails.commission ?? 0 | number:'1.2-2'}}</td>
+                                <td data-label="تاريخ الوصول">{{ MessageDetails.operationServerDateTime ?? '-' | arabicDateWithTime}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="admin-table-wrapper">
+                <div class="row g-3 p-3">
+                    <div class="col-lg-6">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="item_name" placeholder="new-user" [(ngModel)]="MessageUpdate.amount" [disabled]="MessageUpdate.operationType != 1 && MessageUpdate.operationType != 2">
+                            <label for="item_name">المبلغ</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="item_name" placeholder="new-user" [(ngModel)]="MessageUpdate.fromPhone" [disabled]="MessageUpdate.operationType != 1 && MessageUpdate.operationType != 2">
+                            <label for="item_name">رقم تلفون المرسل</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="item_name" placeholder="new-user" [(ngModel)]="MessageUpdate.senderName" [disabled]="MessageUpdate.operationType != 2">
+                            <label for="item_name">اسم المرسل</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="item_name" placeholder="new-user" [(ngModel)]="MessageUpdate.balanceAfter">
+                            <label for="item_name">رصيد المحفظة</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="item_name" placeholder="new-user" [(ngModel)]="MessageUpdate.commission" [disabled]="MessageUpdate.operationType != 1 && MessageUpdate.operationType != 2">
+                            <label for="item_name">العمولة</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="offcanvas-footer">
+        <button class="btn btn-outline-primary" (click)="UpdateMessageTransaction()"><i class="far fa-edit"></i><span>تعديل</span></button>
+        <button class="btn btn-outline-success" (click)="CorrectionProcess()"><i class="fas fa-wrench"></i><span>تصحيح</span></button>
+    </div>
+</ng-template>

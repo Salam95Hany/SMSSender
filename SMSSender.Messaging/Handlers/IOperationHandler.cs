@@ -13,5 +13,6 @@ namespace SMSSender.Messaging.Handlers
     {
         OperationType OperationType { get; }
         Task Handle(MessageTransaction message);
+        Task Update(MessageTransaction message);
     }
 }

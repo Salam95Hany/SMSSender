@@ -1,15 +1,16 @@
-﻿using System.Data;
-using System.Text.RegularExpressions;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using SMSSender.Entities.Common;
 using SMSSender.Entities.Contracts.DTOs;
 using SMSSender.Entities.Models.Messaging;
+using SMSSender.Entities.Specifications.Message;
 using SMSSender.Interfaces;
 using SMSSender.Interfaces.Common;
 using SMSSender.Interfaces.Repositories;
 using SMSSender.Services.Common;
+using System.Data;
+using System.Text.RegularExpressions;
 
 namespace SMSSender.Services
 {
@@ -100,10 +101,45 @@ namespace SMSSender.Services
                 OperationServerDateTime = x.OperationServerDateTime,
                 Commission = x.Commission
             }).ToList();
-                
-                
+
+
 
             return ApiResponseModel<List<LatestTransactionDto>>.Success(GenericErrors.GetSuccess, Results);
+        }
+
+        public async Task<ApiResponseModel<MessageDetailsDto>> GetMessageDetailsById(Guid TransactionId)
+        {
+            var LogSpec = new MessageLogByIdSpecification(TransactionId);
+            var LogData = await _unitOfWork.Repository<SmsMessageLog>().GetByIdWithSpecAsync(LogSpec);
+            var Results = new MessageDetailsDto
+            {
+                TransactionId = LogData.TransactionId,
+                Provider = LogData.Provider,
+                ProviderName = LogData.ProviderName,
+                ProviderPhone = LogData.ProviderPhone,
+                Sim = LogData.Sim,
+                SentStamp = LogData.SentStamp,
+                ReceivedStamp = LogData.ReceivedStamp,
+                Message = LogData.Message
+            };
+            return ApiResponseModel<MessageDetailsDto>.Success(GenericErrors.GetSuccess, Results);
+        }
+
+        public async Task<ApiResponseModel<MessageDetailsDto>> UpdateTransactionMessage(UpdateTransactionMessage Model)
+        {
+            var Spec = new MessageTransactionByIdSpecification(Model.TransactionId);
+            var Entity = await _unitOfWork.Repository<MessageTransaction>().GetByIdWithSpecAsync(Spec);
+            if (Entity == null)
+                return ApiResponseModel<MessageDetailsDto>.Failure(GenericErrors.TransFailed);
+
+            Entity.Amount = Model.Amount;
+            Entity.FromPhone = Model.FromPhone;
+            Entity.SenderName = Model.SenderName;
+            Entity.BalanceAfter = Model.BalanceAfter;
+            Entity.Commission = Model.Commission.HasValue ? Model.Commission : null;
+
+            await _unitOfWork.CompleteAsync();
+            return ApiResponseModel<MessageDetailsDto>.Success(GenericErrors.UpdateSuccess);
         }
 
         public bool GetMessageFiltered(string? provider, string message)

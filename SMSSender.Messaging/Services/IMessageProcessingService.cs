@@ -9,5 +9,6 @@ namespace SMSSender.Messaging.Services
     public interface IMessageProcessingService
     {
         Task<bool> Process(SmsMessagePure Message);
+        Task<bool> CorrectionProcess(SmsMessagePure model);
     }
 }

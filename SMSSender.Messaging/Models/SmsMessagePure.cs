@@ -10,6 +10,8 @@ namespace SMSSender.Messaging
 {
     public class SmsMessagePure
     {
+        public int? MessageTransactionId { get; set; }
+        public Guid? TransactionId { get; set; }
         public string DeviceName { get; set; }
         public string PhoneNumber { get; set; }
         public string Message { get; set; }

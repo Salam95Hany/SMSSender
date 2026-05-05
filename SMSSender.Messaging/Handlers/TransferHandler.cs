@@ -27,5 +27,11 @@ namespace SMSSender.Messaging.Handlers
                 throw;
             }
         }
+
+        public async Task Update(MessageTransaction message)
+        {
+            _unitOfWork.Repository<MessageTransaction>().Update(message);
+            await _unitOfWork.CompleteAsync();
+        }
     }
 }

@@ -12,5 +12,7 @@ namespace SMSSender.Interfaces
         Task<ApiResponseModel<DataTable>> GetOperationCountDashboardSummary();
         Task<ApiResponseModel<List<LatestTransactionDto>>> GetTodayLatestTransactions();
         bool GetMessageFiltered(string? provider, string message);
+        Task<ApiResponseModel<MessageDetailsDto>> GetMessageDetailsById(Guid TransactionId);
+        Task<ApiResponseModel<MessageDetailsDto>> UpdateTransactionMessage(UpdateTransactionMessage Model);
     }
 }

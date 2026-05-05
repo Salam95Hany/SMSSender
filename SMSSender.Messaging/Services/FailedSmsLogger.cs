@@ -18,7 +18,7 @@ namespace SMSSender.Messaging.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task LogAsync(SmsMessagePure model, string errorReason)
+        public async Task LogAsync(SmsMessagePure model, string errorReason, bool IsCorrectionProcess = false)
         {
             var createdAt = DateTime.Now;
 
@@ -29,7 +29,7 @@ namespace SMSSender.Messaging.Services
                     TransactionId = Guid.NewGuid(),
                     Message = model.Message ?? string.Empty,
                     ErrorMessage = errorReason,
-                    MsgStatus = MsgStatus.Failure.ToString(),
+                    MsgStatus = IsCorrectionProcess ?  MsgStatus.CorrectionProcess.ToString() : MsgStatus.CorrectionProcess.ToString(),
                     Provider = model.ProviderStr ?? string.Empty,
                     ProviderName = model.DeviceName ?? string.Empty,
                     ProviderPhone = model.PhoneNumber ?? string.Empty,

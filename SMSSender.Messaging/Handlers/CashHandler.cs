@@ -1,12 +1,6 @@
 ﻿using SMSSender.Entities.Common;
 using SMSSender.Entities.Models.Messaging;
 using SMSSender.Interfaces.Repositories;
-using SMSSender.Messaging.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SMSSender.Messaging.Handlers
 {
@@ -30,6 +24,12 @@ namespace SMSSender.Messaging.Handlers
             {
                 throw;
             }
+        }
+
+        public async Task Update(MessageTransaction message)
+        {
+            _unitOfWork.Repository<MessageTransaction>().Update(message);
+            await _unitOfWork.CompleteAsync();
         }
     }
 }

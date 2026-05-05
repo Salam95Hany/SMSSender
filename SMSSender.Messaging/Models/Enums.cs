@@ -22,5 +22,6 @@ namespace SMSSender.Messaging.Models
     {
         Success = 200,
         Failure = 400,
+        CorrectionProcess = 300
     }
 }

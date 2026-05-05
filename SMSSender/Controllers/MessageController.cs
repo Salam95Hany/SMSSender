@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SMSSender.Entities.Common;
 using SMSSender.Entities.Contracts.DTOs;
-using SMSSender.Entities.Models.Messaging;
 using SMSSender.Interfaces;
+using SMSSender.Messaging;
+using SMSSender.Messaging.Services;
 using System.Data;
 
 namespace SMSSender.Controllers
@@ -15,9 +15,11 @@ namespace SMSSender.Controllers
     public class MessageController : ControllerBase
     {
         private readonly IMessageService _messageService;
-        public MessageController(IMessageService messageService)
+        private readonly IMessageProcessingService _processingService;
+        public MessageController(IMessageService messageService, IMessageProcessingService processingService)
         {
             _messageService = messageService;
+            _processingService = processingService;
         }
 
         [HttpPost("GetSmsDataByOperationType")]
@@ -46,6 +48,27 @@ namespace SMSSender.Controllers
         {
             var results = await _messageService.GetTodayLatestTransactions();
             return results;
+        }
+
+        [HttpGet("GetMessageDetailsById")]
+        public async Task<ApiResponseModel<MessageDetailsDto>> GetMessageDetailsById(Guid TransactionId)
+        {
+            var results = await _messageService.GetMessageDetailsById(TransactionId);
+            return results;
+        }
+
+        [HttpPost("UpdateTransactionMessage")]
+        public async Task<ApiResponseModel<MessageDetailsDto>> UpdateTransactionMessage(UpdateTransactionMessage Model)
+        {
+            var results = await _messageService.UpdateTransactionMessage(Model);
+            return results;
+        }
+
+        [HttpPost("CorrectionProcess")]
+        public async Task<bool> CorrectionProcess(SmsMessagePure Model)
+        {
+            var Process = await _processingService.CorrectionProcess(Model);
+            return Process;
         }
     }
 }

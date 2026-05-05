@@ -29,4 +29,16 @@ export class AdminService {
   GetTodayLatestTransactions() {
     return this.http.get<ApiResponseModel<any>>(this.Url + 'Message/GetTodayLatestTransactions');
   }
+
+  GetMessageDetailsById(TransactionId: any) {
+    return this.http.get<ApiResponseModel<any>>(this.Url + 'Message/GetMessageDetailsById?TransactionId=' + TransactionId);
+  }
+
+  UpdateTransactionMessage(Model: any) {
+    return this.http.post<ApiResponseModel<any>>(this.Url + 'Message/UpdateTransactionMessage', Model);
+  }
+
+  CorrectionProcess(Model: any) {
+    return this.http.post<any>(this.Url + 'Message/CorrectionProcess', Model);
+  }
 }
