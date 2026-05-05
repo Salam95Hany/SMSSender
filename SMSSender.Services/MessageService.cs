@@ -76,8 +76,8 @@ namespace SMSSender.Services
             var Tomorrow = Today.AddDays(1);
 
             var Data = await _unitOfWork.Repository<MessageTransaction>()
-                .GetAllAsQueryable().Where(x => x.OperationServerDateTime >= Today && x.OperationServerDateTime < Tomorrow)
-                .OrderByDescending(x => x.OperationServerDateTime)
+                .GetAllAsQueryable().Where(x => x.OperationMsgDateTime >= Today && x.OperationMsgDateTime < Tomorrow)
+                .OrderByDescending(x => x.OperationMsgDateTime)
                 .Take(5).AsNoTracking().ToListAsync();
 
             var Results = Data.Select(x => new LatestTransactionDto
