@@ -98,7 +98,7 @@ namespace SMSSender.Services
                 SenderName = x.SenderName,
                 BalanceAfter = x.BalanceAfter,
                 TransactionNumber = x.TransactionNumber,
-                OperationServerDateTime = x.OperationServerDateTime,
+                OperationServerDateTime = x.OperationMsgDateTime.Value,
                 Commission = x.Commission
             }).ToList();
 
