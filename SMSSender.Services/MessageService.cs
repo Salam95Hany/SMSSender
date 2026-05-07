@@ -107,6 +107,12 @@ namespace SMSSender.Services
             return ApiResponseModel<List<LatestTransactionDto>>.Success(GenericErrors.GetSuccess, Results);
         }
 
+        public async Task<ApiResponseModel<DataTable>> GetMessageNotification()
+        {
+            var dt = await _sQLHelper.ExecuteDataTableAsync("[sms].[SP_GetMessageNotification]", Array.Empty<SqlParameter>());
+            return ApiResponseModel<DataTable>.Success(GenericErrors.GetSuccess, dt);
+        }
+
         public async Task<ApiResponseModel<MessageDetailsDto>> GetMessageDetailsById(Guid TransactionId)
         {
             var LogSpec = new MessageLogByIdSpecification(TransactionId);
@@ -140,6 +146,18 @@ namespace SMSSender.Services
 
             await _unitOfWork.CompleteAsync();
             return ApiResponseModel<MessageDetailsDto>.Success(GenericErrors.UpdateSuccess);
+        }
+
+        public async Task<ApiResponseModel<string>> MakeMessageAsRead(int MessageTransactionId)
+        {
+            var Entity = await _unitOfWork.Repository<MessageTransaction>().GetByIdAsync(MessageTransactionId);
+            if (Entity == null)
+                return ApiResponseModel<string>.Failure(GenericErrors.TransFailed);
+
+            Entity.IsRead = true;
+
+            await _unitOfWork.CompleteAsync();
+            return ApiResponseModel<string>.Success(GenericErrors.UpdateSuccess);
         }
 
         public bool GetMessageFiltered(string? provider, string message)

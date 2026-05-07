@@ -5,7 +5,6 @@ import { AdminService } from '../../../../services/admin.service';
 import { AdminBreadcrumbComponent } from '../../../../shared/admin-breadcrumb/admin-breadcrumb.component';
 import { AdminEmptyStateComponent } from '../../../../shared/admin-empty-state/admin-empty-state.component';
 import { AdminStatsCardComponent } from '../../../../shared/admin-stats-card/admin-stats-card.component';
-import { MessageBoxPopupComponent } from '../../../../shared/message-box-popup/message-box-popup.component';
 import { ArabicDateWithTimePipe } from '../../../../pipes/arabic-date-with-time.pipe';
 
 @Component({
@@ -16,7 +15,6 @@ import { ArabicDateWithTimePipe } from '../../../../pipes/arabic-date-with-time.
     NgIf,
     NgbModule,
     AdminStatsCardComponent,
-    MessageBoxPopupComponent,
     AdminBreadcrumbComponent,
     AdminEmptyStateComponent,
     ArabicDateWithTimePipe,
@@ -67,13 +65,5 @@ export class DashboardComponent {
       case 5: return 'badge-secondary';
       default: return 'badge-light';
     }
-  }
-
-  openMessageBoxModal(content: unknown): void {
-    this.modalService.open(content, {
-      centered: true,
-      size: 'xl',
-      windowClass: 'messages-modal',
-    });
   }
 }

@@ -461,7 +461,7 @@ button:disabled {
 }
 
 .messages-modal .modal-dialog {
-    max-width: min(1100px, calc(100vw - 1.5rem));
+    max-width: min(880px, calc(100vw - 1.5rem));
 }
 
 .pagination {

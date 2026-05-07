@@ -12,6 +12,10 @@ export class AdminService {
 
   constructor(private http: HttpClient) { }
 
+  connect() {
+    return new EventSource(this.Url + 'SMSReader/stream');
+  }
+
   // ============================== Message ==============================
 
   GetSmsDataByOperationType(PagingFilter: PagingFilterModel) {
@@ -40,5 +44,13 @@ export class AdminService {
 
   CorrectionProcess(Model: any) {
     return this.http.post<any>(this.Url + 'Message/CorrectionProcess', Model);
+  }
+
+  GetMessageNotification() {
+    return this.http.get<ApiResponseModel<any[]>>(this.Url + 'Message/GetMessageNotification');
+  }
+
+  MakeMessageAsRead(MessageTransactionId: number) {
+    return this.http.get<ApiResponseModel<any[]>>(this.Url + 'Message/MakeMessageAsRead?MessageTransactionId=' + MessageTransactionId);
   }
 }

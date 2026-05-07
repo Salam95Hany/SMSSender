@@ -14,5 +14,7 @@ namespace SMSSender.Interfaces
         bool GetMessageFiltered(string? provider, string message);
         Task<ApiResponseModel<MessageDetailsDto>> GetMessageDetailsById(Guid TransactionId);
         Task<ApiResponseModel<MessageDetailsDto>> UpdateTransactionMessage(UpdateTransactionMessage Model);
+        Task<ApiResponseModel<DataTable>> GetMessageNotification();
+        Task<ApiResponseModel<string>> MakeMessageAsRead(int MessageTransactionId);
     }
 }

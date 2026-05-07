@@ -14,11 +14,16 @@
         </div>
 
         <div class="app-header__end">
-            <li class="nav-item user-dropdown user-notifications" ngbDropdown display="dynamic" placement="bottom-start">
-                <a class="nav-link without-arrow dropdown-toggle d-flex align-items-center text-white" role="button" tabindex="0" id="userDropdown" ngbDropdownToggle>
+            <li class="nav-item user-dropdown user-notifications" ngbDropdown display="dynamic" placement="bottom-end">
+                <a class="nav-link without-arrow" (click)="OpenMessageBoxModal()">
+                    <i class="fas fa-envelope"></i>
+                </a>
+            </li>
+            <li class="nav-item user-dropdown user-notifications" ngbDropdown display="dynamic" placement="bottom-end">
+                <a class="nav-link without-arrow dropdown-toggle d-flex align-items-center" role="button" tabindex="0" id="userDropdown" ngbDropdownToggle>
                     <span class="position-relative">
-          <span class="alert-count">0</span>
-                    <i class="far fa-bell"></i>
+                    <span class="alert-count">{{TotalCount}}</span>
+                    <i class="fas fa-bell"></i>
                     </span>
                 </a>
                 <div ngbDropdownMenu aria-labelledby="userDropdown" class="dropdown-menu dropdown-user-menu w-100 min-width-360 py-0">
@@ -26,21 +31,16 @@
                         <p class="msg-header-clear m-0 ms-auto">كل الرسائل</p>
                     </div>
                     <div class="header-message-list small-scroll overflow-auto max-height-300">
-                        <a class="dropdown-item">
-                            <div class="d-flex align-items-center">
-                                <div class="notify me-2 bg-light-danger text-danger me-2"><i class="fas fa-wallet"></i></div>
+                        <a class="dropdown-item" *ngFor="let item of MessageList" [ngClass]="{'not-read-item': !item.isRead}" (click)="RedirectToMessagesPage(item.messageTransactionId)">
+                            <div class="d-flex align-items-center w-100">
+                                <div class="notify me-2 bg-light-danger text-danger me-2" *ngIf="item.provider == 'فودافون كاش'"><i class="fas fa-wallet"></i></div>
+                                <div class="notify me-2 bg-light-primary text-primary" *ngIf="item.provider == 'انستا باي'"><i class="fas fa-wallet"></i></div>
                                 <div class="flex-grow-1">
-                                    <h6 class="msg-name">New Orders <span class="msg-time float-end">2 min ago</span></h6>
-                                    <p class="msg-info">You have recived new orders</p>
-                                </div>
-                            </div>
-                        </a>
-                        <a class="dropdown-item">
-                            <div class="d-flex align-items-center">
-                                <div class="notify me-2 bg-light-primary text-primary"><i class="fas fa-wallet"></i></div>
-                                <div class="flex-grow-1">
-                                    <h6 class="msg-name">New 24 authors<span class="msg-time float-end">1 day ago</span></h6>
-                                    <p class="msg-info">24 new authors joined last week</p>
+                                    <h6 class="msg-name">
+                                        <span>{{item.operationTypeName}}</span>
+                                        <span class="msg-time float-end">{{item.operationServerDateTime | timeAgoToday}}</span>
+                                    </h6>
+                                    <p class="msg-info">عملية {{item.operationTypeName}} لمحفظة رقم {{item.providerPhone}}</p>
                                 </div>
                             </div>
                         </a>
@@ -52,7 +52,6 @@
                 <i class="fas fa-sliders-h"></i>
                 <span>الإعدادات</span>
             </a>
-
             <div class="user-menu" ngbDropdown placement="bottom-end">
                 <button type="button" class="user-menu__trigger" ngbDropdownToggle>
                     <span class="user-menu__avatar">{{ userInitials }}</span>
@@ -86,3 +85,7 @@
         </div>
     </div>
 </header>
+
+<ng-template #MessageBoxModal>
+    <app-message-box-popup [MessageList]="MessageList"></app-message-box-popup>
+</ng-template>

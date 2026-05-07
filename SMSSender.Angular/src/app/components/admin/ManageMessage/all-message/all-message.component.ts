@@ -32,9 +32,11 @@ export class AllMessageComponent implements OnInit {
   TransactionId: any;
   ProviderName = '';
   ProviderPhone = '';
+  MessageTransactionId
   PagingFilter: PagingFilterModel = { pagesize: 20, currentpage: 1, operationType: 0, filterList: [] };
   TotalCount = 0;
   isFilter = true;
+  ReloadFilter = 0;
 
   constructor(private adminService: AdminService, private toaster: ToastrService, private route: ActivatedRoute, private offcanvasService: NgbOffcanvas) { }
 
@@ -42,12 +44,24 @@ export class AllMessageComponent implements OnInit {
     const data = this.route.snapshot.data;
     this.PagingFilter.operationType = data['opreationType'];
     this.Title = data['title'];
-    this.GetSmsDataByOperationType();
-    this.GetSmsFilterByOperationType();
+    this.route.queryParams.subscribe(params => {
+      this.MessageTransactionId = params['id'];
+      this.PagingFilter.filterList = [];
+
+      if (this.MessageTransactionId) {
+        this.PagingFilter.filterList.push({
+          categoryName: 'MessageTransId',
+          itemId: this.MessageTransactionId
+        });
+        this.ReloadFilter++;
+      }
+
+      this.GetSmsDataByOperationType();
+      this.GetSmsFilterByOperationType();
+    });
   }
 
   openSidePanel(content: any, item: any) {
-    debugger;
     this.TransactionId = item.transactionId;
     this.MessageDetails = item;
     var obj = {
@@ -91,6 +105,11 @@ export class AllMessageComponent implements OnInit {
 
   FilterChecked(filterList: FilterModel[]) {
     this.PagingFilter.filterList = filterList;
+    if (this.MessageTransactionId)
+      this.PagingFilter.filterList.push({
+        categoryName: 'MessageTransId',
+        itemId: this.MessageTransactionId
+      });
     this.GetSmsDataByOperationType();
     this.GetSmsFilterByOperationType();
   }

@@ -31,7 +31,7 @@ import { NgxDaterangepickerMd, LocaleService, LOCALE_CONFIG } from 'ngx-daterang
 export class AdminFilterComponent {
   @Input() FilterList: FilterModel[] = [];
   @Input() AppliedFilters: FilterModel[] = [];
-  @Input() ReloadFilter = false;
+  @Input() ReloadFilter = 0;
   @Input() Page = '';
   @Output() FilterChecked = new EventEmitter<FilterModel[]>();
   SelectedFilter: FilterModel[] = [];
@@ -50,7 +50,7 @@ export class AdminFilterComponent {
     this.mergeFiltersWithCache();
     this.restoreSelectedValues();
 
-    if (changes['ReloadFilter'] && this.ReloadFilter) {
+    if (changes['ReloadFilter']) {
       this.removeAllFilters();
     }
   }

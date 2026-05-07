@@ -1,83 +1,78 @@
 <section class="message-center">
-  <header class="message-center__header">
-    <div>
-      <span class="message-center__eyebrow">مركز الرسائل</span>
-      <h2>صندوق المتابعة</h2>
-      <p>كل الرسائل في مساحة واحدة مع بحث سريع وفرز واضح للحالات غير المقروءة.</p>
-    </div>
-
-    <button type="button" class="message-center__close" (click)="dismissModal()" aria-label="إغلاق">
-      <i class="fas fa-times"></i>
-    </button>
-  </header>
-
-  <div class="message-center__toolbar">
-    <div class="message-search">
-      <i class="fas fa-search"></i>
-      <input type="text" [(ngModel)]="searchTerm" placeholder="ابحث في الرسائل أو الأرقام" />
-    </div>
-
-    <div class="message-filters">
-      <button type="button" [class.active]="activeFilter === 'all'" (click)="setFilter('all')">
-        الكل
-        <span>{{ messages.length }}</span>
-      </button>
-      <button type="button" [class.active]="activeFilter === 'unread'" (click)="setFilter('unread')">
-        غير مقروء
-        <span>{{ unreadCount }}</span>
-      </button>
-    </div>
-  </div>
-
-  <div class="message-center__body" *ngIf="filteredMessages.length > 0; else emptyState">
-    <article
-      class="message-card"
-      *ngFor="let message of filteredMessages"
-      [class.message-card--unread]="message.unread"
-      [style.--message-accent]="message.accent"
-    >
-      <div class="message-card__header">
-        <div class="message-card__sender">
-          <div class="message-card__avatar">{{ message.initial }}</div>
-          <div>
-            <strong>{{ message.senderName }}</strong>
-            <span>{{ message.senderNumber }}</span>
-          </div>
+    <header class="message-center__header">
+        <div>
+            <span class="message-center__eyebrow">مركز الرسائل</span>
+            <h2>صندوق المتابعة</h2>
+            <p>كل الرسائل في مساحة واحدة مع بحث سريع وفرز واضح.</p>
         </div>
 
-        <div class="message-card__meta">
-          <small>{{ message.time }}</small>
-          <span *ngIf="message.unread">جديد</span>
+        <button type="button" class="message-center__close" (click)="dismissModal()" aria-label="إغلاق">
+            <i class="fas fa-times"></i>
+        </button>
+    </header>
+    <div class="message-center__toolbar">
+        <div class="message-search">
+            <i class="fas fa-search"></i>
+            <input type="text" [(ngModel)]="searchTerm" placeholder="ابحث في الرسائل أو الأرقام" />
         </div>
-      </div>
-
-      <p>{{ message.preview }}</p>
-
-      <div class="message-card__actions">
-        <button type="button" class="btn btn-outline-secondary">
-          <i class="fas fa-eye"></i>
-          <span>عرض</span>
-        </button>
-        <button type="button" class="btn btn-secondary">
-          <i class="fas fa-check-double"></i>
-          <span>تم الاستلام</span>
-        </button>
-      </div>
-    </article>
-  </div>
-
-  <ng-template #emptyState>
-    <div class="message-center__empty">
-      <i class="fas fa-inbox"></i>
-      <h3>لا توجد رسائل مطابقة</h3>
-      <p>جرّب تغيير البحث أو التبديل بين عوامل التصفية للوصول إلى النتائج المطلوبة.</p>
+        <div class="message-filters">
+            <button type="button"> الكل<span>{{ MessageList.length }}</span></button>
+        </div>
     </div>
-  </ng-template>
-
-  <footer class="message-center__footer">
-    <span>إجمالي الرسائل</span>
-    <strong>{{ messages.length }}</strong>
-    <span>غير المقروءة</span>
-    <strong>{{ unreadCount }}</strong>
-  </footer>
+    <div class="message-center__body" *ngIf="MessageList.length > 0; else emptyState">
+        <div class="card-wrap" *ngFor="let item of MessageList;let i = index">
+            <div class="card-main">
+                <div class="card-header">
+                    <div class="header-left">
+                        <div class="avatar button-color">{{item.firstLetter}}</div>
+                        <div>
+                            <div class="sender-name">{{ item.senderName }}</div>
+                            <div class="sender-nums">({{ item.fromPhone }}) &nbsp;|&nbsp; {{item.providerName}} ({{ item.providerPhone }})</div>
+                        </div>
+                    </div>
+                    <div class="header-right">
+                        <div class="time-badge">{{ item.operationServerDateTime | timeAgoToday }}</div>
+                        <span class="badge-sabq">{{item.operationTypeName}}</span>
+                    </div>
+                </div>
+                <div class="msg-box">
+                    <p class="msg-text">{{ item.message }}</p>
+                </div>
+                <table class="details-table">
+                    <tr>
+                        <td>المبلغ</td>
+                        <td class="amount-val">{{item.amount | number:'1.2-2'}}</td>
+                        <td class="w-15">المبلغ المطلوب</td>
+                        <td class="amount-val w-10">{{item.customerReceive | number:'1.2-2'}}</td>
+                    </tr>
+                </table>
+                <div class="commission-row">
+                    <div>
+                        العمولة: &nbsp;<strong>{{item.commission}}</strong>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center" *ngIf="item.operationType == 2">
+                        <label class="label-title me-2" for="checkbox-comm_{{i}}">{{item.isChecked ?'المبلغ شامل العمولة؟':'المبلغ غير شامل العمولة؟'}}</label>
+                        <input type="checkbox" class="custom-checkbox" id="checkbox-comm_{{i}}" [(ngModel)]="item.isChecked" (change)="CalculateCustomerReceive(item,$event.target.checked)">
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <label class="label-title me-2">تعديل العمولة:</label>
+                        <div class="d-flex align-items-center">
+                            <input type="number" class="form-control text-center w-75" [(ngModel)]="item.commissionUpdated" (input)="CalculateCamission(item)">
+                        </div>
+                    </div>
+                </div>
+                <div class="actions">
+                    <button class="btn button-color">✓ &nbsp;{{item.operationType == 1 ? 'تم الاستلام' : 'تم التسليم'}}</button>
+                    <button class="btn btn-secondary">💰 &nbsp;مؤجل</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ng-template #emptyState>
+        <div class="message-center__empty">
+            <i class="fas fa-inbox"></i>
+            <h3>لا توجد رسائل مطابقة</h3>
+            <p>جرّب تغيير البحث أو التبديل بين عوامل التصفية للوصول إلى النتائج المطلوبة.</p>
+        </div>
+    </ng-template>
 </section>

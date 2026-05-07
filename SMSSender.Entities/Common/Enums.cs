@@ -15,4 +15,10 @@ namespace SMSSender.Entities.Common
         Transfer = 4, // دخلت في المحفظة ولم تخصم من الصندوق
         BalanceInquiry = 5 // استعلام رصيد
     }
+
+    public enum TransactionStatus
+    {
+        Completed = 1,
+        Delayed = 2
+    }
 }

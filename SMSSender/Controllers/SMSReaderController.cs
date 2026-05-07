@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+﻿using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using SMSSender.Interfaces;
 using SMSSender.Interfaces.Common;
@@ -57,9 +56,9 @@ namespace SMSSender.Controllers
                 };
 
                 var Process = await _processingService.Process(smsMessage);
-                if (Process)
+                if (Process.Success)
                 {
-                    await BroadcastAsync("Message_Added");
+                    await BroadcastAsync("Message_Added", Process.TransactionId.Value);
                     return Ok();
                 }
                 else
@@ -83,13 +82,15 @@ namespace SMSSender.Controllers
             _clients.TryTake(out _);
         }
 
-        public static async Task BroadcastAsync(string msg)
+        public static async Task BroadcastAsync(string msg, Guid TransactionId)
         {
+            var Payload = JsonSerializer.Serialize(new { Message = msg, TransactionId = TransactionId });
+
             foreach (var client in _clients)
             {
                 try
                 {
-                    var data = $"data: {msg}\n\n";
+                    var data = $"data: {Payload}\n\n";
                     var bytes = Encoding.UTF8.GetBytes(data);
 
                     await client.Body.WriteAsync(bytes);

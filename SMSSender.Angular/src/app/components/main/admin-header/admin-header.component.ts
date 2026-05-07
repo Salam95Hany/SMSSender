@@ -1,25 +1,34 @@
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
-import { NgClass, NgIf } from '@angular/common';
+import { Component, EventEmitter, Inject, Input, Output, TemplateRef, ViewChild, inject } from '@angular/core';
+import { NgClass, NgFor, NgIf } from '@angular/common';
 import { ActivatedRoute, NavigationEnd, Router, RouterLink } from '@angular/router';
-import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { filter } from 'rxjs';
 import { AuthService } from '../../../auth/auth.service';
+import { MessageBoxPopupComponent } from '../../../shared/message-box-popup/message-box-popup.component';
+import { AdminService } from '../../../services/admin.service';
+import { TimeAgoTodayPipe } from '../../../pipes/time-ago-today.pipe';
 
 @Component({
   selector: 'app-admin-header',
   standalone: true,
-  imports: [NgClass, NgbDropdownModule, RouterLink],
+  imports: [NgClass, NgbDropdownModule, RouterLink, MessageBoxPopupComponent, TimeAgoTodayPipe, NgIf, NgFor],
   templateUrl: './admin-header.component.html',
   styleUrl: './admin-header.component.css'
 })
 export class AdminHeaderComponent {
+  @ViewChild('MessageBoxModal') MessageBoxModal: TemplateRef<any>;
   @Input() isSidebarCollapsed = false;
   @Input() isMobileMenuOpen = false;
   @Output() menuToggle = new EventEmitter<void>();
+  MessageList: any[] = [];
+  TotalCount = 0;
+  TransactionId: any;
 
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly authService = inject(AuthService);
+  private readonly modalService = inject(NgbModal);
+  private readonly adminService = inject(AdminService);
 
   userModel: any = null;
   userName = 'مشرف النظام';
@@ -29,14 +38,39 @@ export class AdminHeaderComponent {
 
   ngOnInit(): void {
     this.refreshUser();
-    this.syncRouteMeta();
+    const es = this.adminService.connect();
+    const notificationSound = new Audio('/bell-172780.mp3');
+    es.onmessage = (event) => {
+      console.log("Event received: ", event.data);
+      let data = JSON.parse(event.data);
+      if (data.message === 'Message_Added') {
+        this.TransactionId = data.transactionId;
+        notificationSound.currentTime = 0;
+        notificationSound.play().catch(err => {
+          console.log('Audio play blocked:', err);
+        });
+        this.GetMessageNotification(true);
+      }
+    };
 
-    this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe(() => {
-        this.refreshUser();
-        this.syncRouteMeta();
-      });
+    this.GetMessageNotification(false);
+  }
+
+  OpenMessageBoxModal(): void {
+    this.modalService.open(this.MessageBoxModal, {
+      centered: true,
+      size: 'sm',
+      windowClass: 'messages-modal',
+    });
+  }
+
+  GetMessageNotification(openModal: boolean) {
+    this.adminService.GetMessageNotification().subscribe(data => {
+      this.MessageList = data.results;
+      this.TotalCount = data.totalCount;
+      if (openModal)
+        this.OpenMessageBoxModal();
+    });
   }
 
   get userInitials(): string {
@@ -57,16 +91,40 @@ export class AdminHeaderComponent {
     this.roleName = this.userModel?.role || 'Administrator';
   }
 
-  private syncRouteMeta(): void {
-    let currentRoute = this.route.firstChild;
-
-    while (currentRoute?.firstChild) {
-      currentRoute = currentRoute.firstChild;
-    }
-  }
-
   logOut(): void {
     localStorage.removeItem('UserModel');
     this.router.navigate(['/login']);
+  }
+
+  getOperationClass(type: number): string {
+    switch (type) {
+      case 1: return 'badge-success';
+      case 2: return 'badge-brown';
+      case 3: return 'badge-gold';
+      case 4: return 'badge-purple';
+      case 5: return 'badge-secondary';
+      default: return 'badge-light';
+    }
+  }
+
+  RedirectToMessagesPage(messageTransactionId: number) {
+    this.adminService.MakeMessageAsRead(messageTransactionId).subscribe(data => {
+      if (data.isSuccess) {
+        const checked = this.MessageList.find(i => i.messageTransactionId === messageTransactionId);
+        if (checked) checked.isRead = true;
+
+        if (this.router.url.includes('/admin/all-message')) {
+          this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: { id: messageTransactionId },
+            queryParamsHandling: 'merge'
+          });
+        } else {
+          this.router.navigate(['/admin/all-message'], {
+            queryParams: { id: messageTransactionId }
+          });
+        }
+      }
+    })
   }
 }

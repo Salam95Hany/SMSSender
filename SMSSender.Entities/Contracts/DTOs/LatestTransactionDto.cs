@@ -8,6 +8,7 @@ namespace SMSSender.Entities.Contracts.DTOs
 {
     public class LatestTransactionDto
     {
+        public int MessageTransactionId { get; set; }
         public Guid TransactionId { get; set; }
         public string Provider { get; set; }
         public string ProviderName { get; set; }
@@ -17,9 +18,12 @@ namespace SMSSender.Entities.Contracts.DTOs
         public double? Amount { get; set; }
         public string FromPhone { get; set; }
         public string SenderName { get; set; }
+        public string Message { get; set; }
         public double? BalanceAfter { get; set; }
         public string TransactionNumber { get; set; }
         public DateTime OperationServerDateTime { get; set; }
         public decimal? Commission { get; set; }
+        public bool? IsCalculated { get; set; }
+        public bool? IsRead { get; set; }
     }
 }

@@ -21,7 +21,7 @@
         </div>
 
         <div class="page-section-grid mb-2" [ngbCollapse]="isFilter">
-            <app-admin-filter [FilterList]="FilterList" (FilterChecked)="FilterChecked($event)"></app-admin-filter>
+            <app-admin-filter [FilterList]="FilterList" [ReloadFilter]="ReloadFilter" (FilterChecked)="FilterChecked($event)"></app-admin-filter>
         </div>
 
         <div class="admin-table-wrapper" *ngIf="MessageList.length > 0; else emptyState">

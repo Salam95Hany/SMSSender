@@ -9,7 +9,7 @@
             <app-admin-stats-card [statsInfo]="stats"></app-admin-stats-card>
         </div>
     </div>
-    <div class="surface-card page-panel" (click)="openMessageBoxModal(MessageBoxModal)">
+    <div class="surface-card page-panel">
         <div class="page-toolbar">
             <div class="page-toolbar__meta">
                 <h2>آخر العمليات</h2>
@@ -58,8 +58,4 @@
             <app-admin-empty-state icon="fas fa-chart-line" title="لا توجد عمليات حديثة" description="عند وصول رسائل أو تنفيذ عمليات جديدة ستظهر هنا داخل جدول واضح ومتجاوب."></app-admin-empty-state>
         </ng-template>
     </div>
-
-    <ng-template #MessageBoxModal>
-        <app-message-box-popup></app-message-box-popup>
-    </ng-template>
 </section>

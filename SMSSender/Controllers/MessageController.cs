@@ -70,5 +70,19 @@ namespace SMSSender.Controllers
             var Process = await _processingService.CorrectionProcess(Model);
             return Process;
         }
+
+        [HttpGet("GetMessageNotification")]
+        public async Task<ApiResponseModel<DataTable>> GetMessageNotification()
+        {
+            var Results = await _messageService.GetMessageNotification();
+            return Results;
+        }
+
+        [HttpGet("MakeMessageAsRead")]
+        public async Task<ApiResponseModel<string>> MakeMessageAsRead(int MessageTransactionId)
+        {
+            var Results = await _messageService.MakeMessageAsRead(MessageTransactionId);
+            return Results;
+        }
     }
 }
