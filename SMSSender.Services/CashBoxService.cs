@@ -63,6 +63,7 @@ namespace SMSSender.Services
                 if (MessageTrans != null)
                 {
                     MessageTrans.IsCalculated = true;
+                    MessageTrans.Commission = (decimal)Model.Commission.Value;
                     MessageTrans.TransactionStatus = TransactionStatus.Completed;
                 }
 
