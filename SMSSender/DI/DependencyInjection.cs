@@ -56,8 +56,10 @@ namespace SMSSender.DI
             services.AddScoped<ISQLHelper, SQLHelper>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IMessageService, MessageService>();
+            services.AddScoped<ICashBoxService, CashBoxService>();
             
-            
+
+
 
 
             #region ReportsDI

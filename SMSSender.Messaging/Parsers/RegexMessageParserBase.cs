@@ -151,49 +151,45 @@ namespace SMSSender.Messaging.Parsers
         protected DateTime? ParseStampDateTime(string? value)
         {
             if (string.IsNullOrWhiteSpace(value))
-            {
                 return null;
-            }
 
+            var egyptTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time");
             var normalizedValue = SmsTextNormalizer.Normalize(value);
 
             if (long.TryParse(normalizedValue, NumberStyles.Integer, CultureInfo.InvariantCulture, out var numericStamp))
             {
-                var digitsCount = normalizedValue.TrimStart('+', '-').Length;
-
-                if (digitsCount >= 17 &&
-                    numericStamp >= DateTime.MinValue.Ticks &&
-                    numericStamp <= DateTime.MaxValue.Ticks)
-                {
-                    return new DateTime(numericStamp, DateTimeKind.Local);
-                }
-
-                if (digitsCount >= 11 &&
-                    numericStamp >= MinUnixMilliseconds &&
+                if (numericStamp >= MinUnixMilliseconds &&
                     numericStamp <= MaxUnixMilliseconds)
                 {
-                    return DateTimeOffset.FromUnixTimeMilliseconds(numericStamp).LocalDateTime;
+                    var utc = DateTimeOffset.FromUnixTimeMilliseconds(numericStamp).UtcDateTime;
+                    return TimeZoneInfo.ConvertTimeFromUtc(utc, egyptTimeZone);
                 }
 
-                if (digitsCount >= 10 &&
-                    numericStamp >= MinUnixSeconds &&
+                if (numericStamp >= MinUnixSeconds &&
                     numericStamp <= MaxUnixSeconds)
                 {
-                    return DateTimeOffset.FromUnixTimeSeconds(numericStamp).LocalDateTime;
+                    var utc = DateTimeOffset.FromUnixTimeSeconds(numericStamp).UtcDateTime;
+                    return TimeZoneInfo.ConvertTimeFromUtc(utc, egyptTimeZone);
                 }
 
-                if (numericStamp >= DateTime.MinValue.Ticks &&
-                    numericStamp <= DateTime.MaxValue.Ticks)
+                if (numericStamp >= DateTime.MinValue.Ticks && numericStamp <= DateTime.MaxValue.Ticks)
                 {
-                    return new DateTime(numericStamp, DateTimeKind.Local);
+                    var utc = new DateTime(numericStamp, DateTimeKind.Utc);
+                    return TimeZoneInfo.ConvertTimeFromUtc(utc, egyptTimeZone);
                 }
             }
 
-            return DateTimeOffset.TryParse(normalizedValue, CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces, out var parsedOffset)
-                ? parsedOffset.LocalDateTime
-                : DateTime.TryParse(normalizedValue, CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces, out var parsedDateTime)
-                    ? parsedDateTime
-                    : null;
+            if (DateTimeOffset.TryParse(normalizedValue, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out var parsedOffset))
+            {
+                return TimeZoneInfo.ConvertTimeFromUtc(parsedOffset.UtcDateTime, egyptTimeZone);
+            }
+
+            if (DateTime.TryParse(normalizedValue, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out var parsedDateTime))
+            {
+                return TimeZoneInfo.ConvertTimeFromUtc(parsedDateTime.ToUniversalTime(), egyptTimeZone);
+            }
+
+            return null;
         }
 
         public decimal CalculateFee(decimal amount, OperationType type, ProviderType Provider)
@@ -270,7 +266,7 @@ namespace SMSSender.Messaging.Parsers
                     amount -= chunk;
                 }
             }
-                
+
 
             return fee;
         }

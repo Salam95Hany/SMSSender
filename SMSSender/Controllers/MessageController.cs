@@ -84,5 +84,12 @@ namespace SMSSender.Controllers
             var Results = await _messageService.MakeMessageAsRead(MessageTransactionId);
             return Results;
         }
+
+        [HttpGet("MakeMessageAsDelayed")]
+        public async Task<ApiResponseModel<string>> MakeMessageAsDelayed(int MessageTransactionId)
+        {
+            var Results = await _messageService.MakeMessageAsDelayed(MessageTransactionId);
+            return Results;
+        }
     }
 }

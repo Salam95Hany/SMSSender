@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Asn1;
 using SMSSender.Entities.Models;
 using SMSSender.Entities.Specifications;
 using SMSSender.Interfaces.Repositories;
@@ -146,6 +147,11 @@ namespace SMSSender.Services.Repositories
                 query = include(query);
 
             return await query.ToListAsync();
+        }
+
+        public async Task<T?> GetLastAsync<TKey>(Expression<Func<T, TKey>> orderBy)
+        {
+            return await _dbContext.Set<T>().OrderByDescending(orderBy).FirstOrDefaultAsync();
         }
     }
 }

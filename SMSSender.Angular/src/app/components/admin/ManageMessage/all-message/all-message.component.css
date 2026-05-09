@@ -245,6 +245,18 @@
     color: var(--text-strong);
 }
 
+.badge-complete {
+    background-color: #d1fae5;
+    color: #065f46;
+    border: 1px solid #34d399;
+}
+
+.badge-delayed {
+    background-color: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #f87171;
+}
+
 @media (max-width: 767.98px) {
     .message-card__actions .btn {
         flex: 1 1 100%;

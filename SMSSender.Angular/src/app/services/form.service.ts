@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -7,35 +7,35 @@ import { AbstractControl, FormGroup, Validators } from '@angular/forms';
 export class FormService {
 
   buildFormData(formData: FormData, data: any, parentKey: string | null = null) {
-  if (data === null || data === undefined) return;
+    if (data === null || data === undefined) return;
 
-  if (data instanceof File) {
-    formData.append(parentKey!, data);
-  }
-  else if (Array.isArray(data)) {
-    data.forEach((item, index) => {
-      const key = parentKey ? `${parentKey}[${index}]` : `${index}`;
-      this.buildFormData(formData, item, key);
-    });
-  }
-  else if (typeof data === 'object' && !(data instanceof Date)) {
-    Object.keys(data).forEach(key => {
-      const value = data[key];
+    if (data instanceof File) {
+      formData.append(parentKey!, data);
+    }
+    else if (Array.isArray(data)) {
+      data.forEach((item, index) => {
+        const key = parentKey ? `${parentKey}[${index}]` : `${index}`;
+        this.buildFormData(formData, item, key);
+      });
+    }
+    else if (typeof data === 'object' && !(data instanceof Date)) {
+      Object.keys(data).forEach(key => {
+        const value = data[key];
 
-      if (value === null || value === undefined) return;
+        if (value === null || value === undefined) return;
 
-      if (key.toLowerCase() === 'file' && value instanceof File) {
-        formData.append(`${parentKey}.${key}`, value);
-      } else {
-        this.buildFormData(formData, value, parentKey ? `${parentKey}.${key}` : key);
-      }
-    });
+        if (key.toLowerCase() === 'file' && value instanceof File) {
+          formData.append(`${parentKey}.${key}`, value);
+        } else {
+          this.buildFormData(formData, value, parentKey ? `${parentKey}.${key}` : key);
+        }
+      });
+    }
+    else {
+      if (data !== '')
+        formData.set(parentKey!, data);
+    }
   }
-  else {
-    if (data !== '')
-      formData.set(parentKey!, data);
-  }
-}
 
   NumbersOnly(key: any): boolean {
     let patt = /^([0-9\+.])$/;
@@ -159,55 +159,75 @@ export class FormService {
    * - Stringifies arrays and nested objects so server can parse them from a single field
    * - If parentKey is provided keys will be prefixed with `${parentKey}.` (optional)
    */
- buildFormDataFlat(formData: FormData, data: any, parentKey: string | null = null): void {
-  if (data === null || data === undefined) return;
+  buildFormDataFlat(formData: FormData, data: any, parentKey: string | null = null): void {
+    if (data === null || data === undefined) return;
 
-  // Handle File or Blob directly
-  if (data instanceof File || data instanceof Blob) {
-    formData.append(parentKey ?? 'file', data);
-    return;
-  }
-
-  // Handle primitive types
-  if (typeof data !== 'object' || data instanceof Date) {
-    formData.append(parentKey ?? 'value', String(data));
-    return;
-  }
-
-  // Handle arrays
-  if (Array.isArray(data)) {
-    data.forEach((item, index) => {
-      const key = parentKey ? `${parentKey}[${index}]` : `${index}`;
-      this.buildFormDataFlat(formData, item, key);
-    });
-    return;
-  }
-
-  // Handle objects
-  Object.entries(data).forEach(([key, value]) => {
-    if (value === null || value === undefined) return;
-
-    // Construct new key
-    const newKey = parentKey ? `${parentKey}.${key}` : key;
-
-    // Recurse deeper
-    if (typeof value === 'object' && !(value instanceof File) && !(value instanceof Blob) && !(value instanceof Date)) {
-      this.buildFormDataFlat(formData, value, newKey);
-    } else {
-      formData.append(newKey, value instanceof Date ? value.toISOString() : String(value));
+    // Handle File or Blob directly
+    if (data instanceof File || data instanceof Blob) {
+      formData.append(parentKey ?? 'file', data);
+      return;
     }
-  });
-}
-buildFormDataData(formData, data, parentKey = null, key = null) {
-  if (data instanceof File)
-    formData.append(key, data);
-  else if (data && typeof data === 'object' && !(data instanceof Date) && !(data instanceof File)) {
-    Object.keys(data).forEach(key => {
-      this.buildFormDataData(formData, data[key], parentKey ? parentKey + '[' + key + ']' : key, key);
+
+    // Handle primitive types
+    if (typeof data !== 'object' || data instanceof Date) {
+      formData.append(parentKey ?? 'value', String(data));
+      return;
+    }
+
+    // Handle arrays
+    if (Array.isArray(data)) {
+      data.forEach((item, index) => {
+        const key = parentKey ? `${parentKey}[${index}]` : `${index}`;
+        this.buildFormDataFlat(formData, item, key);
+      });
+      return;
+    }
+
+    // Handle objects
+    Object.entries(data).forEach(([key, value]) => {
+      if (value === null || value === undefined) return;
+
+      // Construct new key
+      const newKey = parentKey ? `${parentKey}.${key}` : key;
+
+      // Recurse deeper
+      if (typeof value === 'object' && !(value instanceof File) && !(value instanceof Blob) && !(value instanceof Date)) {
+        this.buildFormDataFlat(formData, value, newKey);
+      } else {
+        formData.append(newKey, value instanceof Date ? value.toISOString() : String(value));
+      }
     });
-  } else {
-    const value = data == null ? '' : data;
-    formData.append(parentKey, value);
   }
-}
+  buildFormDataData(formData, data, parentKey = null, key = null) {
+    if (data instanceof File)
+      formData.append(key, data);
+    else if (data && typeof data === 'object' && !(data instanceof Date) && !(data instanceof File)) {
+      Object.keys(data).forEach(key => {
+        this.buildFormDataData(formData, data[key], parentKey ? parentKey + '[' + key + ']' : key, key);
+      });
+    } else {
+      const value = data == null ? '' : data;
+      formData.append(parentKey, value);
+    }
+  }
+
+  noSpaceValidator(control: FormControl) {
+    if (control.value) {
+      let value = control.value;
+      if (typeof value === 'number') {
+        value = value.toString();
+      }
+
+      if (value.trim().length === 0) {
+        return { noSpace: true };
+      }
+    }
+
+    if (!control.value) {
+      return null;
+    }
+
+
+    return null;
+  }
 }

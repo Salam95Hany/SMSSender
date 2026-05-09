@@ -12,12 +12,13 @@ import { AdminPaginationComponent } from '../../../../shared/admin-pagination/ad
 import { ActivatedRoute } from '@angular/router';
 import { ArabicDateWithTimePipe } from '../../../../pipes/arabic-date-with-time.pipe';
 import { FormsModule } from '@angular/forms';
+import { NgxLoadingModule } from 'ngx-loading';
 
 @Component({
   selector: 'app-all-message',
   standalone: true,
   imports: [AdminPaginationComponent, NgFor, NgIf, NgClass, AdminFilterComponent, NgbModule, AdminBreadcrumbComponent, AdminEmptyStateComponent, ArabicDateWithTimePipe,
-    CommonModule, FormsModule
+    CommonModule, FormsModule,NgxLoadingModule
   ],
   templateUrl: './all-message.component.html',
   styleUrl: './all-message.component.css'
@@ -36,6 +37,7 @@ export class AllMessageComponent implements OnInit {
   PagingFilter: PagingFilterModel = { pagesize: 20, currentpage: 1, operationType: 0, filterList: [] };
   TotalCount = 0;
   isFilter = true;
+  ShowLoader = false;
   ReloadFilter = 0;
 
   constructor(private adminService: AdminService, private toaster: ToastrService, private route: ActivatedRoute, private offcanvasService: NgbOffcanvas) { }
@@ -80,7 +82,9 @@ export class AllMessageComponent implements OnInit {
   }
 
   GetSmsDataByOperationType() {
+    this.ShowLoader = true;
     this.adminService.GetSmsDataByOperationType(this.PagingFilter).subscribe((data) => {
+      this.ShowLoader = false;
       this.MessageList = data.results;
       this.TotalCount = data.totalCount;
     });

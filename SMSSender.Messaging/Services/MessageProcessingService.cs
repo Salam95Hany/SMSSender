@@ -92,7 +92,7 @@ namespace SMSSender.Messaging.Services
                     SenderName = parsedMessage.SenderName,
                     BalanceAfter = parsedMessage.BalanceAfter.HasValue ? (double)parsedMessage.BalanceAfter.Value : null,
                     TransactionNumber = parsedMessage.TransactionNumber,
-                    OperationServerDateTime = DateTime.Now,
+                    OperationServerDateTime = DateTime.UtcNow.EgyptNow(),
                     OperationMsgDateTime = parsedMessage.OperationDateTime,
                     OperationSentDateTime = parsedMessage.SentDateTime
                 };
@@ -161,7 +161,7 @@ namespace SMSSender.Messaging.Services
                     SenderName = parsedMessage.SenderName,
                     BalanceAfter = parsedMessage.BalanceAfter.HasValue ? (double)parsedMessage.BalanceAfter.Value : null,
                     TransactionNumber = parsedMessage.TransactionNumber,
-                    OperationServerDateTime = DateTime.Now,
+                    OperationServerDateTime = DateTime.UtcNow.EgyptNow(),
                     OperationMsgDateTime = parsedMessage.OperationDateTime,
                     OperationSentDateTime = parsedMessage.SentDateTime
                 };
@@ -197,7 +197,7 @@ namespace SMSSender.Messaging.Services
                     SentStamp = model.SentStamp ?? string.Empty,
                     ReceivedStamp = model.ReceivedStamp ?? string.Empty,
                     Sim = model.Sim ?? string.Empty,
-                    CreatedDate = DateTime.Now,
+                    CreatedDate = DateTime.UtcNow.EgyptNow(),
                 });
             }
             catch

@@ -35,5 +35,6 @@ namespace SMSSender.Interfaces.Repositories
 
         Task<T?> GetByIdWithIncludeAsync(Expression<Func<T, bool>> predicate, Func<IQueryable<T>, IQueryable<T>> include);
         Task<List<T>> GetAllWithIncludeAsync(Func<IQueryable<T>, IQueryable<T>> include);
+        Task<T?> GetLastAsync<TKey>(Expression<Func<T, TKey>> orderBy);
     }
 }

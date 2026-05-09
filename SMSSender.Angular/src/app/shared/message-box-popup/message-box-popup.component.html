@@ -27,7 +27,7 @@
                         <div class="avatar button-color">{{item.firstLetter}}</div>
                         <div>
                             <div class="sender-name">{{ item.senderName }}</div>
-                            <div class="sender-nums">({{ item.fromPhone }}) &nbsp;|&nbsp; {{item.providerName}} ({{ item.providerPhone }})</div>
+                            <div class="sender-nums"><span *ngIf="item.fromPhone">({{ item.fromPhone }}) &nbsp;|&nbsp;</span> {{item.providerName}} ({{ item.providerPhone }})</div>
                         </div>
                     </div>
                     <div class="header-right">
@@ -62,8 +62,8 @@
                     </div>
                 </div>
                 <div class="actions">
-                    <button class="btn button-color">✓ &nbsp;{{item.operationType == 1 ? 'تم الاستلام' : 'تم التسليم'}}</button>
-                    <button class="btn btn-secondary">💰 &nbsp;مؤجل</button>
+                    <button class="btn button-color" (click)="AddNewCashBox(item)">✓ &nbsp;{{item.operationType == 1 ? 'تم الاستلام' : 'تم التسليم'}}</button>
+                    <button class="btn btn-secondary" (click)="MakeMessageAsDelayed(item.messageTransactionId)">💰 &nbsp;مؤجل</button>
                 </div>
             </div>
         </div>
@@ -76,3 +76,6 @@
         </div>
     </ng-template>
 </section>
+
+
+<ngx-loading [show]="ShowLoader"></ngx-loading>

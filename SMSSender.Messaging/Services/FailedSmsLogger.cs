@@ -20,7 +20,7 @@ namespace SMSSender.Messaging.Services
 
         public async Task LogAsync(SmsMessagePure model, string errorReason, bool IsCorrectionProcess = false)
         {
-            var createdAt = DateTime.Now;
+            var createdAt = DateTime.UtcNow.EgyptNow();
 
             try
             {

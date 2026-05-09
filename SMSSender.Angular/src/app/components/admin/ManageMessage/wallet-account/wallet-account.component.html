@@ -1,41 +1,57 @@
 <section class="page-shell">
-  <app-admin-breadcrumb
-    title="رصيد المحافظ"
-    subtitle="بطاقات مرنة لعرض المحافظ والأرصدة الحالية مع توزيع متجاوب مناسب للهاتف والكمبيوتر."
-    icon="fas fa-wallet"
-    [items]="[
+    <app-admin-breadcrumb title="رصيد المحافظ" subtitle="بطاقات مرنة لعرض المحافظ والأرصدة الحالية مع توزيع متجاوب مناسب للهاتف والكمبيوتر." icon="fas fa-wallet" [items]="[
       { label: 'إدارة الرسائل', route: '/admin/dashboard' },
       { label: 'رصيد المحافظ' }
-    ]"
-  ></app-admin-breadcrumb>
+    ]"></app-admin-breadcrumb>
 
-  <div class="surface-card page-panel">
-    <div class="page-toolbar">
-      <div class="page-toolbar__meta">
-        <h2>المحافظ المتاحة</h2>
-        <p>عرض منسق للأرصدة يساعد على المقارنة السريعة بين القنوات المختلفة.</p>
-      </div>
-    </div>
-
-    <div class="wallet-grid">
-      <article class="wallet-card" *ngFor="let wallet of wallets" [ngClass]="wallet.theme">
-        <div class="wallet-card__top">
-          <div class="wallet-card__icon">
-            <i class="fas fa-wallet"></i>
-          </div>
-          <div class="wallet-card__owner">
-            <h3>{{ wallet.owner }}</h3>
-            <span>{{ wallet.provider }}</span>
-          </div>
+    <div class="surface-card page-panel">
+        <div class="page-toolbar">
+            <div class="page-toolbar__meta">
+                <h2>المحافظ المتاحة</h2>
+                <p>عرض منسق للأرصدة يساعد على المقارنة السريعة بين القنوات المختلفة.</p>
+            </div>
         </div>
 
-        <div class="wallet-card__number">{{ wallet.number }}</div>
+        <div class="wallet-grid">
+            <article class="wallet-card" *ngFor="let wallet of wallets" [ngClass]="wallet.theme">
+                <div class="wallet-card__top">
+                    <div class="wallet-card__icon">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <div class="wallet-card__owner">
+                        <h3>{{ wallet.owner }}</h3>
+                        <span>{{ wallet.provider }}</span>
+                    </div>
+                </div>
 
-        <div class="wallet-card__footer">
-          <span>الرصيد المتاح</span>
-          <strong>{{ wallet.balance }}</strong>
+                <div class="wallet-card__number">
+                    <span>{{ wallet.number }}</span>
+                    <span>15-12-2025</span>
+                </div>
+                <div>
+                    <div class="wallet-card__footer mb-2">
+                        <span>الرصيد المتاح</span>
+                        <strong>{{ wallet.balance }}</strong>
+                    </div>
+                    <div class="wallet-card__footer mb-2">
+                        <span>الحد الشهري</span>
+                        <strong>200,000 / 75,000</strong>
+                    </div>
+                    <div class="wallet-card__footer mb-2">
+                        <span>الحد اليومي</span>
+                        <strong>60,000 / 40,000</strong>
+                    </div>
+                </div>
+                <div>
+                    <div class="progress-label-row">
+                        <span>المُستخدَم</span>
+                        <span>40% من الحد الشهري</span>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+            </article>
         </div>
-      </article>
     </div>
-  </div>
 </section>

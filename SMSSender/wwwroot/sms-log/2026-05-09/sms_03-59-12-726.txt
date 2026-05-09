@@ -1,0 +1,14 @@
+﻿CreatedAt: 2026-05-09T03:59:12.7265967+03:00
+SecretKey: SMSFORWARDER-KEY-8Hd77!k39$QpZ
+InputParam: {
+  "MessageTransactionId": null,
+  "TransactionId": null,
+  "DeviceName": "Salam Hany",
+  "PhoneNumber": "01014605611",
+  "Message": "May 4, 2026 8:43:37 PM: Received EGP28,465 from 00201550000000 to Mobile Account Number 1226. Ref: 019712813981 Available Balance: 91561.41",
+  "Provider": 0,
+  "ProviderStr": "ALEXBANK",
+  "SentStamp": "1777837864000",
+  "ReceivedStamp": "1777838317802",
+  "Sim": "sim1"
+}

@@ -179,5 +179,10 @@ namespace SMSSender.Services.Common
 
             return Task.FromResult(allFilters.ToGroupedFilters());
         }
+
+        public static DateTime EgyptNow(this DateTime dateTime)
+        {
+            return TimeZoneInfo.ConvertTimeBySystemTimeZoneId(dateTime.ToUniversalTime(), "Egypt Standard Time");
+        }
     }
 }

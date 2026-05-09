@@ -72,7 +72,7 @@ namespace SMSSender.Services
 
         public async Task<ApiResponseModel<List<LatestTransactionDto>>> GetTodayLatestTransactions()
         {
-            var Today = DateTime.Today;
+            var Today = DateTime.UtcNow.EgyptNow().Date;
             var Tomorrow = Today.AddDays(1);
 
             var Data = await _unitOfWork.Repository<MessageTransaction>()
@@ -155,6 +155,19 @@ namespace SMSSender.Services
                 return ApiResponseModel<string>.Failure(GenericErrors.TransFailed);
 
             Entity.IsRead = true;
+
+            await _unitOfWork.CompleteAsync();
+            return ApiResponseModel<string>.Success(GenericErrors.UpdateSuccess);
+        }
+
+        public async Task<ApiResponseModel<string>> MakeMessageAsDelayed(int MessageTransactionId)
+        {
+            var Entity = await _unitOfWork.Repository<MessageTransaction>().GetByIdAsync(MessageTransactionId);
+            if (Entity == null)
+                return ApiResponseModel<string>.Failure(GenericErrors.TransFailed);
+
+            Entity.IsCalculated = true;
+            Entity.TransactionStatus = TransactionStatus.Delayed;
 
             await _unitOfWork.CompleteAsync();
             return ApiResponseModel<string>.Success(GenericErrors.UpdateSuccess);

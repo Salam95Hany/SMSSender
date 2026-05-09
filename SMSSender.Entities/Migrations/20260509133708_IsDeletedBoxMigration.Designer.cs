@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SMSSender.Entities.Models;
 
@@ -11,9 +12,11 @@ using SMSSender.Entities.Models;
 namespace SMSSender.Entities.Migrations
 {
     [DbContext(typeof(SMSDbContext))]
-    partial class SMSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260509133708_IsDeletedBoxMigration")]
+    partial class IsDeletedBoxMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -245,6 +248,7 @@ namespace SMSSender.Entities.Migrations
                         .HasColumnType("float");
 
                     b.Property<string>("CashBoxNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("InsertDate")
@@ -261,6 +265,7 @@ namespace SMSSender.Entities.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Reason")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<double?>("TransactionAmount")
@@ -273,6 +278,7 @@ namespace SMSSender.Entities.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UpdateUser")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("CashBoxId");

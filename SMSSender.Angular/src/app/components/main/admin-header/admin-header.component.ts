@@ -7,6 +7,7 @@ import { AuthService } from '../../../auth/auth.service';
 import { MessageBoxPopupComponent } from '../../../shared/message-box-popup/message-box-popup.component';
 import { AdminService } from '../../../services/admin.service';
 import { TimeAgoTodayPipe } from '../../../pipes/time-ago-today.pipe';
+import { NotificationSoundService } from '../../../services/notification-sound.service';
 
 @Component({
   selector: 'app-admin-header',
@@ -20,15 +21,19 @@ export class AdminHeaderComponent {
   @Input() isSidebarCollapsed = false;
   @Input() isMobileMenuOpen = false;
   @Output() menuToggle = new EventEmitter<void>();
+  private es!: EventSource;
+  isModalOpen = false;
   MessageList: any[] = [];
   TotalCount = 0;
   TransactionId: any;
+
 
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly authService = inject(AuthService);
   private readonly modalService = inject(NgbModal);
   private readonly adminService = inject(AdminService);
+  private readonly notificationSound = inject(NotificationSoundService);
 
   userModel: any = null;
   userName = 'مشرف النظام';
@@ -37,18 +42,14 @@ export class AdminHeaderComponent {
   pageTitle = 'واجهة الإدارة';
 
   ngOnInit(): void {
+    this.notificationSound.unlockAudio();
     this.refreshUser();
-    const es = this.adminService.connect();
-    const notificationSound = new Audio('/bell-172780.mp3');
-    es.onmessage = (event) => {
-      console.log("Event received: ", event.data);
+    this.es = this.adminService.connect();
+    this.es.onmessage = (event) => {
       let data = JSON.parse(event.data);
       if (data.message === 'Message_Added') {
         this.TransactionId = data.transactionId;
-        notificationSound.currentTime = 0;
-        notificationSound.play().catch(err => {
-          console.log('Audio play blocked:', err);
-        });
+        this.notificationSound.play();
         this.GetMessageNotification(true);
       }
     };
@@ -57,10 +58,18 @@ export class AdminHeaderComponent {
   }
 
   OpenMessageBoxModal(): void {
-    this.modalService.open(this.MessageBoxModal, {
+    if (this.isModalOpen) return;
+
+    this.isModalOpen = true;
+
+    const modalRef = this.modalService.open(this.MessageBoxModal, {
       centered: true,
       size: 'sm',
       windowClass: 'messages-modal',
+    });
+
+    modalRef.result.finally(() => {
+      this.isModalOpen = false;
     });
   }
 
@@ -126,5 +135,11 @@ export class AdminHeaderComponent {
         }
       }
     })
+  }
+
+  ngOnDestroy() {
+    if (this.es) {
+      this.es.close();
+    }
   }
 }

@@ -16,5 +16,6 @@ namespace SMSSender.Interfaces
         Task<ApiResponseModel<MessageDetailsDto>> UpdateTransactionMessage(UpdateTransactionMessage Model);
         Task<ApiResponseModel<DataTable>> GetMessageNotification();
         Task<ApiResponseModel<string>> MakeMessageAsRead(int MessageTransactionId);
+        Task<ApiResponseModel<string>> MakeMessageAsDelayed(int MessageTransactionId);
     }
 }

@@ -53,4 +53,26 @@ export class AdminService {
   MakeMessageAsRead(MessageTransactionId: number) {
     return this.http.get<ApiResponseModel<any[]>>(this.Url + 'Message/MakeMessageAsRead?MessageTransactionId=' + MessageTransactionId);
   }
+
+  MakeMessageAsDelayed(MessageTransactionId: number) {
+    return this.http.get<ApiResponseModel<any[]>>(this.Url + 'Message/MakeMessageAsDelayed?MessageTransactionId=' + MessageTransactionId);
+  }
+
+  // ============================== CashBox ==============================
+
+  GetCashBoxData(PagingFilter: PagingFilterModel) {
+    return this.http.post<ApiResponseModel<any[]>>(this.Url + 'CashBox/GetCashBoxData', PagingFilter);
+  }
+
+  GetCashBoxFilters(PagingFilter: PagingFilterModel) {
+    return this.http.post<ApiResponseModel<any[]>>(this.Url + 'CashBox/GetCashBoxFilters', PagingFilter);
+  }
+
+  AddNewCashBox(Model: any) {
+    return this.http.post<ApiResponseModel<any>>(this.Url + 'CashBox/AddNewCashBox', Model);
+  }
+
+  DeleteCashBox(CashBoxId: Number, UserId: any) {
+    return this.http.get<ApiResponseModel<any>>(this.Url + 'CashBox/DeleteCashBox?CashBoxId=' + CashBoxId + '&UserId=' + UserId);
+  }
 }

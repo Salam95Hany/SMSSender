@@ -21,4 +21,10 @@ namespace SMSSender.Entities.Common
         Completed = 1,
         Delayed = 2
     }
+
+    public enum CashBoxTransactionType
+    {
+        Deposit = 1,
+        Withdraw = 2
+    }
 }
