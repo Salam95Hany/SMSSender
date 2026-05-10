@@ -4,54 +4,135 @@
       { label: 'رصيد المحافظ' }
     ]"></app-admin-breadcrumb>
 
-    <div class="surface-card page-panel">
-        <div class="page-toolbar">
-            <div class="page-toolbar__meta">
-                <h2>المحافظ المتاحة</h2>
-                <p>عرض منسق للأرصدة يساعد على المقارنة السريعة بين القنوات المختلفة.</p>
+    <div class="row">
+        <div class="col-lg-3 mb-2" *ngFor="let item of WalletList">
+            <div class="wallet-card">
+                <div class="card-header">
+                    <div class="header-top">
+                        <div class="user-info">
+                            <p class="name">{{item.name}}</p>
+                            <span class="type">{{item.typeName}}</span>
+                        </div>
+                        <div class="wallet-icon">
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                    </div>
+                    <div class="card-number-row">
+                        <span class="card-num">{{item.phoneNumber}}</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="balance-section">
+                        <div class="balance-label">الرصيد المتاح</div>
+                        <div class="balance-value">
+                            {{item.availableBalance | number:'1.2-2'}}
+                            <span class="currency">ج.م</span>
+                        </div>
+                    </div>
+                    <div class="limits-grid">
+                        <div class="limit-card">
+                            <div class="limit-label">الحد الشهري للسحب</div>
+                            <div class="limit-values">
+                                <div>
+                                    <span>{{item.usedMonthlyWithdrawal | number:'1.2-2'}} </span>
+                                    <span class="limit-max">/ {{item.monthlyLimit | number:'1.2-2'}}</span>
+                                </div>
+                                <div>
+                                    <span class="limit-max">{{item.monthlyWithdrawalUsagePercent}}%</span>
+                                </div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill-monthly" [style.width.%]="item.monthlyWithdrawalUsagePercent"></div>
+                            </div>
+                        </div>
+                        <div class="limit-card">
+                            <div class="limit-label">الحد الشهري للإيداع</div>
+                            <div class="limit-values">
+                                <div>
+                                    <span>{{item.usedMonthlyDeposit | number:'1.2-2'}}</span>
+                                    <span class="limit-max">/ {{item.monthlyLimit | number:'1.2-2'}}</span>
+                                </div>
+                                <div>
+                                    <span class="limit-max">{{item.monthlyDepositUsagePercent}}%</span>
+                                </div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill-monthly" [style.width.%]="item.monthlyDepositUsagePercent"></div>
+                            </div>
+                        </div>
+                        <div class="limit-card">
+                            <div class="limit-label">الحد اليومي للسحب</div>
+                            <div class="limit-values">
+                                <div>
+                                    <span>{{item.usedDailyWithdrawal | number:'1.2-2'}}</span>
+                                    <span class="limit-max">/ {{item.dailyLimit | number:'1.2-2'}}</span>
+                                </div>
+                                <div>
+                                    <span class="limit-max">{{item.dailyWithdrawalUsagePercent}}%</span>
+                                </div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill-daily" [style.width.%]="item.dailyWithdrawalUsagePercent"></div>
+                            </div>
+                        </div>
+                        <div class="limit-card">
+                            <div class="limit-label">الحد اليومي للإيداع</div>
+                            <div class="limit-values">
+                                <div>
+                                    <span>{{item.usedDailyDeposit | number:'1.2-2'}}</span>
+                                    <span class="limit-max">/ {{item.dailyLimit | number:'1.2-2'}}</span>
+                                </div>
+                                <div>
+                                    <span class="limit-max">{{item.dailyDepositUsagePercent}}%</span>
+                                </div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill-daily" [style.width.%]="item.dailyDepositUsagePercent"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="extra-fields">
+                        <div class="field-item">
+                            <div class="field-icon green"><i class="fas fa-arrow-alt-circle-down"></i></div>
+                            <div class="field-text">
+                                <div class="fl">إجمالي الإيداع</div>
+                                <div class="fv">{{item.totalDeposit | number:'1.2-2'}}</div>
+                            </div>
+                        </div>
+                        <div class="field-item">
+                            <div class="field-icon coral"><i class="fas fa-arrow-alt-circle-up"></i></div>
+                            <div class="field-text">
+                                <div class="fl">إجمالي السحب</div>
+                                <div class="fv">{{item.totalWithdrawal | number:'1.2-2'}}</div>
+                            </div>
+                        </div>
+                        <div class="field-item">
+                            <div class="field-icon blue"><i class="fas fa-exchange-alt"></i></div>
+                            <div class="field-text">
+                                <div class="fl">عدد العمليات</div>
+                                <div class="fv">{{item.totalOperations}}</div>
+                            </div>
+                        </div>
+                        <div class="field-item">
+                            <div class="field-icon purple"><i class="fas fa-calendar"></i></div>
+                            <div class="field-text">
+                                <div class="fl">تاريخ اخر شحن رصيد</div>
+                                <div class="fv">{{item.lastRechargeDate | arabicDateWithTime}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="usage-bar-section">
+                        <div class="usage-header">
+                            <span class="usage-title">نسبة الاستخدام الشهري</span>
+                            <span class="usage-pct">40%</span>
+                        </div>
+                        <div class="usage-progress">
+                            <div class="usage-fill"></div>
+                        </div>
+                    </div> -->
+                </div>
             </div>
         </div>
 
-        <div class="wallet-grid">
-            <article class="wallet-card" *ngFor="let wallet of wallets" [ngClass]="wallet.theme">
-                <div class="wallet-card__top">
-                    <div class="wallet-card__icon">
-                        <i class="fas fa-wallet"></i>
-                    </div>
-                    <div class="wallet-card__owner">
-                        <h3>{{ wallet.owner }}</h3>
-                        <span>{{ wallet.provider }}</span>
-                    </div>
-                </div>
-
-                <div class="wallet-card__number">
-                    <span>{{ wallet.number }}</span>
-                    <span>15-12-2025</span>
-                </div>
-                <div>
-                    <div class="wallet-card__footer mb-2">
-                        <span>الرصيد المتاح</span>
-                        <strong>{{ wallet.balance }}</strong>
-                    </div>
-                    <div class="wallet-card__footer mb-2">
-                        <span>الحد الشهري</span>
-                        <strong>200,000 / 75,000</strong>
-                    </div>
-                    <div class="wallet-card__footer mb-2">
-                        <span>الحد اليومي</span>
-                        <strong>60,000 / 40,000</strong>
-                    </div>
-                </div>
-                <div>
-                    <div class="progress-label-row">
-                        <span>المُستخدَم</span>
-                        <span>40% من الحد الشهري</span>
-                    </div>
-                    <div class="progress-track">
-                        <div class="progress-fill"></div>
-                    </div>
-                </div>
-            </article>
-        </div>
     </div>
 </section>

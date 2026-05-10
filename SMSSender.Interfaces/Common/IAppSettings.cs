@@ -58,6 +58,7 @@ namespace SMSSender.Interfaces.Common
         public string[] Transfer { get; set; } = Array.Empty<string>();
         public string[] CashWithdrawal { get; set; } = Array.Empty<string>();
         public string[] BalanceInquiry { get; set; } = Array.Empty<string>();
+        public string[] ChargeWallet { get; set; } = Array.Empty<string>();
 
         public IEnumerable<string> All()
         {
@@ -66,6 +67,7 @@ namespace SMSSender.Interfaces.Common
                 .Concat(Transfer)
                 .Concat(CashWithdrawal)
                 .Concat(BalanceInquiry)
+                .Concat(ChargeWallet)
                 .Where(value => !string.IsNullOrWhiteSpace(value));
         }
     }

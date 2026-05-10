@@ -33,6 +33,15 @@ namespace SMSSender.Controllers
             try
             {
                 string secretKey = Request.Headers["User-Agent"];
+                
+                //await LogMessageData(smsMessage, secretKey);
+                if (secretKey != _appSettings.SecretKey)
+                    return Unauthorized();
+
+                var AcceptedMsg = _messageService.GetMessageFiltered(model.From, model.Text);
+                if (!AcceptedMsg)
+                    return Ok();
+
                 string deviceName = Request.Headers["Device-Name"];
                 string phoneNumber = Request.Headers["Phone-Number"];
 
@@ -46,16 +55,6 @@ namespace SMSSender.Controllers
                     SentStamp = model.SentStamp,
                     Sim = model.Sim
                 };
-                //await LogMessageData(smsMessage, secretKey);
-                if (secretKey != _appSettings.SecretKey)
-                    return Unauthorized();
-
-                var AcceptedMsg = _messageService.GetMessageFiltered(model.From, model.Text);
-                if (!AcceptedMsg)
-                    return Ok();
-
-
-
 
                 var Process = await _processingService.Process(smsMessage);
                 if (Process.Success)

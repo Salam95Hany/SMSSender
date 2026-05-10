@@ -25,6 +25,7 @@ namespace SMSSender.Messaging
             services.AddScoped<IOperationHandler, CashHandler>();
             services.AddScoped<IOperationHandler, TransferHandler>();
             services.AddScoped<IOperationHandler, BalanceInquiryHandler>();
+            services.AddScoped<IOperationHandler, ChargeWalletHandler>();
 
             return services;
         }

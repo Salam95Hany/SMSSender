@@ -1,29 +1,36 @@
-import { NgClass, NgFor } from '@angular/common';
-import { Component } from '@angular/core';
+import { CommonModule, NgClass, NgFor } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { AdminBreadcrumbComponent } from '../../../../shared/admin-breadcrumb/admin-breadcrumb.component';
-
-interface WalletCard {
-  owner: string;
-  provider: string;
-  number: string;
-  balance: string;
-  theme: 'red' | 'blue';
-}
+import { AdminService } from '../../../../services/admin.service';
+import { PagingFilterModel } from '../../../../models/PagingFilterModel';
+import { FilterModel } from '../../../../models/FilterModel';
+import { ArabicDateWithTimePipe } from '../../../../pipes/arabic-date-with-time.pipe';
 
 @Component({
   selector: 'app-wallet-account',
   standalone: true,
-  imports: [NgFor, NgClass, AdminBreadcrumbComponent],
+  imports: [NgFor, NgClass, AdminBreadcrumbComponent,CommonModule,ArabicDateWithTimePipe],
   templateUrl: './wallet-account.component.html',
   styleUrl: './wallet-account.component.css'
 })
-export class WalletAccountComponent {
-  readonly wallets: WalletCard[] = [
-    { owner: 'سلام هاني البدوي', provider: 'فودافون كاش', number: '01124564843', balance: '25,450.00 ج.م', theme: 'red' },
-    { owner: 'سلام هاني البدوي', provider: 'فودافون كاش', number: '01124564844', balance: '18,220.00 ج.م', theme: 'red' },
-    { owner: 'سلام هاني البدوي', provider: 'فودافون كاش', number: '01124564845', balance: '31,900.00 ج.م', theme: 'red' },
-    { owner: 'سلام هاني البدوي', provider: 'فودافون كاش', number: '01124564846', balance: '27,115.00 ج.م', theme: 'red' },
-    { owner: 'سلام هاني البدوي', provider: 'إنستا باي', number: '01124564847', balance: '11,240.00 ج.م', theme: 'blue' },
-    { owner: 'سلام هاني البدوي', provider: 'إنستا باي', number: '01124564848', balance: '16,750.00 ج.م', theme: 'blue' },
-  ];
+export class WalletAccountComponent implements OnInit {
+  WalletList: any[] = [];
+  FilterList: FilterModel[] = [];
+  PagingFilter: PagingFilterModel = { pagesize: 20, currentpage: 1, operationType: 0, filterList: [] };
+
+  constructor(private adminService: AdminService) {
+
+  }
+
+  ngOnInit(): void {
+    this.GetWalletAccountSummary();
+  }
+
+  GetWalletAccountSummary() {
+    this.adminService.GetWalletAccountSummary(this.PagingFilter).subscribe(data => {
+      this.WalletList = data.results;
+      console.log(this.WalletList);
+    });
+  }
+
 }

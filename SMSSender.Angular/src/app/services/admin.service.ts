@@ -75,4 +75,10 @@ export class AdminService {
   DeleteCashBox(CashBoxId: Number, UserId: any) {
     return this.http.get<ApiResponseModel<any>>(this.Url + 'CashBox/DeleteCashBox?CashBoxId=' + CashBoxId + '&UserId=' + UserId);
   }
+
+  // ============================== WalletDetail ==============================
+
+  GetWalletAccountSummary(PagingFilter: PagingFilterModel) {
+    return this.http.post<ApiResponseModel<any[]>>(this.Url + 'WalletDetail/GetWalletAccountSummary', PagingFilter);
+  }
 }

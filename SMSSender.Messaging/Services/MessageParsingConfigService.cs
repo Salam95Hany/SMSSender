@@ -13,7 +13,8 @@ namespace SMSSender.Messaging.Services
                 [OperationType.Withdraw] = providerSettings.OperationKeywords.Withdraw ?? Array.Empty<string>(),
                 [OperationType.Transfer] = providerSettings.OperationKeywords.Transfer ?? Array.Empty<string>(),
                 [OperationType.CashWithdrawal] = providerSettings.OperationKeywords.CashWithdrawal ?? Array.Empty<string>(),
-                [OperationType.BalanceInquiry] = providerSettings.OperationKeywords.BalanceInquiry ?? Array.Empty<string>()
+                [OperationType.BalanceInquiry] = providerSettings.OperationKeywords.BalanceInquiry ?? Array.Empty<string>(),
+                [OperationType.ChargeWallet] = providerSettings.OperationKeywords.ChargeWallet ?? Array.Empty<string>()
             };
         }
 

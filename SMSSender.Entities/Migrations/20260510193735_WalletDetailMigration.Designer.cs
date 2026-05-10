@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SMSSender.Entities.Models;
 
@@ -11,9 +12,11 @@ using SMSSender.Entities.Models;
 namespace SMSSender.Entities.Migrations
 {
     [DbContext(typeof(SMSDbContext))]
-    partial class SMSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260510193735_WalletDetailMigration")]
+    partial class WalletDetailMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -413,14 +416,20 @@ namespace SMSSender.Entities.Migrations
                     b.Property<double>("Amount")
                         .HasColumnType("float");
 
-                    b.Property<DateTime>("LastDailyResetDate")
-                        .HasColumnType("datetime2");
+                    b.Property<double>("DailyDepositLimit")
+                        .HasColumnType("float");
 
-                    b.Property<DateTime>("LastMonthlyResetDate")
-                        .HasColumnType("datetime2");
+                    b.Property<double>("DailyWithdrawalLimit")
+                        .HasColumnType("float");
 
                     b.Property<DateTime?>("LastRechargeDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<double>("MonthlyDepositLimit")
+                        .HasColumnType("float");
+
+                    b.Property<double>("MonthlyWithdrawalLimit")
+                        .HasColumnType("float");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -433,18 +442,6 @@ namespace SMSSender.Entities.Migrations
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("UsedDailyDeposit")
-                        .HasColumnType("float");
-
-                    b.Property<double>("UsedDailyWithdrawal")
-                        .HasColumnType("float");
-
-                    b.Property<double>("UsedMonthlyDeposit")
-                        .HasColumnType("float");
-
-                    b.Property<double>("UsedMonthlyWithdrawal")
-                        .HasColumnType("float");
 
                     b.HasKey("WalletDetailId");
 

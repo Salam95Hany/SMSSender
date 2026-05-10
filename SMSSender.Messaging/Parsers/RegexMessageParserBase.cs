@@ -19,7 +19,8 @@ namespace SMSSender.Messaging.Parsers
             OperationType.Withdraw,
             OperationType.Transfer,
             OperationType.CashWithdrawal,
-            OperationType.BalanceInquiry
+            OperationType.BalanceInquiry,
+            OperationType.ChargeWallet
         };
 
         private readonly IRegexEngine _regexEngine;
