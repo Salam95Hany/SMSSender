@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using SMSSender.Entities.Models;
 using SMSSender.Interfaces.Repositories;
 using System;
@@ -33,6 +34,11 @@ namespace SMSSender.Services.Repositories
             }
 
             return _repositories[key] as IGenericRepository<TEntity>;
+        }
+
+        public async Task<int> ExecuteSqlAsync(string sql, params object[] parameters)
+        {
+            return await _dbContext.Database.ExecuteSqlRawAsync(sql, parameters);
         }
 
 

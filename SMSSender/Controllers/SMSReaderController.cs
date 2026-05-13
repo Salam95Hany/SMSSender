@@ -33,15 +33,6 @@ namespace SMSSender.Controllers
             try
             {
                 string secretKey = Request.Headers["User-Agent"];
-                
-                //await LogMessageData(smsMessage, secretKey);
-                if (secretKey != _appSettings.SecretKey)
-                    return Unauthorized();
-
-                var AcceptedMsg = _messageService.GetMessageFiltered(model.From, model.Text);
-                if (!AcceptedMsg)
-                    return Ok();
-
                 string deviceName = Request.Headers["Device-Name"];
                 string phoneNumber = Request.Headers["Phone-Number"];
 
@@ -55,6 +46,16 @@ namespace SMSSender.Controllers
                     SentStamp = model.SentStamp,
                     Sim = model.Sim
                 };
+
+                if (model.From == "ALEXBANK")
+                    await LogMessageData(smsMessage, secretKey);
+
+                if (secretKey != _appSettings.SecretKey)
+                    return Unauthorized();
+
+                var AcceptedMsg = _messageService.GetMessageFiltered(model.From, model.Text);
+                if (!AcceptedMsg)
+                    return Ok();
 
                 var Process = await _processingService.Process(smsMessage);
                 if (Process.Success)
@@ -141,14 +142,16 @@ namespace SMSSender.Controllers
             var targetDirectory = Path.Combine(rootPath, "sms-log", dateFolder);
             if (!Directory.Exists(targetDirectory))
                 Directory.CreateDirectory(targetDirectory);
-            var filePath = Path.Combine(targetDirectory, $"sms_{createdAt:HH-mm-ss-fff}.txt");
+            var filePath = Path.Combine(targetDirectory, $"sms_{createdAt:yyyy-MM-dd}.txt");
             var fileContent = new StringBuilder()
+                .AppendLine()
+                .AppendLine("====================================")
                 .AppendLine($"CreatedAt: {createdAt:O}")
                 .AppendLine($"SecretKey: {secretKey}")
                 .AppendLine($"InputParam: {JsonConvert.SerializeObject(Model, Formatting.Indented)}")
                 .ToString();
 
-            await System.IO.File.WriteAllTextAsync(filePath, fileContent, Encoding.UTF8);
+            await System.IO.File.AppendAllTextAsync(filePath, fileContent, Encoding.UTF8);
         }
     }
 }

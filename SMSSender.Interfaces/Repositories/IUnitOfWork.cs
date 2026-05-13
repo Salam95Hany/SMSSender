@@ -12,5 +12,6 @@ namespace SMSSender.Interfaces.Repositories
         IGenericRepository<TEntity> Repository<TEntity>() where TEntity : class;
         Task<int> CompleteAsync();
         Task<IDbContextTransaction> BeginTransactionAsync();
+        Task<int> ExecuteSqlAsync(string sql, params object[] parameters);
     }
 }

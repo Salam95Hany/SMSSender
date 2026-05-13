@@ -32,7 +32,6 @@ namespace SMSSender.Interfaces.Repositories
         Task<TResult> MaxAsync<TResult>(Expression<Func<T, TResult>> selector);
         IQueryable<T> Where(Expression<Func<T, bool>> predicate);
         Task<List<T>> WhereAsync(Expression<Func<T, bool>> predicate, int? take = null);
-
         Task<T?> GetByIdWithIncludeAsync(Expression<Func<T, bool>> predicate, Func<IQueryable<T>, IQueryable<T>> include);
         Task<List<T>> GetAllWithIncludeAsync(Func<IQueryable<T>, IQueryable<T>> include);
         Task<T?> GetLastAsync<TKey>(Expression<Func<T, TKey>> orderBy);

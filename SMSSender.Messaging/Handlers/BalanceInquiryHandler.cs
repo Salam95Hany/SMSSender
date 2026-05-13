@@ -33,12 +33,19 @@ namespace SMSSender.Messaging.Handlers
 
         public async Task UpdateDepositLimitsAsync(double? balanceAfter, string phoneNumber)
         {
-            var Entity = await _unitOfWork.Repository<WalletDetail>().GetByIdAsync(w => w.PhoneNumber == phoneNumber);
-
-            if (Entity != null)
+            try
             {
-                Entity.Amount = balanceAfter.Value;
+                string sql = @"
+            UPDATE sms.WalletDetail
+            SET Amount = @p0
+            WHERE PhoneNumber = @p1";
+
+                await _unitOfWork.ExecuteSqlAsync(sql, balanceAfter.Value, phoneNumber);
             }
+            catch (Exception ex)
+            {
+                throw;
+            } 
         }
     }
 }

@@ -37,27 +37,53 @@ namespace SMSSender.Messaging.Handlers
 
         public async Task UpdateDepositLimitsAsync(double? amount, double? balanceAfter, string phoneNumber)
         {
-            var Now = DateTime.UtcNow.EgyptNow();
-
-            var Entity = await _unitOfWork.Repository<WalletDetail>().GetByIdAsync(w => w.PhoneNumber == phoneNumber);
-
-            if (Entity != null)
+            try
             {
-                if (Entity.LastDailyResetDate.Date < Now.Date)
-                {
-                    Entity.UsedDailyDeposit = 0;
-                    Entity.LastDailyResetDate = Now;
-                }
+                var Now = DateTime.UtcNow.EgyptNow();
 
-                if (Entity.LastMonthlyResetDate.Month != Now.Month || Entity.LastMonthlyResetDate.Year != Now.Year)
-                {
-                    Entity.UsedMonthlyDeposit = 0;
-                    Entity.LastMonthlyResetDate = Now;
-                }
+                string sql = @"
+                UPDATE sms.WalletDetails
+                SET
+                    Amount = @p0,
 
-                Entity.Amount = balanceAfter.Value;
-                Entity.UsedDailyDeposit += amount.Value;
-                Entity.UsedMonthlyDeposit += amount.Value;
+                    UsedDailyDeposit =
+                        CASE
+                            WHEN CAST(LastDailyResetDate AS DATE) < CAST(@p1 AS DATE)
+                                THEN @p2
+                            ELSE UsedDailyDeposit + @p2
+                        END,
+
+                    LastDailyResetDate =
+                        CASE
+                            WHEN CAST(LastDailyResetDate AS DATE) < CAST(@p1 AS DATE)
+                                THEN @p1
+                            ELSE LastDailyResetDate
+                        END,
+
+                    UsedMonthlyDeposit =
+                        CASE
+                            WHEN MONTH(LastMonthlyResetDate) <> MONTH(@p1)
+                                 OR YEAR(LastMonthlyResetDate) <> YEAR(@p1)
+                                THEN @p2
+                            ELSE UsedMonthlyDeposit + @p2
+                        END,
+
+                    LastMonthlyResetDate =
+                        CASE
+                            WHEN MONTH(LastMonthlyResetDate) <> MONTH(@p1)
+                                 OR YEAR(LastMonthlyResetDate) <> YEAR(@p1)
+                                THEN @p1
+                            ELSE LastMonthlyResetDate
+                        END
+
+                WHERE PhoneNumber = @p3
+            ";
+
+                await _unitOfWork.ExecuteSqlAsync(sql, balanceAfter.Value, Now, amount.Value, phoneNumber);
+            }
+            catch (Exception ex)
+            {
+                throw;
             }
         }
     }

@@ -19,14 +19,14 @@
                     <i class="fas fa-envelope"></i>
                 </a>
             </li>
-            <li class="nav-item user-dropdown user-notifications" ngbDropdown display="dynamic" placement="bottom-end">
-                <a class="nav-link without-arrow dropdown-toggle d-flex align-items-center" role="button" tabindex="0" id="userDropdown" ngbDropdownToggle>
+            <li class="nav-item user-dropdown user-notifications" (click)="OpenNotificationBoxModal()">
+                <a class="nav-link without-arrow dropdown-toggle d-flex align-items-center">
                     <span class="position-relative">
                     <span class="alert-count">{{TotalCount}}</span>
                     <i class="fas fa-bell"></i>
                     </span>
                 </a>
-                <div ngbDropdownMenu aria-labelledby="userDropdown" class="dropdown-menu dropdown-user-menu w-100 min-width-360 py-0">
+                <!-- <div ngbDropdownMenu aria-labelledby="userDropdown" class="dropdown-menu dropdown-user-menu w-100 min-width-360 py-0">
                     <div class="msg-header">
                         <p class="msg-header-clear m-0 ms-auto">كل الرسائل</p>
                     </div>
@@ -46,7 +46,7 @@
                         </a>
                     </div>
                     <div class="text-center msg-footer">عرض جميع الرسائل</div>
-                </div>
+                </div> -->
             </li>
             <a class="app-header__shortcut" routerLink="/admin/user">
                 <i class="fas fa-sliders-h"></i>
@@ -88,4 +88,8 @@
 
 <ng-template #MessageBoxModal>
     <app-message-box-popup [MessageList]="MessageList"></app-message-box-popup>
+</ng-template>
+
+<ng-template #NotificationBoxModal>
+    <app-notification-box-popup></app-notification-box-popup>
 </ng-template>

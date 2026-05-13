@@ -8,16 +8,18 @@ import { MessageBoxPopupComponent } from '../../../shared/message-box-popup/mess
 import { AdminService } from '../../../services/admin.service';
 import { TimeAgoTodayPipe } from '../../../pipes/time-ago-today.pipe';
 import { NotificationSoundService } from '../../../services/notification-sound.service';
+import { NotificationBoxPopupComponent } from '../../../shared/notification-box-popup/notification-box-popup.component';
 
 @Component({
   selector: 'app-admin-header',
   standalone: true,
-  imports: [NgClass, NgbDropdownModule, RouterLink, MessageBoxPopupComponent, TimeAgoTodayPipe, NgIf, NgFor],
+  imports: [NgClass, NgbDropdownModule, RouterLink, MessageBoxPopupComponent,NotificationBoxPopupComponent],
   templateUrl: './admin-header.component.html',
   styleUrl: './admin-header.component.css'
 })
 export class AdminHeaderComponent {
   @ViewChild('MessageBoxModal') MessageBoxModal: TemplateRef<any>;
+  @ViewChild('NotificationBoxModal') NotificationBoxModal: TemplateRef<any>;
   @Input() isSidebarCollapsed = false;
   @Input() isMobileMenuOpen = false;
   @Output() menuToggle = new EventEmitter<void>();
@@ -70,6 +72,14 @@ export class AdminHeaderComponent {
 
     modalRef.result.finally(() => {
       this.isModalOpen = false;
+    });
+  }
+
+  OpenNotificationBoxModal() {
+    this.modalService.open(this.NotificationBoxModal, {
+      centered: true,
+      size: 'sm',
+      windowClass: 'messages-modal',
     });
   }
 
