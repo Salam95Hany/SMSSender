@@ -154,7 +154,7 @@ namespace SMSSender.Services
             if (Entity == null)
                 return ApiResponseModel<string>.Failure(GenericErrors.TransFailed);
 
-            Entity.IsRead = true;
+            //Entity.IsRead = true;
 
             await _unitOfWork.CompleteAsync();
             return ApiResponseModel<string>.Success(GenericErrors.UpdateSuccess);

@@ -19,7 +19,6 @@ namespace SMSSender.Controllers
         private readonly IMessageProcessingService _processingService;
         private static readonly ConcurrentDictionary<string, HttpResponse> _clients = new();
 
-
         public SMSReaderController(IMessageProcessingService processingService, IAppSettings appSettings, IMessageService messageService)
         {
             _appSettings = appSettings;
@@ -28,13 +27,17 @@ namespace SMSSender.Controllers
         }
 
         [HttpPost("webhook")]
-        public async Task<IActionResult> IncomingMessage([FromBody] IncomingSmsParam model)
+        public IActionResult IncomingMessage([FromBody] IncomingSmsParam model)
         {
             try
             {
                 string secretKey = Request.Headers["User-Agent"];
-                string deviceName = Request.Headers["Device-Name"];
-                string phoneNumber = Request.Headers["Phone-Number"];
+
+                if (secretKey != _appSettings.SecretKey)
+                    return Unauthorized("unauthorized");
+
+                string deviceName = "ميار 631";
+                string phoneNumber = "01030972631";
 
                 var smsMessage = new SmsMessagePure
                 {
@@ -47,38 +50,43 @@ namespace SMSSender.Controllers
                     Sim = model.Sim
                 };
 
-                if (model.From == "ALEXBANK")
-                    await LogMessageData(smsMessage, secretKey);
-
-                if (secretKey != _appSettings.SecretKey)
-                    return Unauthorized();
-
-                var AcceptedMsg = _messageService.GetMessageFiltered(model.From, model.Text);
-                if (!AcceptedMsg)
-                    return Ok();
-
-                var Process = await _processingService.Process(smsMessage);
-                if (Process.Success)
+                _ = Task.Run(async () =>
                 {
-                    await BroadcastAsync("Message_Added", Process.TransactionId.Value);
-                    return Ok();
-                }
-                else
-                    return BadRequest();
+                    try
+                    {
+                        if (smsMessage.ProviderStr == "ALEXBANK")
+                            await LogMessageData(smsMessage, secretKey);
 
+                        var acceptedMsg = _messageService.GetMessageFiltered(smsMessage.ProviderStr, smsMessage.Message);
+                        if (!acceptedMsg)
+                            return;
+
+                        var process = await _processingService.Process(smsMessage);
+
+                        if (process.Success && process.TransactionId.HasValue)
+                            await BroadcastAsync("Message_Added", process.TransactionId.Value);
+                    }
+                    catch (Exception ex)
+                    {
+                        await LogError(ex);
+                    }
+                });
+
+                return Content("success", "text/plain");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return BadRequest();
+                _ = LogError(ex);
+                return BadRequest("error");
             }
         }
 
         [HttpGet("stream")]
         public async Task Stream()
         {
-            Response.Headers.Add("Content-Type", "text/event-stream");
-            Response.Headers.Add("Cache-Control", "no-cache");
-            Response.Headers.Add("Connection", "keep-alive");
+            Response.Headers["Content-Type"] = "text/event-stream";
+            Response.Headers["Cache-Control"] = "no-cache";
+            Response.Headers["Connection"] = "keep-alive";
 
             var clientId = Guid.NewGuid().ToString();
             _clients.TryAdd(clientId, Response);
@@ -92,9 +100,8 @@ namespace SMSSender.Controllers
                     await Task.Delay(15000, HttpContext.RequestAborted);
                 }
             }
-            catch (TaskCanceledException)
+            catch
             {
-                // client disconnected
             }
             finally
             {
@@ -119,7 +126,7 @@ namespace SMSSender.Controllers
             {
                 try
                 {
-                    await client.Value.Body.WriteAsync(bytes);
+                    await client.Value.Body.WriteAsync(bytes, 0, bytes.Length);
                     await client.Value.Body.FlushAsync();
                 }
                 catch
@@ -129,29 +136,41 @@ namespace SMSSender.Controllers
             }
 
             foreach (var dead in deadClients)
-            {
                 _clients.TryRemove(dead, out _);
-            }
         }
 
-        public async Task LogMessageData(SmsMessagePure Model, string secretKey)
+        public async Task LogMessageData(SmsMessagePure model, string secretKey)
         {
             var createdAt = DateTime.Now;
             var rootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
             var dateFolder = createdAt.ToString("yyyy-MM-dd");
             var targetDirectory = Path.Combine(rootPath, "sms-log", dateFolder);
+
             if (!Directory.Exists(targetDirectory))
                 Directory.CreateDirectory(targetDirectory);
+
             var filePath = Path.Combine(targetDirectory, $"sms_{createdAt:yyyy-MM-dd}.txt");
+
             var fileContent = new StringBuilder()
                 .AppendLine()
                 .AppendLine("====================================")
                 .AppendLine($"CreatedAt: {createdAt:O}")
                 .AppendLine($"SecretKey: {secretKey}")
-                .AppendLine($"InputParam: {JsonConvert.SerializeObject(Model, Formatting.Indented)}")
+                .AppendLine($"InputParam: {JsonConvert.SerializeObject(model, Formatting.Indented)}")
                 .ToString();
 
             await System.IO.File.AppendAllTextAsync(filePath, fileContent, Encoding.UTF8);
+        }
+
+        public async Task LogError(Exception ex)
+        {
+            var rootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "logs");
+
+            if (!Directory.Exists(rootPath))
+                Directory.CreateDirectory(rootPath);
+
+            var filePath = Path.Combine(rootPath, $"error_{DateTime.Now:yyyy-MM-dd}.txt");
+            await System.IO.File.AppendAllTextAsync(filePath, $"{DateTime.Now:O}\n{ex}\n----------------------\n");
         }
     }
 }

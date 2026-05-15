@@ -21,7 +21,6 @@ namespace SMSSender.Entities.Models
         public DbSet<MessageTransaction> MessageTransactions { get; set; }
         public DbSet<CashBox> CashBoxes { get; set; }
         public DbSet<WalletDetail> WalletDetails { get; set; }
-        
-
+        public DbSet<Notification> Notifications { get; set; }
     }
 }

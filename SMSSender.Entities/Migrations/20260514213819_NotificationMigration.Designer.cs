@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SMSSender.Entities.Models;
 
@@ -11,9 +12,11 @@ using SMSSender.Entities.Models;
 namespace SMSSender.Entities.Migrations
 {
     [DbContext(typeof(SMSDbContext))]
-    partial class SMSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260514213819_NotificationMigration")]
+    partial class NotificationMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -365,8 +368,8 @@ namespace SMSSender.Entities.Migrations
                     b.Property<int>("NotificationType")
                         .HasColumnType("int");
 
-                    b.Property<string>("Provider")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ReferenceId")
+                        .HasColumnType("int");
 
                     b.Property<int>("ReferenceType")
                         .HasColumnType("int");
@@ -374,9 +377,6 @@ namespace SMSSender.Entities.Migrations
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("TransactionId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("NotificationId");
 

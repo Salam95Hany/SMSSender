@@ -1,5 +1,6 @@
 ﻿using SMSSender.Entities.Common;
 using SMSSender.Entities.Models.Messaging;
+using SMSSender.Interfaces;
 using SMSSender.Interfaces.Repositories;
 using SMSSender.Messaging.Services;
 using System;
@@ -13,9 +14,11 @@ namespace SMSSender.Messaging.Handlers
     public class ChargeWalletHandler : IOperationHandler
     {
         private readonly IUnitOfWork _unitOfWork;
-        public ChargeWalletHandler(IUnitOfWork unitOfWork)
+        private readonly INotificationService _notificationService;
+        public ChargeWalletHandler(IUnitOfWork unitOfWork, INotificationService notificationService)
         {
             _unitOfWork = unitOfWork;
+            _notificationService = notificationService;
         }
         public OperationType OperationType => OperationType.ChargeWallet;
 
@@ -23,10 +26,12 @@ namespace SMSSender.Messaging.Handlers
         {
             try
             {
+                string NotBody = $"تم شحن رصيد · المحفظة: {message.ProviderPhone}";
                 var Entity = await _unitOfWork.Repository<WalletDetail>().GetByIdAsync(w => w.PhoneNumber == message.ProviderPhone);
                 if (Entity != null)
                 {
                     Entity.LastRechargeDate = message.OperationMsgDateTime;
+                    _notificationService.CreateNotification("شحن رصيد", NotBody, message.Provider, NotificationTypes.BalanceInquiry, NotificationReferenceTypes.MessageTransaction, message.TransactionId);
                     await _unitOfWork.CompleteAsync();
                 }
             }

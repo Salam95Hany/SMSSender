@@ -1,23 +1,30 @@
 ﻿using SMSSender.Entities.Common;
 using SMSSender.Entities.Models.Messaging;
+using SMSSender.Interfaces;
 using SMSSender.Interfaces.Repositories;
+using SMSSender.Messaging.Services;
 
 namespace SMSSender.Messaging.Handlers
 {
     public class CashHandler : IOperationHandler
     {
         private readonly IUnitOfWork _unitOfWork;
-        public CashHandler(IUnitOfWork unitOfWork)
+        private readonly INotificationService _notificationService;
+        public CashHandler(IUnitOfWork unitOfWork, INotificationService notificationService)
         {
             _unitOfWork = unitOfWork;
+            _notificationService = notificationService;
         }
         public OperationType OperationType => OperationType.CashWithdrawal;
 
         public async Task Handle(MessageTransaction message)
         {
+            await using var transaction = await _unitOfWork.BeginTransactionAsync();
             try
             {
-                await _unitOfWork.Repository<MessageTransaction>().AddAsync(message);
+                string NotBody = $"تم سحب جنيه {message.Amount:N2} · المحفظة: {message.ProviderPhone}";
+                _unitOfWork.Repository<MessageTransaction>().Add(message);
+                _notificationService.CreateNotification("سحب نقدي", NotBody, message.Provider, NotificationTypes.BalanceInquiry, NotificationReferenceTypes.MessageTransaction, message.TransactionId);
                 await _unitOfWork.CompleteAsync();
             }
             catch (Exception ex)

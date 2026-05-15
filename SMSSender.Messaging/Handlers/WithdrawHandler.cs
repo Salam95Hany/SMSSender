@@ -1,5 +1,6 @@
 ﻿using SMSSender.Entities.Common;
 using SMSSender.Entities.Models.Messaging;
+using SMSSender.Interfaces;
 using SMSSender.Interfaces.Repositories;
 using SMSSender.Messaging.Services;
 
@@ -8,18 +9,23 @@ namespace SMSSender.Messaging.Handlers
     public class WithdrawHandler : IOperationHandler
     {
         private readonly IUnitOfWork _unitOfWork;
-        public WithdrawHandler(IUnitOfWork unitOfWork)
+        private readonly INotificationService _notificationService;
+        public WithdrawHandler(IUnitOfWork unitOfWork, INotificationService notificationService)
         {
             _unitOfWork = unitOfWork;
+            _notificationService = notificationService;
         }
         public OperationType OperationType => OperationType.Withdraw;
 
         public async Task Handle(MessageTransaction message)
         {
+            await using var transaction = await _unitOfWork.BeginTransactionAsync();
             try
             {
-                await _unitOfWork.Repository<MessageTransaction>().AddAsync(message);
+                string NotBody = $"تم سحب جنيه {message.Amount:N2} من {message.FromPhone} · المحفظة: {message.ProviderPhone}";
+                 _unitOfWork.Repository<MessageTransaction>().Add(message);
                 await UpdateWithdrawalLimitsAsync(message.Amount, message.BalanceAfter, message.ProviderPhone);
+                _notificationService.CreateNotification("سحب مبلغ جديد", NotBody, message.Provider, NotificationTypes.Deposit, NotificationReferenceTypes.MessageTransaction, message.TransactionId);
                 await _unitOfWork.CompleteAsync();
             }
             catch (Exception)
@@ -46,11 +52,11 @@ namespace SMSSender.Messaging.Handlers
                 SET
                     Amount = @p0,
 
-                    UsedDailyDeposit =
+                    UsedDailyWithdrawal =
                         CASE
                             WHEN CAST(LastDailyResetDate AS DATE) < CAST(@p1 AS DATE)
                                 THEN @p2
-                            ELSE UsedDailyDeposit + @p2
+                            ELSE UsedDailyWithdrawal + @p2
                         END,
 
                     LastDailyResetDate =
@@ -60,12 +66,12 @@ namespace SMSSender.Messaging.Handlers
                             ELSE LastDailyResetDate
                         END,
 
-                    UsedMonthlyDeposit =
+                    UsedMonthlyWithdrawal =
                         CASE
                             WHEN MONTH(LastMonthlyResetDate) <> MONTH(@p1)
                                  OR YEAR(LastMonthlyResetDate) <> YEAR(@p1)
                                 THEN @p2
-                            ELSE UsedMonthlyDeposit + @p2
+                            ELSE UsedMonthlyWithdrawal + @p2
                         END,
 
                     LastMonthlyResetDate =

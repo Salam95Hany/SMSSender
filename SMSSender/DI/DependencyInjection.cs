@@ -58,7 +58,8 @@ namespace SMSSender.DI
             services.AddScoped<IMessageService, MessageService>();
             services.AddScoped<ICashBoxService, CashBoxService>();
             services.AddScoped<IWalletDetailService, WalletDetailService>();
-            
+            services.AddScoped<INotificationService, NotificationService>();
+
             #region ReportsDI
 
             services.AddSingleton<IRazorLightEngine>(serviceProvider =>

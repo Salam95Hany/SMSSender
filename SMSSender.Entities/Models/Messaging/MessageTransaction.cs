@@ -29,7 +29,6 @@ namespace SMSSender.Entities.Models.Messaging
         public DateTime OperationServerDateTime { get; set; } // تاريخ ووقت العملية في السيرفر
         public DateTime? OperationMsgDateTime { get; set; } // تاريخ ووقت الاستلام من الـ ReceivedStamp
         public DateTime? OperationSentDateTime { get; set; } // تاريخ ووقت الإرسال من الـ SentStamp
-        public bool? IsCalculated { get; set; } // تاريخ ووقت الإرسال من الـ SentStamp
-        public bool? IsRead { get; set; } // تاريخ ووقت الإرسال من الـ SentStamp
+        public bool? IsCalculated { get; set; }
     }
 }
