@@ -1,7 +1,5 @@
 <div class="demo-backdrop">
     <div class="notif-popup" id="notifPopup">
-
-        <!-- Header -->
         <div class="notif-header">
             <div class="notif-header-right">
                 <div class="notif-header-icon"><i class="fas fa-bell"></i></div>
@@ -13,62 +11,41 @@
                 <i class="fas fa-times"></i>
             </button>
         </div>
-        <!-- Toolbar -->
         <div class="notif-toolbar">
             <div class="notif-tabs">
                 <button class="notif-tab">
-          الكل <span class="badge-tab">12</span>
-        </button>
-                <button class="notif-tab active">
-          غير مقروء <span class="badge-tab" style="background:var(--danger);color:#fff;">5</span>
-        </button>
-            </div>
-            <div style="display:flex;align-items:center;gap:8px;flex:1;justify-content:flex-end;">
-                <button class="btn-mark-all">
-                    <i class="fas fa-check-double"></i> تحديد الكل كمقروء
+                     الكل <span class="badge-tab">{{TotalCount}}</span>
                 </button>
             </div>
         </div>
-        <!-- List -->
         <div class="notif-list" id="notifList">
-            <!-- 1 – Payment received (unread) -->
-            <div class="notif-item unread" data-type="all unread">
-                <div class="unread-dot"></div>
-                <div class="notif-avatar c-blue">
-                    👝
-                    <span class="notif-type-badge" style="background:var(--info);color:#fff;"><i class="fas fa-arrow-up"></i></span>
+            <div class="notif-item" data-type="all unread" [ngClass]="{'unread': !item.isRead}" *ngFor="let item of NotificationList">
+                <div class="unread-dot" *ngIf="!item.isRead"></div>
+                <div class="notif-avatar" [ngClass]="getProviderClass(item.provider)">
+                    <span *ngIf="item.provider">👝</span>
+                    <span *ngIf="!item.provider">⚠️</span>
+                    <span class="notif-type-badge" style="background:var(--danger);color:#fff;" *ngIf="item.provider == 'VodafoneCash'"><i class="fas fa-arrow-up"></i></span>
+                    <span class="notif-type-badge" style="background:var(--info);color:#fff;" *ngIf="item.provider == 'InstaPay'"><i class="fas fa-arrow-up"></i></span>
+                    <span class="notif-type-badge" style="background:var(--danger);color:#fff;" *ngIf="!item.provider"><i class="fas fa-exclamation-triangle"></i></span>
                 </div>
                 <div class="notif-content">
-                    <div class="notif-name">تم استلام دفعة جديدة</div>
+                    <div class="notif-name">{{item.title}}</div>
                     <div class="notif-body">
-                        استُلم مبلغ EGP 1,400.00 من رقم 00201008380799 – حسن 119 · رقم المرجع: 019923018149
+                        {{item.body}}
                     </div>
                     <div class="notif-meta">
-                        <span class="notif-time"><i class="fas fa-clock"></i> منذ ساعة</span>
-                        <span class="notif-chip c-blue">انستا باي</span>
+                        <span class="notif-time"><i class="fas fa-clock"></i> {{item.createdAt | timeAgoToday}}</span>
+                        <span class="notif-chip c-red" *ngIf="item.provider == 'VodafoneCash'">فودافون كاش</span>
+                        <span class="notif-chip c-blue" *ngIf="item.provider == 'InstaPay'">انستا باي</span>
+                        <span class="notif-chip c-orange" *ngIf="!item.provider">النظام</span>
                     </div>
                 </div>
             </div>
-            <!-- 2 – New loan request (unread) -->
-            <div class="notif-item unread" data-type="all unread">
-                <div class="unread-dot"></div>
-                <div class="notif-avatar c-red">
-                    👝
-                    <span class="notif-type-badge" style="background:var(--danger);color:#fff;"><i class="fas fa-arrow-up"></i></span>
-                </div>
-                <div class="notif-content">
-                    <div class="notif-name">طلب قرض جديد – يحتاج مراجعة</div>
-                    <div class="notif-body">
-                        قدّم Marwa H Mahmoud طلب قرض بمبلغ EGP 205.00 · مندل 685 · المحفظة: 01062571174
-                    </div>
-                    <div class="notif-meta">
-                        <span class="notif-time"><i class="fas fa-clock"></i> منذ ساعة</span>
-                        <span class="notif-chip c-red">فودافون كاش</span>
-                    </div>
-                </div>
+            <div class="loading-more" *ngIf="ShowLoader">
+                <i class="fas fa-spinner fa-spin"></i> جاري تحميل المزيد...
             </div>
-            <!-- 3 – Payment delay (unread) -->
-            <div class="notif-item unread" data-type="all unread">
+            <div #observer></div>
+            <!-- <div class="notif-item unread" data-type="all unread">
                 <div class="unread-dot"></div>
                 <div class="notif-avatar c-orange">
                     ⚠️
@@ -84,11 +61,11 @@
                         <span class="notif-chip c-orange">النظام</span>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
         <!-- Footer -->
-        <div class="notif-footer">
-            <strong class="me-1">5</strong><span class="me-1"> إشعارات غير مقروءة من أصل </span><strong>12</strong>
-        </div>
+        <!-- <div class="notif-footer">
+            <strong class="me-1">{{UnreadCount}}</strong><span class="me-1"> إشعارات غير مقروءة من أصل </span><strong>{{NotificationList.length}}</strong>
+        </div> -->
     </div>
 </div>

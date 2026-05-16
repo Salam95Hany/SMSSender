@@ -19,10 +19,9 @@ namespace SMSSender.Messaging.Handlers
 
         public async Task Handle(MessageTransaction message)
         {
-            await using var transaction = await _unitOfWork.BeginTransactionAsync();
             try
             {
-                string NotBody = $"تم سحب جنيه {message.Amount:N2} من {message.FromPhone} · المحفظة: {message.ProviderPhone}";
+                string NotBody = $"تم سحب {message.Amount:N2} جنيه من {message.FromPhone ?? message.SenderName} · المحفظة: {message.ProviderPhone}";
                  _unitOfWork.Repository<MessageTransaction>().Add(message);
                 await UpdateWithdrawalLimitsAsync(message.Amount, message.BalanceAfter, message.ProviderPhone);
                 _notificationService.CreateNotification("سحب مبلغ جديد", NotBody, message.Provider, NotificationTypes.Deposit, NotificationReferenceTypes.MessageTransaction, message.TransactionId);
@@ -43,53 +42,27 @@ namespace SMSSender.Messaging.Handlers
 
         public async Task UpdateWithdrawalLimitsAsync(double? amount, double? balanceAfter, string phoneNumber)
         {
-            try
+            var Now = DateTime.UtcNow.EgyptNow();
+
+            var Entity = await _unitOfWork.Repository<WalletDetail>().GetByIdAsync(w => w.PhoneNumber == phoneNumber);
+
+            if (Entity != null)
             {
-                var Now = DateTime.UtcNow.EgyptNow();
+                if (Entity.LastDailyResetDate.Date < Now.Date)
+                {
+                    Entity.UsedDailyWithdrawal = 0;
+                    Entity.LastDailyResetDate = Now;
+                }
 
-                string sql = @"
-                UPDATE sms.WalletDetails
-                SET
-                    Amount = @p0,
+                if (Entity.LastMonthlyResetDate.Month != Now.Month || Entity.LastMonthlyResetDate.Year != Now.Year)
+                {
+                    Entity.UsedMonthlyWithdrawal = 0;
+                    Entity.LastMonthlyResetDate = Now;
+                }
 
-                    UsedDailyWithdrawal =
-                        CASE
-                            WHEN CAST(LastDailyResetDate AS DATE) < CAST(@p1 AS DATE)
-                                THEN @p2
-                            ELSE UsedDailyWithdrawal + @p2
-                        END,
-
-                    LastDailyResetDate =
-                        CASE
-                            WHEN CAST(LastDailyResetDate AS DATE) < CAST(@p1 AS DATE)
-                                THEN @p1
-                            ELSE LastDailyResetDate
-                        END,
-
-                    UsedMonthlyWithdrawal =
-                        CASE
-                            WHEN MONTH(LastMonthlyResetDate) <> MONTH(@p1)
-                                 OR YEAR(LastMonthlyResetDate) <> YEAR(@p1)
-                                THEN @p2
-                            ELSE UsedMonthlyWithdrawal + @p2
-                        END,
-
-                    LastMonthlyResetDate =
-                        CASE
-                            WHEN MONTH(LastMonthlyResetDate) <> MONTH(@p1)
-                                 OR YEAR(LastMonthlyResetDate) <> YEAR(@p1)
-                                THEN @p1
-                            ELSE LastMonthlyResetDate
-                        END
-
-                WHERE PhoneNumber = @p3
-            ";
-
-                await _unitOfWork.ExecuteSqlAsync(sql, balanceAfter.Value, Now, amount.Value, phoneNumber);
-            }
-            catch (Exception ex)
-            {
-                throw;
+                Entity.Amount = balanceAfter.Value;
+                Entity.UsedDailyWithdrawal += amount.Value;
+                Entity.UsedMonthlyWithdrawal += amount.Value;
             }
         }
     }

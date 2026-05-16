@@ -71,10 +71,10 @@ namespace SMSSender.Controllers
             return Process;
         }
 
-        [HttpGet("GetMessageNotification")]
-        public async Task<ApiResponseModel<DataTable>> GetMessageNotification()
+        [HttpPost("GetMessageNotification")]
+        public async Task<ApiResponseModel<DataTable>> GetMessageNotification(PagingFilterModel PagingFilter)
         {
-            var Results = await _messageService.GetMessageNotification();
+            var Results = await _messageService.GetMessageNotification(PagingFilter);
             return Results;
         }
 
@@ -89,6 +89,13 @@ namespace SMSSender.Controllers
         public async Task<ApiResponseModel<string>> MakeMessageAsDelayed(int MessageTransactionId)
         {
             var Results = await _messageService.MakeMessageAsDelayed(MessageTransactionId);
+            return Results;
+        }
+
+        [HttpGet("GetMessageBoxTodayData")]
+        public async Task<ApiResponseModel<DataTable>> GetMessageBoxTodayData()
+        {
+            var Results = await _messageService.GetMessageBoxTodayData();
             return Results;
         }
     }

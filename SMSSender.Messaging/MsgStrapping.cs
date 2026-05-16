@@ -1,8 +1,10 @@
 using Microsoft.Extensions.DependencyInjection;
+using SMSSender.Messaging.FileLog;
 using SMSSender.Messaging.Handlers;
 using SMSSender.Messaging.Parsers;
 using SMSSender.Messaging.Repositories;
 using SMSSender.Messaging.Services;
+using SMSSender.Messaging.TaskQueue;
 
 namespace SMSSender.Messaging
 {
@@ -17,7 +19,6 @@ namespace SMSSender.Messaging
             services.AddScoped<IFailedSmsLogger, FailedSmsLogger>();
 
             services.AddScoped<IMessageParser, VodafoneCashParser>();
-            services.AddScoped<IMessageParser, VodafoneCashEnParser>();
             services.AddScoped<IMessageParser, InstaPayParser>();
 
             services.AddScoped<IOperationHandler, DepositHandler>();
@@ -26,6 +27,11 @@ namespace SMSSender.Messaging
             services.AddScoped<IOperationHandler, TransferHandler>();
             services.AddScoped<IOperationHandler, BalanceInquiryHandler>();
             services.AddScoped<IOperationHandler, ChargeWalletHandler>();
+
+            services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
+            services.AddHostedService<SmsProcessingWorker>();
+
+            services.AddSingleton<IFileLoggerService, FileLoggerService>();
 
             return services;
         }

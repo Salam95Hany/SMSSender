@@ -29,7 +29,7 @@ namespace SMSSender.Messaging.Services
                     TransactionId = Guid.NewGuid(),
                     Message = model.Message ?? string.Empty,
                     ErrorMessage = errorReason,
-                    MsgStatus = IsCorrectionProcess ?  MsgStatus.CorrectionProcess.ToString() : MsgStatus.CorrectionProcess.ToString(),
+                    MsgStatus = IsCorrectionProcess ? MsgStatus.CorrectionProcess.ToString() : MsgStatus.CorrectionProcess.ToString(),
                     Provider = model.ProviderStr ?? string.Empty,
                     ProviderName = model.DeviceName ?? string.Empty,
                     ProviderPhone = model.PhoneNumber ?? string.Empty,
@@ -48,16 +48,10 @@ namespace SMSSender.Messaging.Services
 
             try
             {
-                var failureSettings = _appSettings.MessageParsing?.FailedSms ?? new FailedSmsSettings();
                 var rootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
-                var dateFolder = createdAt.ToString(string.IsNullOrWhiteSpace(failureSettings.DateFolderFormat) ? "yyyy-MM-dd" : failureSettings.DateFolderFormat);
-                var targetDirectory = Path.Combine(
-                    rootPath,
-                    string.IsNullOrWhiteSpace(failureSettings.RelativeDirectory) ? "sms-failures" : failureSettings.RelativeDirectory,
-                    dateFolder);
-
+                var dateFolder = createdAt.ToString("yyyy-MM-dd");
+                var targetDirectory = Path.Combine(rootPath, "sms-failures", dateFolder);
                 Directory.CreateDirectory(targetDirectory);
-
                 var filePath = Path.Combine(targetDirectory, $"sms_{createdAt:HH-mm-ss-fff}.txt");
                 var fileContent = new StringBuilder()
                     .AppendLine($"CreatedAt: {createdAt:O}")

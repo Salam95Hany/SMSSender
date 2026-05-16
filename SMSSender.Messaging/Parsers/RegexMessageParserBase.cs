@@ -56,7 +56,7 @@ namespace SMSSender.Messaging.Parsers
                 SenderName = ExtractField(normalizedMessage, settings, nameof(FieldPatterns.SenderName)),
                 BalanceAfter = ParseDecimal(ExtractField(normalizedMessage, settings, nameof(FieldPatterns.BalanceAfter))),
                 TransactionNumber = ExtractField(normalizedMessage, settings, nameof(FieldPatterns.TransactionNumber)),
-                OperationDateTime = ParseStampDateTime(message.ReceivedStamp) ?? ExtractOperationDateTime(normalizedMessage, settings),
+                OperationDateTime = ParseStampDateTime(message.ReceivedStamp) ?? DateTime.UtcNow.EgyptNow(),
                 SentDateTime = ParseStampDateTime(message.SentStamp)
             };
         }
@@ -92,38 +92,6 @@ namespace SMSSender.Messaging.Parsers
             }
 
             return CleanStringValue(value);
-        }
-
-        protected DateTime? ExtractOperationDateTime(string message, ProviderSettings settings)
-        {
-            var patterns = MessageParsingConfigService.GetFieldPatterns(settings, nameof(FieldPatterns.OperationDateTime));
-            if (!_regexEngine.TryExtractGroups(message, patterns, out var groups, "value", "date", "time"))
-            {
-                return null;
-            }
-
-            var candidate = groups.TryGetValue("value", out var rawDateTime)
-                ? rawDateTime
-                : string.Join(" ", new[] { groups.GetValueOrDefault("date"), groups.GetValueOrDefault("time") }.Where(value => !string.IsNullOrWhiteSpace(value)));
-
-            candidate = CleanStringValue(candidate);
-            if (string.IsNullOrWhiteSpace(candidate))
-            {
-                return null;
-            }
-
-            var formats = settings.DateTimeFormats ?? Array.Empty<string>();
-            foreach (var format in formats.Where(value => !string.IsNullOrWhiteSpace(value)))
-            {
-                if (DateTime.TryParseExact(candidate, format, CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces, out var parsedDateTime))
-                {
-                    return parsedDateTime;
-                }
-            }
-
-            return DateTime.TryParse(candidate, CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces, out var fallbackDateTime)
-                ? fallbackDateTime
-                : null;
         }
 
         protected decimal? ParseDecimal(string? value)
@@ -197,7 +165,7 @@ namespace SMSSender.Messaging.Parsers
         {
             decimal fee = 0;
 
-            if (Provider == ProviderType.VodafoneCash || Provider == ProviderType.VodafoneCashEnglish)
+            if (Provider == ProviderType.VodafoneCash)
             {
                 switch (type)
                 {

@@ -1,22 +1,24 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using SMSSender.Entities.Models;
-using SMSSender.Services.Common;
-using SMSSender.Interfaces.Common;
-using SMSSender.Interfaces.Repositories;
-using SMSSender.Services.Repositories;
-using SMSSender.Interfaces.Auth;
-using SMSSender.Services.Auth;
-using SMSSender.Entities.Auth;
 using RazorLight;
+using SMSSender.Entities.Auth;
+using SMSSender.Entities.Models;
+using SMSSender.Hubs;
+using SMSSender.Interfaces;
+using SMSSender.Interfaces.Auth;
+using SMSSender.Interfaces.Common;
+using SMSSender.Interfaces.Hub;
+using SMSSender.Interfaces.Repositories;
 using SMSSender.Reports.Interface;
 using SMSSender.Reports.Service;
-using SMSSender.Interfaces;
 using SMSSender.Services;
+using SMSSender.Services.Auth;
+using SMSSender.Services.Common;
+using SMSSender.Services.Repositories;
+using System.Text;
 
 namespace SMSSender.DI
 {
@@ -39,7 +41,7 @@ namespace SMSSender.DI
                 options.AddPolicy(MyAllowSpecificOrigins, builder =>
                 {
                     var appSettings = services.BuildServiceProvider().GetRequiredService<IAppSettings>();
-                    builder.WithOrigins(appSettings.URLList).AllowAnyHeader().AllowAnyMethod();
+                    builder.WithOrigins(appSettings.URLList).AllowAnyMethod().AllowAnyHeader().AllowCredentials();
                 });
             });
 
@@ -49,6 +51,7 @@ namespace SMSSender.DI
                 options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
                 options.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
             }).AddNewtonsoftJson();
+            
             services.AddAuthConfig(configuration);
 
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
@@ -59,6 +62,7 @@ namespace SMSSender.DI
             services.AddScoped<ICashBoxService, CashBoxService>();
             services.AddScoped<IWalletDetailService, WalletDetailService>();
             services.AddScoped<INotificationService, NotificationService>();
+            services.AddScoped<IHubNotificationService, HubNotificationService>();
 
             #region ReportsDI
 

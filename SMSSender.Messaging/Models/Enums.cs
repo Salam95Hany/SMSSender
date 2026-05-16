@@ -14,9 +14,6 @@ namespace SMSSender.Messaging.Models
 
         [EnumMember(Value = "InstaPay")]
         InstaPay = 2,
-
-        [EnumMember(Value = "VF-Cash-En")]
-        VodafoneCashEnglish = 3
     }
     public enum MsgStatus
     {

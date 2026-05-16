@@ -46,8 +46,12 @@ export class AdminService {
     return this.http.post<any>(this.Url + 'Message/CorrectionProcess', Model);
   }
 
-  GetMessageNotification() {
-    return this.http.get<ApiResponseModel<any[]>>(this.Url + 'Message/GetMessageNotification');
+  GetMessageNotification(PagingFilter: PagingFilterModel) {
+    return this.http.post<ApiResponseModel<any[]>>(this.Url + 'Message/GetMessageNotification', PagingFilter);
+  }
+
+  GetMessageBoxTodayData() {
+    return this.http.get<ApiResponseModel<any[]>>(this.Url + 'Message/GetMessageBoxTodayData');
   }
 
   MakeMessageAsRead(MessageTransactionId: number) {

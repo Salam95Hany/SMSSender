@@ -22,19 +22,16 @@ namespace SMSSender.Messaging.Handlers
 
         public async Task Handle(MessageTransaction message)
         {
-            await using var transaction = await _unitOfWork.BeginTransactionAsync();
             try
             {
-                string NotBody = $"رصيدك الحالي جنيه {message.BalanceAfter:N2} · المحفظة: {message.ProviderPhone}";
+                string NotBody = $"رصيدك الحالي {message.BalanceAfter:N2} جنيه · المحفظة: {message.ProviderPhone}";
                 _unitOfWork.Repository<MessageTransaction>().Add(message);
                 await UpdateDepositLimitsAsync(message.BalanceAfter, message.ProviderPhone);
                 _notificationService.CreateNotification("استعلام رصيد", NotBody, message.Provider, NotificationTypes.BalanceInquiry, NotificationReferenceTypes.MessageTransaction, message.TransactionId);
                 await _unitOfWork.CompleteAsync();
-                await transaction.CommitAsync();
             }
             catch
             {
-                await transaction.RollbackAsync();
                 throw;
             }
         }
@@ -48,14 +45,10 @@ namespace SMSSender.Messaging.Handlers
 
         public async Task UpdateDepositLimitsAsync(double? balanceAfter, string phoneNumber)
         {
-            try
+            var Entity = await _unitOfWork.Repository<WalletDetail>().GetByIdAsync(w => w.PhoneNumber == phoneNumber);
+            if (Entity != null)
             {
-                string sql = @"UPDATE sms.WalletDetail SET Amount = @p0 WHERE PhoneNumber = @p1";
-                await _unitOfWork.ExecuteSqlAsync(sql, balanceAfter.Value, phoneNumber);
-            }
-            catch (Exception ex)
-            {
-                throw;
+                Entity.Amount = balanceAfter.Value;
             }
         }
     }

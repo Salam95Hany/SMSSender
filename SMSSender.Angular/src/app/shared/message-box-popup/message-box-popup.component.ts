@@ -33,7 +33,6 @@ export class MessageBoxPopupComponent implements OnInit {
   constructor(private modalService: NgbModal, private adminService: AdminService, private toaster: ToastrService, private authService: AuthService) { }
 
   ngOnInit(): void {
-    this.MessageList = this.MessageList.filter(i => (i.operationType == 1 || i.operationType == 2) && !i.isCalculated)
     this.MessageList.forEach(i => {
       if (i.senderName)
         i.firstLetter = i.senderName?.trim().charAt(0);

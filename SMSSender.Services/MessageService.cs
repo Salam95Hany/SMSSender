@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using SMSSender.Entities.Common;
 using SMSSender.Entities.Contracts.DTOs;
@@ -10,6 +9,7 @@ using SMSSender.Interfaces.Common;
 using SMSSender.Interfaces.Repositories;
 using SMSSender.Services.Common;
 using System.Data;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace SMSSender.Services
@@ -107,9 +107,18 @@ namespace SMSSender.Services
             return ApiResponseModel<List<LatestTransactionDto>>.Success(GenericErrors.GetSuccess, Results);
         }
 
-        public async Task<ApiResponseModel<DataTable>> GetMessageNotification()
+        public async Task<ApiResponseModel<DataTable>> GetMessageNotification(PagingFilterModel PagingFilter)
         {
-            var dt = await _sQLHelper.ExecuteDataTableAsync("[sms].[SP_GetMessageNotification]", Array.Empty<SqlParameter>());
+            var Params = new SqlParameter[2];
+            Params[0] = new SqlParameter("@CurrentPage", PagingFilter.Currentpage);
+            Params[1] = new SqlParameter("@PageSize", PagingFilter.Pagesize);
+            var dt = await _sQLHelper.ExecuteDataTableAsync("[sms].[SP_GetMessageNotification]", Params);
+            return ApiResponseModel<DataTable>.Success(GenericErrors.GetSuccess, dt);
+        }
+
+        public async Task<ApiResponseModel<DataTable>> GetMessageBoxTodayData()
+        {
+            var dt = await _sQLHelper.ExecuteDataTableAsync("[sms].[SP_GetMessageBoxTodayData]", Array.Empty<SqlParameter>());
             return ApiResponseModel<DataTable>.Success(GenericErrors.GetSuccess, dt);
         }
 

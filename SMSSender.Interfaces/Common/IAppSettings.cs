@@ -30,14 +30,7 @@ namespace SMSSender.Interfaces.Common
 
     public class MessageParsingSettings
     {
-        public FailedSmsSettings FailedSms { get; set; } = new();
         public Dictionary<string, ProviderSettings> Providers { get; set; } = new();
-    }
-
-    public class FailedSmsSettings
-    {
-        public string RelativeDirectory { get; set; } = "sms-failures";
-        public string DateFolderFormat { get; set; } = "yyyy-MM-dd";
     }
 
     public class ProviderSettings
@@ -46,7 +39,6 @@ namespace SMSSender.Interfaces.Common
         public int Priority { get; set; }
         public string[] SenderAliases { get; set; } = Array.Empty<string>();
         public string[] DetectionPatterns { get; set; } = Array.Empty<string>();
-        public string[] DateTimeFormats { get; set; } = Array.Empty<string>();
         public OperationKeywords OperationKeywords { get; set; } = new();
         public FieldPatterns FieldPatterns { get; set; } = new();
     }

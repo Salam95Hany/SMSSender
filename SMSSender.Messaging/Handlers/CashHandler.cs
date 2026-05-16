@@ -19,10 +19,9 @@ namespace SMSSender.Messaging.Handlers
 
         public async Task Handle(MessageTransaction message)
         {
-            await using var transaction = await _unitOfWork.BeginTransactionAsync();
             try
             {
-                string NotBody = $"تم سحب جنيه {message.Amount:N2} · المحفظة: {message.ProviderPhone}";
+                string NotBody = $"تم سحب {message.Amount:N2} جنيه · المحفظة: {message.ProviderPhone}";
                 _unitOfWork.Repository<MessageTransaction>().Add(message);
                 _notificationService.CreateNotification("سحب نقدي", NotBody, message.Provider, NotificationTypes.BalanceInquiry, NotificationReferenceTypes.MessageTransaction, message.TransactionId);
                 await _unitOfWork.CompleteAsync();

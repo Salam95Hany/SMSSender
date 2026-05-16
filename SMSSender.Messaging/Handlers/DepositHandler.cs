@@ -19,22 +19,19 @@ namespace SMSSender.Messaging.Handlers
 
         public async Task Handle(MessageTransaction message)
         {
-            await using var transaction = await _unitOfWork.BeginTransactionAsync();
             try
             {
-                string NotBody = $"تم إيداع جنيه {message.Amount:N2} من {message.FromPhone} · المحفظة: {message.ProviderPhone}";
+                string NotBody = $"تم إيداع {message.Amount:N2} جنيه من {message.FromPhone ?? message.SenderName} · المحفظة: {message.ProviderPhone}";
                 _unitOfWork.Repository<MessageTransaction>().Add(message);
                 await UpdateDepositLimitsAsync(message.Amount, message.BalanceAfter, message.ProviderPhone);
                 _notificationService.CreateNotification("إيداع مبلغ جديد", NotBody, message.Provider, NotificationTypes.Deposit, NotificationReferenceTypes.MessageTransaction, message.TransactionId);
                 await _unitOfWork.CompleteAsync();
-                await transaction.CommitAsync();
             }
             catch
             {
-                await transaction.RollbackAsync();
                 throw;
             }
-            
+
         }
 
         public async Task Update(MessageTransaction message)
@@ -48,45 +45,26 @@ namespace SMSSender.Messaging.Handlers
         {
             var Now = DateTime.UtcNow.EgyptNow();
 
-            string sql = @"
-                UPDATE sms.WalletDetails
-                SET
-                    Amount = @p0,
+            var Entity = await _unitOfWork.Repository<WalletDetail>().GetByIdAsync(w => w.PhoneNumber == phoneNumber);
 
-                    UsedDailyDeposit =
-                        CASE
-                            WHEN CAST(LastDailyResetDate AS DATE) < CAST(@p1 AS DATE)
-                                THEN @p2
-                            ELSE UsedDailyDeposit + @p2
-                        END,
+            if (Entity != null)
+            {
+                if (Entity.LastDailyResetDate.Date < Now.Date)
+                {
+                    Entity.UsedDailyDeposit = 0;
+                    Entity.LastDailyResetDate = Now;
+                }
 
-                    LastDailyResetDate =
-                        CASE
-                            WHEN CAST(LastDailyResetDate AS DATE) < CAST(@p1 AS DATE)
-                                THEN @p1
-                            ELSE LastDailyResetDate
-                        END,
+                if (Entity.LastMonthlyResetDate.Month != Now.Month || Entity.LastMonthlyResetDate.Year != Now.Year)
+                {
+                    Entity.UsedMonthlyDeposit = 0;
+                    Entity.LastMonthlyResetDate = Now;
+                }
 
-                    UsedMonthlyDeposit =
-                        CASE
-                            WHEN MONTH(LastMonthlyResetDate) <> MONTH(@p1)
-                                 OR YEAR(LastMonthlyResetDate) <> YEAR(@p1)
-                                THEN @p2
-                            ELSE UsedMonthlyDeposit + @p2
-                        END,
-
-                    LastMonthlyResetDate =
-                        CASE
-                            WHEN MONTH(LastMonthlyResetDate) <> MONTH(@p1)
-                                 OR YEAR(LastMonthlyResetDate) <> YEAR(@p1)
-                                THEN @p1
-                            ELSE LastMonthlyResetDate
-                        END
-
-                WHERE PhoneNumber = @p3
-            ";
-
-            await _unitOfWork.ExecuteSqlAsync(sql, balanceAfter.Value, Now, amount.Value, phoneNumber);
+                Entity.Amount = balanceAfter.Value;
+                Entity.UsedDailyDeposit += amount.Value;
+                Entity.UsedMonthlyDeposit += amount.Value;
+            }
         }
     }
 }

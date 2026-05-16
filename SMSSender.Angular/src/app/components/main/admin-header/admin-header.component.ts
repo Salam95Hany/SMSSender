@@ -1,19 +1,19 @@
-import { Component, EventEmitter, Inject, Input, Output, TemplateRef, ViewChild, inject } from '@angular/core';
-import { NgClass, NgFor, NgIf } from '@angular/common';
-import { ActivatedRoute, NavigationEnd, Router, RouterLink } from '@angular/router';
+import { Component, EventEmitter, Input, Output, TemplateRef, ViewChild, inject } from '@angular/core';
+import { NgClass } from '@angular/common';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { NgbDropdownModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { filter } from 'rxjs';
 import { AuthService } from '../../../auth/auth.service';
 import { MessageBoxPopupComponent } from '../../../shared/message-box-popup/message-box-popup.component';
 import { AdminService } from '../../../services/admin.service';
-import { TimeAgoTodayPipe } from '../../../pipes/time-ago-today.pipe';
 import { NotificationSoundService } from '../../../services/notification-sound.service';
 import { NotificationBoxPopupComponent } from '../../../shared/notification-box-popup/notification-box-popup.component';
+import { NotificationSignalrService } from '../../../services/notification-signalr.service';
+import { PagingFilterModel } from '../../../models/PagingFilterModel';
 
 @Component({
   selector: 'app-admin-header',
   standalone: true,
-  imports: [NgClass, NgbDropdownModule, RouterLink, MessageBoxPopupComponent,NotificationBoxPopupComponent],
+  imports: [NgClass, NgbDropdownModule, RouterLink, MessageBoxPopupComponent, NotificationBoxPopupComponent],
   templateUrl: './admin-header.component.html',
   styleUrl: './admin-header.component.css'
 })
@@ -26,9 +26,9 @@ export class AdminHeaderComponent {
   private es!: EventSource;
   isModalOpen = false;
   MessageList: any[] = [];
+  NotificationList: any[] = [];
   TotalCount = 0;
-  TransactionId: any;
-
+  PagingFilter: PagingFilterModel = { pagesize: 10, currentpage: 1, operationType: 0, filterList: [] };
 
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
@@ -36,6 +36,7 @@ export class AdminHeaderComponent {
   private readonly modalService = inject(NgbModal);
   private readonly adminService = inject(AdminService);
   private readonly notificationSound = inject(NotificationSoundService);
+  private readonly notificationSignalrService = inject(NotificationSignalrService);
 
   userModel: any = null;
   userName = 'مشرف النظام';
@@ -45,18 +46,16 @@ export class AdminHeaderComponent {
 
   ngOnInit(): void {
     this.notificationSound.unlockAudio();
+    this.notificationSignalrService.startConnection();
     this.refreshUser();
-    this.es = this.adminService.connect();
-    this.es.onmessage = (event) => {
-      let data = JSON.parse(event.data);
-      if (data.message === 'Message_Added') {
-        this.TransactionId = data.transactionId;
-        this.notificationSound.play();
-        this.GetMessageNotification(true);
-      }
-    };
+    this.notificationSignalrService.onMessageAdded(() => {
+      this.notificationSound.play();
+      this.GetMessageNotification();
+      this.GetMessageBoxTodayData(true);
+    });
 
-    this.GetMessageNotification(false);
+    this.GetMessageNotification();
+    this.GetMessageBoxTodayData(false);
   }
 
   OpenMessageBoxModal(): void {
@@ -83,10 +82,16 @@ export class AdminHeaderComponent {
     });
   }
 
-  GetMessageNotification(openModal: boolean) {
-    this.adminService.GetMessageNotification().subscribe(data => {
-      this.MessageList = data.results;
+  GetMessageNotification() {
+    this.adminService.GetMessageNotification(this.PagingFilter).subscribe(data => {
+      this.NotificationList = data.results;
       this.TotalCount = data.totalCount;
+    });
+  }
+
+  GetMessageBoxTodayData(openModal: boolean) {
+    this.adminService.GetMessageBoxTodayData().subscribe(data => {
+      this.MessageList = data.results;
       if (openModal)
         this.OpenMessageBoxModal();
     });

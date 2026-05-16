@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Http.Features;
 using SMSSender.DI;
-using SMSSender.Services.Common;
+using SMSSender.Hubs;
 using SMSSender.Messaging;
+using SMSSender.Services.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,7 @@ builder.Services.Configure<AppPaths>(options =>
 builder.Services.AddDependencies(builder.Configuration);
 builder.Services.Bootstrap();
 builder.Services.AddControllers();
+builder.Services.AddSignalR();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.Configure<FormOptions>(options =>
@@ -37,5 +39,6 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.MapHub<NotificationHub>("/notificationHub");
 app.UseStaticFiles();
 app.Run();
