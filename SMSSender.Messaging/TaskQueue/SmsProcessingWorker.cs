@@ -21,15 +21,8 @@ namespace SMSSender.Messaging.TaskQueue
             _fileLogger = fileLogger;
         }
 
-        private static Stopwatch _stopwatch = new Stopwatch();
-        private static int _processedCount = 0;
-        private const int TargetMessages = 100;
-        public static long LastElapsedMs => _stopwatch.ElapsedMilliseconds;
-        public static int Processed => _processedCount;
-
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _stopwatch.Start();
             while (!stoppingToken.IsCancellationRequested)
             {
                 SmsMessagePure smsMessage = null;
@@ -48,14 +41,8 @@ namespace SMSSender.Messaging.TaskQueue
                         continue;
 
                     var process = await processingService.Process(smsMessage);
-                    _processedCount++;
                     if (process.Success && process.TransactionId.HasValue)
                         await hubService.SendMessageAddedAsync();
-
-                    if (_processedCount == TargetMessages)
-                    {
-                        _stopwatch.Stop();
-                    }
                 }
                 catch (OperationCanceledException)
                 {

@@ -61,9 +61,41 @@ namespace SMSSender.Messaging.Handlers
                     Entity.LastMonthlyResetDate = Now;
                 }
 
-                Entity.Amount = balanceAfter.Value;
+                Entity.Amount = balanceAfter.HasValue ? balanceAfter.Value : 0;
                 Entity.UsedDailyDeposit += amount.Value;
                 Entity.UsedMonthlyDeposit += amount.Value;
+
+                if (Entity.UsedDailyDeposit >= 55000)
+                {
+                    if (Entity.LastDailyDepositLimitNotificationDate.Date < Now.Date)
+                    {
+                        _notificationService.CreateNotification(
+                            "تنبيه الحد اليومي للإيداع",
+                            $"لقد اقتربت من الوصول للحد اليومي للإيداع . المحفظة: {phoneNumber}",
+                            null,
+                            NotificationTypes.System,
+                            NotificationReferenceTypes.WalletDetail
+                        );
+
+                        Entity.LastDailyDepositLimitNotificationDate = Now;
+                    }
+                }
+
+                if (Entity.UsedMonthlyDeposit >= 195000)
+                {
+                    if (Entity.LastMonthlyDepositLimitNotificationDate.Month != Now.Month || Entity.LastMonthlyDepositLimitNotificationDate.Year != Now.Year)
+                    {
+                        _notificationService.CreateNotification(
+                            "تنبيه الحد الشهري للإيداع",
+                            $"لقد اقتربت من الوصول للحد الشهري للإيداع . المحفظة: {phoneNumber}",
+                            null,
+                            NotificationTypes.System,
+                            NotificationReferenceTypes.WalletDetail
+                        );
+
+                        Entity.LastMonthlyDepositLimitNotificationDate = Now;
+                    }
+                }
             }
         }
     }

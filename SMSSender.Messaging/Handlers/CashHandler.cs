@@ -26,7 +26,7 @@ namespace SMSSender.Messaging.Handlers
                 _notificationService.CreateNotification("سحب نقدي", NotBody, message.Provider, NotificationTypes.BalanceInquiry, NotificationReferenceTypes.MessageTransaction, message.TransactionId);
                 await _unitOfWork.CompleteAsync();
             }
-            catch (Exception ex)
+            catch
             {
                 throw;
             }

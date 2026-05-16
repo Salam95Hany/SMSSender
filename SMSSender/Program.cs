@@ -1,6 +1,8 @@
+using Hangfire;
 using Microsoft.AspNetCore.Http.Features;
 using SMSSender.DI;
 using SMSSender.Hubs;
+using SMSSender.Interfaces.CronJop;
 using SMSSender.Messaging;
 using SMSSender.Services.Common;
 
@@ -41,4 +43,13 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapHub<NotificationHub>("/notificationHub");
 app.UseStaticFiles();
+app.UseHangfireDashboard("/hangfire");
+RecurringJob.AddOrUpdate<IWalletReminderService>("wallet-recharge-job", x => x.CheckRechargeReminders(), "0 12 * * *",
+    new RecurringJobOptions
+    {
+        TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time")
+    }
+);
 app.Run();
+
+

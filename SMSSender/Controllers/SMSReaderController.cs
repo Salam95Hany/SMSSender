@@ -19,16 +19,6 @@ namespace SMSSender.Controllers
             _taskQueue = taskQueue;
         }
 
-        [HttpGet("stats")]
-        public IActionResult GetStats()
-        {
-            return Ok(new
-            {
-                Processed = SmsProcessingWorker.Processed,
-                TimeMs = SmsProcessingWorker.LastElapsedMs
-            });
-        }
-
         [HttpGet("test-queue-parallel")]
         public async Task<IActionResult> TestQueueParallel()
         {

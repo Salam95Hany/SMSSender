@@ -1,15 +1,18 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Hangfire;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using RazorLight;
+using SMSSender.CronJop;
 using SMSSender.Entities.Auth;
 using SMSSender.Entities.Models;
 using SMSSender.Hubs;
 using SMSSender.Interfaces;
 using SMSSender.Interfaces.Auth;
 using SMSSender.Interfaces.Common;
+using SMSSender.Interfaces.CronJop;
 using SMSSender.Interfaces.Hub;
 using SMSSender.Interfaces.Repositories;
 using SMSSender.Reports.Interface;
@@ -27,12 +30,11 @@ namespace SMSSender.DI
         private const string MyAllowSpecificOrigins = "_SMSSender";
         public static IServiceCollection AddDependencies(this IServiceCollection services, IConfiguration configuration)
         {
-
+            var appSettings = configuration.Get<AppSettings>();
             services.Configure<AppSettings>(configuration);
             services.AddSingleton<IAppSettings>(sp => sp.GetRequiredService<IOptions<AppSettings>>().Value);
             services.AddDbContext<SMSDbContext>((serviceProvider, options) =>
             {
-                var appSettings = serviceProvider.GetRequiredService<IAppSettings>();
                 options.UseSqlServer(appSettings.ConnectionStrings.DBConnection);
             });
 
@@ -40,7 +42,6 @@ namespace SMSSender.DI
             {
                 options.AddPolicy(MyAllowSpecificOrigins, builder =>
                 {
-                    var appSettings = services.BuildServiceProvider().GetRequiredService<IAppSettings>();
                     builder.WithOrigins(appSettings.URLList).AllowAnyMethod().AllowAnyHeader().AllowCredentials();
                 });
             });
@@ -51,7 +52,11 @@ namespace SMSSender.DI
                 options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
                 options.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
             }).AddNewtonsoftJson();
-            
+            services.AddHangfire(config =>
+            {
+                config.UseSqlServerStorage(appSettings.ConnectionStrings.DBConnection);
+            });
+            services.AddHangfireServer();
             services.AddAuthConfig(configuration);
 
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
@@ -63,6 +68,7 @@ namespace SMSSender.DI
             services.AddScoped<IWalletDetailService, WalletDetailService>();
             services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<IHubNotificationService, HubNotificationService>();
+            services.AddScoped<IWalletReminderService, WalletReminderService>();
 
             #region ReportsDI
 

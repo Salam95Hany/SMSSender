@@ -80,11 +80,11 @@ export class NotificationBoxPopupComponent implements OnInit {
   }
 
   getProviderClass(type: string): string {
+    debugger;
     switch (type) {
       case 'VodafoneCash': return 'c-red';
       case 'InstaPay': return 'c-blue';
-      case '': return 'c-orange';
-      default: return 'c-gray';
+      default: return 'c-orange';
     }
   }
 

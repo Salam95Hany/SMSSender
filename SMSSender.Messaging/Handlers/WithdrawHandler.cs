@@ -27,7 +27,7 @@ namespace SMSSender.Messaging.Handlers
                 _notificationService.CreateNotification("سحب مبلغ جديد", NotBody, message.Provider, NotificationTypes.Deposit, NotificationReferenceTypes.MessageTransaction, message.TransactionId);
                 await _unitOfWork.CompleteAsync();
             }
-            catch (Exception)
+            catch
             {
                 throw;
             }
@@ -60,9 +60,41 @@ namespace SMSSender.Messaging.Handlers
                     Entity.LastMonthlyResetDate = Now;
                 }
 
-                Entity.Amount = balanceAfter.Value;
+                Entity.Amount = balanceAfter.HasValue ? balanceAfter.Value : 0;
                 Entity.UsedDailyWithdrawal += amount.Value;
                 Entity.UsedMonthlyWithdrawal += amount.Value;
+
+                if (Entity.UsedDailyWithdrawal >= 55000)
+                {
+                    if (Entity.LastDailyWithdrawalLimitNotificationDate.Date < Now.Date)
+                    {
+                        _notificationService.CreateNotification(
+                            "تنبيه الحد اليومي للسحب",
+                            $"لقد اقتربت من الوصول للحد اليومي للسحب . المحفظة: {phoneNumber}",
+                            null,
+                            NotificationTypes.System,
+                            NotificationReferenceTypes.WalletDetail
+                        );
+
+                        Entity.LastDailyWithdrawalLimitNotificationDate = Now;
+                    }
+                }
+
+                if (Entity.UsedMonthlyWithdrawal >= 195000)
+                {
+                    if (Entity.LastMonthlyWithdrawalLimitNotificationDate.Month != Now.Month || Entity.LastMonthlyWithdrawalLimitNotificationDate.Year != Now.Year)
+                    {
+                        _notificationService.CreateNotification(
+                            "تنبيه الحد الشهري للسحب",
+                            $"لقد اقتربت من الوصول للحد الشهري للسحب . المحفظة: {phoneNumber}",
+                            null,
+                            NotificationTypes.System,
+                            NotificationReferenceTypes.WalletDetail
+                        );
+
+                        Entity.LastMonthlyWithdrawalLimitNotificationDate = Now;
+                    }
+                }
             }
         }
     }

@@ -30,12 +30,12 @@ namespace SMSSender.Messaging.Handlers
                 var Entity = await _unitOfWork.Repository<WalletDetail>().GetByIdAsync(w => w.PhoneNumber == message.ProviderPhone);
                 if (Entity != null)
                 {
-                    Entity.LastRechargeDate = message.OperationMsgDateTime;
+                    Entity.LastRechargeDate = message.OperationMsgDateTime.Value;
                     _notificationService.CreateNotification("شحن رصيد", NotBody, message.Provider, NotificationTypes.BalanceInquiry, NotificationReferenceTypes.MessageTransaction, message.TransactionId);
                     await _unitOfWork.CompleteAsync();
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 throw;
             }
