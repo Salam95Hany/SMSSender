@@ -62,6 +62,30 @@ namespace SMSSender.CronJop
                 await _hubNotificationService.SendMessageAddedAsync();
         }
 
+        public async Task ResetWalletDate()
+        {
+            var now = DateTime.UtcNow.EgyptNow();
+            var wallets = await _unitOfWork.Repository<WalletDetail>().GetAllAsync();
+
+            foreach (var entity in wallets)
+            {
+                if (entity.LastDailyResetDate.Date < now.Date)
+                {
+                    entity.UsedDailyDeposit = 0;
+                    entity.LastDailyResetDate = now;
+                }
+
+                if (entity.LastMonthlyResetDate.Month != now.Month || entity.LastMonthlyResetDate.Year != now.Year)
+                {
+                    entity.UsedMonthlyDeposit = 0;
+                    entity.LastMonthlyResetDate = now;
+                }
+
+            }
+
+            await _unitOfWork.CompleteAsync();
+        }
+
         private void SendReminder(WalletDetail entity, string message)
         {
             _notificationService.CreateNotification("تنبيه إعادة شحن", message, null, NotificationTypes.System, NotificationReferenceTypes.WalletDetail);

@@ -1,7 +1,6 @@
 using System.Text;
 using Newtonsoft.Json;
 using SMSSender.Entities.Models.Messaging;
-using SMSSender.Interfaces.Common;
 using SMSSender.Interfaces.Repositories;
 using SMSSender.Messaging.Models;
 
@@ -9,16 +8,14 @@ namespace SMSSender.Messaging.Services
 {
     public class FailedSmsLogger : IFailedSmsLogger
     {
-        private readonly IAppSettings _appSettings;
         private readonly IUnitOfWork _unitOfWork;
 
-        public FailedSmsLogger(IAppSettings appSettings, IUnitOfWork unitOfWork)
+        public FailedSmsLogger(IUnitOfWork unitOfWork)
         {
-            _appSettings = appSettings;
             _unitOfWork = unitOfWork;
         }
 
-        public async Task LogAsync(SmsMessagePure model, string errorReason, bool IsCorrectionProcess = false)
+        public async Task LogAsync(SmsMessagePure model, Guid transactionId, string errorReason)
         {
             var createdAt = DateTime.UtcNow.EgyptNow();
 
@@ -26,10 +23,10 @@ namespace SMSSender.Messaging.Services
             {
                 await _unitOfWork.Repository<SmsMessageLog>().AddAsync(new SmsMessageLog
                 {
-                    TransactionId = Guid.NewGuid(),
+                    TransactionId = transactionId,
                     Message = model.Message ?? string.Empty,
                     ErrorMessage = errorReason,
-                    MsgStatus = IsCorrectionProcess ? MsgStatus.CorrectionProcess.ToString() : MsgStatus.CorrectionProcess.ToString(),
+                    MsgStatus = MsgStatus.Failure.ToString(),
                     Provider = model.ProviderStr ?? string.Empty,
                     ProviderName = model.DeviceName ?? string.Empty,
                     ProviderPhone = model.PhoneNumber ?? string.Empty,

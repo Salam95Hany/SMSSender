@@ -186,27 +186,25 @@ namespace SMSSender.Services
         {
             var normalizedMessage = SmsTextNormalizer.Normalize(message);
             if (string.IsNullOrWhiteSpace(normalizedMessage))
-            {
                 return false;
-            }
 
             var normalizedProvider = SmsTextNormalizer.Normalize(provider);
 
             foreach (var providerSettings in _appSettings.MessageParsing.Providers.Values)
             {
-                var senderMatched = providerSettings.SenderAliases.Any(alias =>
-                    !string.IsNullOrWhiteSpace(alias) &&
-                    normalizedProvider.Contains(alias, StringComparison.OrdinalIgnoreCase));
+                var senderMatched = providerSettings.SenderAliases.Any(alias => !string.IsNullOrWhiteSpace(alias) && normalizedProvider.Contains(SmsTextNormalizer.Normalize(alias), StringComparison.OrdinalIgnoreCase));
+                if (!senderMatched)
+                    continue;
 
-                var keywordMatched = providerSettings.OperationKeywords.All()
-                    .Any(keyword => normalizedMessage.Contains(keyword, StringComparison.OrdinalIgnoreCase));
-
+                var keywordMatched = providerSettings.OperationKeywords.All().Any(keyword => normalizedMessage.Contains(SmsTextNormalizer.Normalize(keyword), StringComparison.OrdinalIgnoreCase));
                 var detectionMatched = providerSettings.DetectionPatterns.Any(pattern => SafeIsMatch(normalizedMessage, pattern));
+                var hasAmount = providerSettings.FieldPatterns.GetPatterns(nameof(FieldPatterns.Amount)).Any(pattern => SafeIsMatch(normalizedMessage, pattern));
+                var hasTransaction = providerSettings.FieldPatterns.GetPatterns(nameof(FieldPatterns.TransactionNumber)).Any(pattern => SafeIsMatch(normalizedMessage, pattern));
+                var isStatementMessage = normalizedMessage.Contains("عدد العمليات");
+                var isFinancialMessage = !isStatementMessage && (keywordMatched || detectionMatched) && (hasAmount || hasTransaction);
 
-                if ((senderMatched && (keywordMatched || detectionMatched)) || keywordMatched || detectionMatched)
-                {
+                if (isFinancialMessage)
                     return true;
-                }
             }
 
             return false;

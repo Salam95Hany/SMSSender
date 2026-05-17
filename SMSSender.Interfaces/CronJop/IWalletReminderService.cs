@@ -9,5 +9,6 @@ namespace SMSSender.Interfaces.CronJop
     public interface IWalletReminderService
     {
         Task CheckRechargeReminders();
+        Task ResetWalletDate();
     }
 }

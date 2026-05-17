@@ -125,26 +125,26 @@ namespace SMSSender.Messaging.Services
             {
                 if (!_providerRegistry.TryResolve(model.ProviderStr, rawMessage, out var providerDefinition))
                 {
-                    return await FailAsync(transactionId.Value, model, "Provider could not be resolved.", true);
+                    return await FailAsync(transactionId.Value, model, "Provider could not be resolved.");
                 }
 
                 var parser = _parsers.FirstOrDefault(item => item.Provider == providerDefinition.ProviderType);
                 if (parser is null)
                 {
-                    return await FailAsync(transactionId.Value, model, $"Parser is not registered for provider '{providerDefinition.ProviderType}'.", true);
+                    return await FailAsync(transactionId.Value, model, $"Parser is not registered for provider '{providerDefinition.ProviderType}'.");
                 }
 
                 model.Provider = providerDefinition.ProviderType;
                 var parsedMessage = parser.Parse(model);
                 if (!parsedMessage.OperationType.HasValue)
                 {
-                    return await FailAsync(transactionId.Value, model, $"Operation type could not be detected for provider '{providerDefinition.ProviderType}'.", true);
+                    return await FailAsync(transactionId.Value, model, $"Operation type could not be detected for provider '{providerDefinition.ProviderType}'.");
                 }
 
                 var handler = _operationHandlers.FirstOrDefault(item => item.OperationType == parsedMessage.OperationType.Value);
                 if (handler is null)
                 {
-                    return await FailAsync(transactionId.Value, model, $"Operation handler is not registered for '{parsedMessage.OperationType.Value}'.", true);
+                    return await FailAsync(transactionId.Value, model, $"Operation handler is not registered for '{parsedMessage.OperationType.Value}'.");
                 }
 
                 var transaction = new MessageTransaction
@@ -175,9 +175,9 @@ namespace SMSSender.Messaging.Services
             }
         }
 
-        private async Task<bool> FailAsync(Guid transactionId, SmsMessagePure model, string reason, bool IsCorrectionProcess = false)
+        private async Task<bool> FailAsync(Guid transactionId, SmsMessagePure model, string reason)
         {
-            await _failedSmsLogger.LogAsync(model, reason, IsCorrectionProcess);
+            await _failedSmsLogger.LogAsync(model, transactionId, reason);
             return false;
         }
 

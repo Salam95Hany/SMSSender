@@ -4,7 +4,6 @@ using SMSSender.Interfaces;
 using SMSSender.Interfaces.Hub;
 using SMSSender.Messaging.FileLog;
 using SMSSender.Messaging.Services;
-using System.Diagnostics;
 
 namespace SMSSender.Messaging.TaskQueue
 {

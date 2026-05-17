@@ -44,12 +44,8 @@ app.MapControllers();
 app.MapHub<NotificationHub>("/notificationHub");
 app.UseStaticFiles();
 app.UseHangfireDashboard("/hangfire");
-RecurringJob.AddOrUpdate<IWalletReminderService>("wallet-recharge-job", x => x.CheckRechargeReminders(), "0 12 * * *",
-    new RecurringJobOptions
-    {
-        TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time")
-    }
-);
+RecurringJob.AddOrUpdate<IWalletReminderService>("wallet-recharge-job", x => x.CheckRechargeReminders(), "0 10 * * *");
+RecurringJob.AddOrUpdate<IWalletReminderService>("wallet-reset-date", x => x.ResetWalletDate(), "0 22 * * *");
 app.Run();
 
 

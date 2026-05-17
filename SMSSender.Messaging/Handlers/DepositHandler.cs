@@ -49,18 +49,6 @@ namespace SMSSender.Messaging.Handlers
 
             if (Entity != null)
             {
-                if (Entity.LastDailyResetDate.Date < Now.Date)
-                {
-                    Entity.UsedDailyDeposit = 0;
-                    Entity.LastDailyResetDate = Now;
-                }
-
-                if (Entity.LastMonthlyResetDate.Month != Now.Month || Entity.LastMonthlyResetDate.Year != Now.Year)
-                {
-                    Entity.UsedMonthlyDeposit = 0;
-                    Entity.LastMonthlyResetDate = Now;
-                }
-
                 Entity.Amount = balanceAfter.HasValue ? balanceAfter.Value : 0;
                 Entity.UsedDailyDeposit += amount.Value;
                 Entity.UsedMonthlyDeposit += amount.Value;

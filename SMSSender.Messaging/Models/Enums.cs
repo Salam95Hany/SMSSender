@@ -18,7 +18,6 @@ namespace SMSSender.Messaging.Models
     public enum MsgStatus
     {
         Success = 200,
-        Failure = 400,
-        CorrectionProcess = 300
+        Failure = 400
     }
 }
