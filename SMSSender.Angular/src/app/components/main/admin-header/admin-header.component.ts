@@ -116,8 +116,7 @@ export class AdminHeaderComponent {
   }
 
   logOut(): void {
-    localStorage.removeItem('UserModel');
-    this.router.navigate(['/login']);
+    this.authService.loginRedirect();
   }
 
   getOperationClass(type: number): string {
@@ -150,6 +149,10 @@ export class AdminHeaderComponent {
         }
       }
     })
+  }
+
+  OnCalculated(){
+    this.GetMessageBoxTodayData(false);
   }
 
   ngOnDestroy() {

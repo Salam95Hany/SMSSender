@@ -23,7 +23,7 @@ namespace SMSSender.CronJop
         {
             var now = DateTime.UtcNow.EgyptNow();
             bool hasNotifications = false;
-            var wallets = await _unitOfWork.Repository<WalletDetail>().GetAllAsync();
+            var wallets = _unitOfWork.Repository<WalletDetail>().GetAllAsQueryable();
 
             foreach (var entity in wallets)
             {
@@ -64,20 +64,22 @@ namespace SMSSender.CronJop
 
         public async Task ResetWalletDate()
         {
-            var now = DateTime.UtcNow.EgyptNow();
-            var wallets = await _unitOfWork.Repository<WalletDetail>().GetAllAsync();
+            var now = DateTime.UtcNow.EgyptNow().Date;
+            var wallets = _unitOfWork.Repository<WalletDetail>().GetAllAsQueryable();
 
             foreach (var entity in wallets)
             {
                 if (entity.LastDailyResetDate.Date < now.Date)
                 {
                     entity.UsedDailyDeposit = 0;
+                    entity.UsedDailyWithdrawal = 0;
                     entity.LastDailyResetDate = now;
                 }
 
                 if (entity.LastMonthlyResetDate.Month != now.Month || entity.LastMonthlyResetDate.Year != now.Year)
                 {
                     entity.UsedMonthlyDeposit = 0;
+                    entity.UsedMonthlyWithdrawal = 0;
                     entity.LastMonthlyResetDate = now;
                 }
 

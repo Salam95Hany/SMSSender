@@ -16,7 +16,10 @@
         <div class="app-header__end">
             <li class="nav-item user-dropdown user-notifications" ngbDropdown display="dynamic" placement="bottom-end">
                 <a class="nav-link without-arrow" (click)="OpenMessageBoxModal()">
+                    <span class="position-relative">
+                    <span class="alert-count">{{MessageList.length}}</span>
                     <i class="fas fa-envelope"></i>
+                    </span>
                 </a>
             </li>
             <li class="nav-item user-dropdown user-notifications" (click)="OpenNotificationBoxModal()">
@@ -87,7 +90,7 @@
 </header>
 
 <ng-template #MessageBoxModal>
-    <app-message-box-popup [MessageList]="MessageList"></app-message-box-popup>
+    <app-message-box-popup [MessageList]="MessageList" (OnCalculated)="OnCalculated()"></app-message-box-popup>
 </ng-template>
 
 <ng-template #NotificationBoxModal>

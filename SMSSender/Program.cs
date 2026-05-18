@@ -8,6 +8,8 @@ using SMSSender.Services.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var egyptTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time");
+
 builder.Services.Configure<AppPaths>(options =>
 {
     var env = builder.Environment;
@@ -44,8 +46,14 @@ app.MapControllers();
 app.MapHub<NotificationHub>("/notificationHub");
 app.UseStaticFiles();
 app.UseHangfireDashboard("/hangfire");
-RecurringJob.AddOrUpdate<IWalletReminderService>("wallet-recharge-job", x => x.CheckRechargeReminders(), "0 10 * * *");
-RecurringJob.AddOrUpdate<IWalletReminderService>("wallet-reset-date", x => x.ResetWalletDate(), "0 22 * * *");
+RecurringJob.AddOrUpdate<IWalletReminderService>("wallet-recharge-job", x => x.CheckRechargeReminders(), "0 12 * * *", new RecurringJobOptions
+{
+    TimeZone = egyptTimeZone
+});
+RecurringJob.AddOrUpdate<IWalletReminderService>("wallet-reset-date", x => x.ResetWalletDate(), "0 0 * * *", new RecurringJobOptions
+{
+    TimeZone = egyptTimeZone
+});
 app.Run();
 
 

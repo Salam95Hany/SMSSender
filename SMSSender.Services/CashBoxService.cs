@@ -67,7 +67,7 @@ namespace SMSSender.Services
                     MessageTrans.TransactionStatus = TransactionStatus.Completed;
                 }
 
-                if (Model.TransactionType == CashBoxTransactionType.Deposit)
+                if (Model.TransactionType == CashBoxTransactionType.Deposit || Model.TransactionType == CashBoxTransactionType.CashWithdrawal)
                 {
                     newBalance = currentBalance + Model.TransactionAmount.Value;
                 }
@@ -168,8 +168,10 @@ namespace SMSSender.Services
             {
                 if (TransactionType == CashBoxTransactionType.Deposit)
                     return $"عملية ايداع من محفظة رقم ({ProviderPhone})";
-                else
+                else if(TransactionType == CashBoxTransactionType.Withdraw)
                     return $"عملية سحب من محفظة رقم ({ProviderPhone})";
+                else
+                    return $"عملية سحب نقدي من محفظة رقم ({ProviderPhone})";
             }
         }
     }

@@ -38,10 +38,17 @@ apiURL = environment.apiUrl;
     return this.http.get<any>(this.apiURL + 'Auth/AdminLogout?UserId=' + UserId);
   }
 
-  loginRedirect(): void {
-    this._userModel = null;
+  clearAuthSession(): void {
     localStorage.removeItem('UserModel');
-    this.router.navigateByUrl('/');
+    this._userModel = null;
+  }
+
+  loginRedirect(returnUrl?: string | null): Promise<boolean> {
+    this.clearAuthSession();
+    const resolvedReturnUrl = this.resolveReturnUrl(returnUrl, '');
+    return this.router.navigate(['/login'], {
+      queryParams: resolvedReturnUrl ? { returnUrl: resolvedReturnUrl } : undefined
+    });
   }
 
   isAuthenticated(): boolean {

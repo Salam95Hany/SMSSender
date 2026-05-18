@@ -26,7 +26,8 @@ namespace SMSSender.Entities.Common
     public enum CashBoxTransactionType
     {
         Deposit = 1,
-        Withdraw = 2
+        Withdraw = 2,
+        CashWithdrawal = 3
     }
 
     public enum NotificationTypes

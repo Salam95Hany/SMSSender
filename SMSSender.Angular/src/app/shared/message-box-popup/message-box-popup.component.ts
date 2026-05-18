@@ -1,5 +1,5 @@
 import { CommonModule, NgFor, NgIf } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TimeAgoTodayPipe } from '../../pipes/time-ago-today.pipe';
@@ -27,6 +27,7 @@ interface MessagePreview {
 })
 export class MessageBoxPopupComponent implements OnInit {
   @Input() MessageList: any[] = [];
+  @Output() OnCalculated = new EventEmitter<any>();
   searchTerm = '';
   ShowLoader = false;
 
@@ -48,7 +49,7 @@ export class MessageBoxPopupComponent implements OnInit {
   }
 
   CalculateCustomerReceive(item: any, isSelected: boolean) {
-    if (item.operationType == 2) {
+    if (item.operationType == 2 || item.operationType == 3) {
       if (isSelected)
         item.customerReceive = item.amount - item.commissionUpdated;
       else
@@ -61,7 +62,7 @@ export class MessageBoxPopupComponent implements OnInit {
     const commission = Number(item.commissionUpdated || 0);
     if (item.operationType == 1) {
       item.customerReceive = originalAmount + commission;
-    } else if (item.operationType == 2) {
+    } else if (item.operationType == 2 || item.operationType == 3) {
       if (item.isChecked)
         item.customerReceive = originalAmount - commission;
     }
@@ -74,7 +75,6 @@ export class MessageBoxPopupComponent implements OnInit {
   }
 
   AddNewCashBox(item: any) {
-    debugger;
     let model = {
       MessageTransactionId: item.messageTransactionId,
       TransactionType: item.operationType,
@@ -90,11 +90,11 @@ export class MessageBoxPopupComponent implements OnInit {
       if (data.isSuccess) {
         let obj = this.MessageList.find(i => i.messageTransactionId == item.messageTransactionId);
         if (obj) {
-          obj.isCalculated = true;
           this.MessageList = this.MessageList.filter(i => i.messageTransactionId != item.messageTransactionId);
+          this.OnCalculated.emit();
         }
 
-        this.toaster.success(`${item.operationType == 1 ? 'تم الاستلام' : 'تم التسليم'} بنجاح `);
+        this.toaster.success(`${item.operationType == 1 || item.operationType == 3 ? 'تم الاستلام' : 'تم التسليم'} بنجاح `);
       } else
         this.toaster.error('لقد حدث خطا');
     });
@@ -107,8 +107,8 @@ export class MessageBoxPopupComponent implements OnInit {
       if (data.isSuccess) {
         let obj = this.MessageList.find(i => i.messageTransactionId == messageTransactionId);
         if (obj) {
-          obj.isCalculated = true;
           this.MessageList = this.MessageList.filter(i => i.messageTransactionId != messageTransactionId);
+          this.OnCalculated.emit();
         }
 
         this.toaster.success(data.message);
