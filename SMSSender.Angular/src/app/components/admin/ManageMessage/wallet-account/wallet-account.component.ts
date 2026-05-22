@@ -9,7 +9,7 @@ import { ArabicDateWithTimePipe } from '../../../../pipes/arabic-date-with-time.
 @Component({
   selector: 'app-wallet-account',
   standalone: true,
-  imports: [NgFor, NgClass, AdminBreadcrumbComponent,CommonModule,ArabicDateWithTimePipe],
+  imports: [NgFor, AdminBreadcrumbComponent, CommonModule, ArabicDateWithTimePipe],
   templateUrl: './wallet-account.component.html',
   styleUrl: './wallet-account.component.css'
 })
@@ -29,8 +29,16 @@ export class WalletAccountComponent implements OnInit {
   GetWalletAccountSummary() {
     this.adminService.GetWalletAccountSummary(this.PagingFilter).subscribe(data => {
       this.WalletList = data.results;
-      console.log(this.WalletList);
+      this.WalletList.forEach(i => {
+        if (i.dailyDepositUsagePercent > 100)
+          i.dailyDepositUsagePercent = 100;
+        if (i.dailyWithdrawalUsagePercent > 100)
+          i.dailyWithdrawalUsagePercent = 100;
+        if (i.monthlyDepositUsagePercent > 100)
+          i.monthlyDepositUsagePercent = 100;
+        if (i.monthlyWithdrawalUsagePercent > 100)
+          i.monthlyWithdrawalUsagePercent = 100;
+      })
     });
   }
-
 }

@@ -41,7 +41,7 @@ namespace SMSSender.Messaging.Services
                     return new ProcessResult
                     {
                         Success = false,
-                        TransactionId = null
+                        OperationType = null
                     };
                 }
 
@@ -52,7 +52,7 @@ namespace SMSSender.Messaging.Services
                     return new ProcessResult
                     {
                         Success = false,
-                        TransactionId = null
+                        OperationType = null
                     };
                 }
 
@@ -64,7 +64,7 @@ namespace SMSSender.Messaging.Services
                     return new ProcessResult
                     {
                         Success = false,
-                        TransactionId = null
+                        OperationType = null
                     };
                 }
 
@@ -75,7 +75,7 @@ namespace SMSSender.Messaging.Services
                     return new ProcessResult
                     {
                         Success = false,
-                        TransactionId = null
+                        OperationType = null
                     };
                 }
 
@@ -92,6 +92,7 @@ namespace SMSSender.Messaging.Services
                     SenderName = parsedMessage.SenderName,
                     BalanceAfter = parsedMessage.BalanceAfter.HasValue ? (double)parsedMessage.BalanceAfter.Value : null,
                     TransactionNumber = parsedMessage.TransactionNumber,
+                    TransactionStatus = Entities.Common.TransactionStatus.Delayed,
                     OperationServerDateTime = DateTime.UtcNow.EgyptNow(),
                     OperationMsgDateTime = parsedMessage.OperationDateTime,
                     OperationSentDateTime = parsedMessage.SentDateTime
@@ -102,7 +103,7 @@ namespace SMSSender.Messaging.Services
                 return new ProcessResult
                 {
                     Success = true,
-                    TransactionId = transactionId
+                    OperationType = (int)transaction.OperationType
                 };
             }
             catch (Exception ex)
@@ -111,7 +112,7 @@ namespace SMSSender.Messaging.Services
                 return new ProcessResult
                 {
                     Success = false,
-                    TransactionId = null
+                    OperationType = null
                 };
             }
         }

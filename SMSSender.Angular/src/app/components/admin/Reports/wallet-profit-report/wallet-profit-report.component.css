@@ -1,0 +1,106 @@
+:host {
+    --primary: #1a7a6e;
+    --primary-light: #22998a;
+    --primary-dark: #145f56;
+    --primary-glow: rgba(26, 122, 110, 0.18);
+    --sidebar-bg: #0f1f1d;
+    --sidebar-item: rgba(255, 255, 255, 0.06);
+    --sidebar-active: #1a7a6e;
+    --sidebar-text: #c8d8d6;
+    --topbar-bg: #ffffff;
+    --page-bg: #f0f5f5;
+    --card-bg: #ffffff;
+    --border: #dce8e6;
+    --text-main: #1a2e2c;
+    --text-muted: #7a9896;
+    --text-sidebar: #b8cecc;
+    --badge-bg: rgba(26, 122, 110, 0.12);
+    --shadow-card: 0 4px 24px rgba(26, 122, 110, 0.08), 0 1px 4px rgba(0, 0, 0, 0.04);
+    --shadow-sidebar: 4px 0 32px rgba(0, 0, 0, 0.18);
+    --radius: 16px;
+    --radius-sm: 10px;
+}
+
+.stat-cards {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+}
+
+.stat-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 20px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-card);
+    position: relative;
+    overflow: hidden;
+    transition: transform .2s, box-shadow .2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 32px rgba(26, 122, 110, 0.13);
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 80px;
+    height: 80px;
+    border-radius: 0 var(--radius) 0 100%;
+    background: var(--primary-glow);
+}
+
+.stat-card .stat-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--badge-bg);
+    color: var(--primary);
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 14px;
+    border: 1px solid rgba(26, 122, 110, 0.15);
+}
+
+.stat-card.accent .stat-icon {
+    background: var(--primary);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 4px 14px rgba(26, 122, 110, 0.4);
+}
+
+.stat-card .stat-value {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text-main);
+    margin-bottom: 3px;
+    letter-spacing: -.5px;
+}
+
+.stat-card .stat-label {
+    font-size: 15px;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.stat-card .stat-change {
+    margin-top: 10px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.stat-card .stat-change.up {
+    color: #27ae60;
+}
+
+.stat-card .stat-change.neutral {
+    color: var(--text-muted);
+}

@@ -29,7 +29,7 @@ namespace SMSSender.Services
                 CreatedAt = DateTime.UtcNow.EgyptNow()
             };
 
-            _unitOfWork.Repository<Notification>().AddAsync(notification);
+            _unitOfWork.Repository<Notification>().Add(notification);
         }
 
         public async Task MarkAsRead(int NotificationId)

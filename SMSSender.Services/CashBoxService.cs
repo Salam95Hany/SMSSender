@@ -3,6 +3,7 @@ using SMSSender.Entities.Common;
 using SMSSender.Entities.Models.Messaging;
 using SMSSender.Interfaces;
 using SMSSender.Interfaces.Common;
+using SMSSender.Interfaces.Hub;
 using SMSSender.Interfaces.Repositories;
 using SMSSender.Services.Common;
 using System.Data;
@@ -13,10 +14,12 @@ namespace SMSSender.Services
     {
         private readonly ISQLHelper _sQLHelper;
         private readonly IUnitOfWork _unitOfWork;
-        public CashBoxService(ISQLHelper sQLHelper, IUnitOfWork unitOfWork)
+        private readonly IHubNotificationService _hubNotificationService;
+        public CashBoxService(ISQLHelper sQLHelper, IUnitOfWork unitOfWork, IHubNotificationService hubNotificationService)
         {
             _sQLHelper = sQLHelper;
             _unitOfWork = unitOfWork;
+            _hubNotificationService = hubNotificationService;
         }
 
         public async Task<ApiResponseModel<DataTable>> GetCashBoxData(PagingFilterModel PagingFilter)
@@ -95,7 +98,8 @@ namespace SMSSender.Services
             await _unitOfWork.CompleteAsync();
             Model.CashBoxNumber = $"CB-{Model.CashBoxId:D6}";
             await _unitOfWork.CompleteAsync();
-
+            if (Model.MessageTransactionId.HasValue)
+                await _hubNotificationService.SendMessageCalculatedAsync(Model.MessageTransactionId.Value);
             return ApiResponseModel<string>.Success(GenericErrors.AddSuccess);
         }
 
@@ -168,7 +172,7 @@ namespace SMSSender.Services
             {
                 if (TransactionType == CashBoxTransactionType.Deposit)
                     return $"عملية ايداع من محفظة رقم ({ProviderPhone})";
-                else if(TransactionType == CashBoxTransactionType.Withdraw)
+                else if (TransactionType == CashBoxTransactionType.Withdraw)
                     return $"عملية سحب من محفظة رقم ({ProviderPhone})";
                 else
                     return $"عملية سحب نقدي من محفظة رقم ({ProviderPhone})";

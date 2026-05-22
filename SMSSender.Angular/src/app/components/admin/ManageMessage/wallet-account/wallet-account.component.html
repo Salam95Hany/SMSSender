@@ -19,6 +19,7 @@
                     </div>
                     <div class="card-number-row">
                         <span class="card-num">{{item.phoneNumber}}</span>
+                        <span class="wallet-icon cursor-pointer" *ngIf="item.type == 'InstaPay'"><i class="fas fa-plus"></i></span>
                     </div>
                 </div>
                 <div class="card-body">
@@ -121,18 +122,8 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="usage-bar-section">
-                        <div class="usage-header">
-                            <span class="usage-title">نسبة الاستخدام الشهري</span>
-                            <span class="usage-pct">40%</span>
-                        </div>
-                        <div class="usage-progress">
-                            <div class="usage-fill"></div>
-                        </div>
-                    </div> -->
                 </div>
             </div>
         </div>
-
     </div>
 </section>

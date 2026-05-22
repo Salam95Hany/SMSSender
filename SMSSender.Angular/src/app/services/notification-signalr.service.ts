@@ -19,11 +19,11 @@ export class NotificationSignalrService {
     this.hubConnection.start().then(() => { }).catch(err => console.log(err));
   }
 
-  onMessageAdded(callback: () => void) {
-    this.hubConnection.on(
-      'Message_Added', () => {
-        callback();
-      }
-    );
+  onMessageAdded(callback: (operationType: number) => void) {
+    this.hubConnection.on('Message_Added', (operationType: number) => { callback(operationType); });
+  }
+
+  onMessageCalculated(callback: (messageTransactionId: number) => void) {
+    this.hubConnection.on('Message_Calculated', (messageTransactionId: number) => { callback(messageTransactionId); });
   }
 }

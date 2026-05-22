@@ -2,6 +2,7 @@
 using SMSSender.Entities.Models.Messaging;
 using SMSSender.Interfaces;
 using SMSSender.Interfaces.Repositories;
+using SMSSender.Messaging.Models;
 using SMSSender.Messaging.Services;
 
 namespace SMSSender.Messaging.Handlers
@@ -22,8 +23,8 @@ namespace SMSSender.Messaging.Handlers
             try
             {
                 string NotBody = $"تم سحب {message.Amount:N2} جنيه من {message.FromPhone ?? message.SenderName} · المحفظة: {message.ProviderPhone}";
-                 _unitOfWork.Repository<MessageTransaction>().Add(message);
-                await UpdateWithdrawalLimitsAsync(message.Amount, message.BalanceAfter, message.ProviderPhone);
+                _unitOfWork.Repository<MessageTransaction>().Add(message);
+                await UpdateWithdrawalLimitsAsync(message.Amount, message.BalanceAfter, message.ProviderPhone, message.Provider);
                 _notificationService.CreateNotification("سحب مبلغ جديد", NotBody, message.Provider, NotificationTypes.Deposit, NotificationReferenceTypes.MessageTransaction, message.TransactionId);
                 await _unitOfWork.CompleteAsync();
             }
@@ -36,19 +37,22 @@ namespace SMSSender.Messaging.Handlers
         public async Task Update(MessageTransaction message)
         {
             _unitOfWork.Repository<MessageTransaction>().Update(message);
-            await UpdateWithdrawalLimitsAsync(message.Amount, message.BalanceAfter, message.ProviderPhone);
+            await UpdateWithdrawalLimitsAsync(message.Amount, message.BalanceAfter, message.ProviderPhone, message.Provider);
             await _unitOfWork.CompleteAsync();
         }
 
-        public async Task UpdateWithdrawalLimitsAsync(double? amount, double? balanceAfter, string phoneNumber)
+        public async Task UpdateWithdrawalLimitsAsync(double? amount, double? balanceAfter, string phoneNumber, string provider)
         {
             var Now = DateTime.UtcNow.EgyptNow();
 
-            var Entity = await _unitOfWork.Repository<WalletDetail>().GetByIdAsync(w => w.PhoneNumber == phoneNumber);
+            var Entity = await _unitOfWork.Repository<WalletDetail>().GetByIdAsync(w => w.PhoneNumber == phoneNumber && w.Type == provider);
 
             if (Entity != null)
             {
-                Entity.Amount = balanceAfter.HasValue ? balanceAfter.Value : 0;
+                if (provider == ProviderType.VodafoneCash.ToString())
+                    Entity.Amount = balanceAfter.HasValue ? balanceAfter.Value : 0;
+                else
+                    Entity.Amount -= amount.Value;
                 Entity.UsedDailyWithdrawal += amount.Value;
                 Entity.UsedMonthlyWithdrawal += amount.Value;
 

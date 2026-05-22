@@ -11,9 +11,14 @@ namespace SMSSender.Hubs
             _hubContext = hubContext;
         }
 
-        public async Task SendMessageAddedAsync()
+        public async Task SendMessageAddedAsync(int OperationType)
         {
-            await _hubContext.Clients.All.SendAsync("Message_Added");
+            await _hubContext.Clients.All.SendAsync("Message_Added", OperationType);
+        }
+
+        public async Task SendMessageCalculatedAsync(int MessageTransactionId)
+        {
+            await _hubContext.Clients.All.SendAsync("Message_Calculated", MessageTransactionId);
         }
     }
 }

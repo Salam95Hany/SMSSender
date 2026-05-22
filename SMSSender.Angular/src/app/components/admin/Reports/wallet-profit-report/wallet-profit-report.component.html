@@ -1,0 +1,89 @@
+<section class="page-shell">
+    <app-admin-breadcrumb title="الرسائل" subtitle="عرض موحد للرسائل الواردة مع فلاتر واضحة وتجربة قراءة أفضل على الهاتف والكمبيوتر." icon="fas fa-envelope-open-text" [items]="[
+      { label: 'الصفحة الرئيسية', route: '/admin/dashboard' },
+      { label: 'التقارير' },
+      { label: Title }
+    ]"></app-admin-breadcrumb>
+
+    <div class="stat-cards" id="statCards">
+        <div class="stat-card accent">
+            <div class="stat-icon"><i class="fas fa-layer-group"></i></div>
+            <div class="stat-value">{{SummaryData?.totalCash ?? 0 | number:'1.2-2'}} جنيه</div>
+            <div class="stat-label">إجمالي الكاش</div>
+        </div>
+        <div class="stat-card accent">
+            <div class="stat-icon"><i class="fas fa-money-bill-wave"></i></div>
+            <div class="stat-value">{{SummaryData?.totalAmount ?? 0 | number:'1.2-2'}} جنيه</div>
+            <div class="stat-label">إجمالي المبلغ</div>
+        </div>
+        <div class="stat-card accent">
+            <div class="stat-icon"><i class="fas fa-wallet"></i></div>
+            <div class="stat-value">{{SummaryData?.totalWalletBalance ?? 0 | number:'1.2-2'}} جنيه</div>
+            <div class="stat-label">رصيد المحافظ</div>
+        </div>
+        <div class="stat-card accent">
+            <div class="stat-icon"><i class="fas fa-file-import"></i></div>
+            <div class="stat-value">{{SummaryData?.totalProfit ?? 0 | number:'1.2-2'}} جنيه</div>
+            <div class="stat-label">إجمالي الربح</div>
+        </div>
+        <div class="stat-card accent">
+            <div class="stat-icon"><i class="fas fa-coins"></i></div>
+            <div class="stat-value">{{SummaryData?.netProfit ?? 0 | number:'1.2-2'}} جنيه</div>
+            <div class="stat-label">صافي الربح</div>
+        </div>
+    </div>
+    <div class="surface-card page-panel">
+        <div class="page-toolbar">
+            <div class="page-toolbar__meta">
+                <h2>{{Title}}</h2>
+                <p>{{Description}}</p>
+            </div>
+        </div>
+        <div class="mb-2">
+            <button type="button" class="btn btn-outline-secondary" (click)="isFilter = !isFilter">
+                <i class="fas fa-filter"></i>
+                <span>{{ isFilter ? 'عرض الفلاتر' : 'إخفاء الفلاتر' }}</span>
+            </button>
+        </div>
+        <div class="page-section-grid mb-2" [ngbCollapse]="isFilter">
+            <app-admin-filter [FilterList]="FilterList" (FilterChecked)="FilterChecked($event)"></app-admin-filter>
+        </div>
+
+        <div class="admin-table-wrapper" *ngIf="MessageList.length > 0; else emptyState">
+            <div class="table-responsive table-responsive-card">
+                <table class="table align-middle table-hover">
+                    <thead>
+                        <tr>
+                            <th>نوع المحفظة</th>
+                            <th>اسم المحفظة</th>
+                            <th>رقم المحفظة</th>
+                            <th>مجموع العمليات</th>
+                            <th>إجمالي المبلغ</th>
+                            <th>صافي الربح</th>
+                            <th>تاريخ اخر عملية</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of MessageList">
+                            <td data-label="نوع المحفظة">
+                                <span class="status-chip" [ngClass]="{'badge-danger': item.provider == 'فودافون كاش','badge-primary':item.provider == 'انستا باي'}">{{item.provider }}</span>
+                            </td>
+                            <td data-label="اسم المحفظة">{{ item.walletName ?? '-' }}</td>
+                            <td data-label="رقم المحفظة">{{ item.walletNumber ?? '-' }}</td>
+                            <td data-label="مجموع العمليات">{{ item.totalTransactions ?? 0 }}</td>
+                            <td data-label="إجمالي المبلغ">{{ item.totalAmount ?? 0 | number:'1.2-2'}}</td>
+                            <td data-label="صافي الربح">{{ item.totalProfit ?? 0 | number:'1.2-2'}}</td>
+                            <td data-label="تاريخ اخر عملية">{{ item.lastTransactionDate | arabicDateWithTime}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <ng-template #emptyState>
+            <app-admin-empty-state></app-admin-empty-state>
+        </ng-template>
+    </div>
+</section>
+
+
+<ngx-loading [show]="ShowLoader"></ngx-loading>

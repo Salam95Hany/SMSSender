@@ -1,5 +1,5 @@
 import { CommonModule, NgFor, NgIf } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TimeAgoTodayPipe } from '../../pipes/time-ago-today.pipe';
@@ -8,16 +8,6 @@ import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../auth/auth.service';
 import { NgxLoadingModule } from 'ngx-loading';
 
-interface MessagePreview {
-  senderName: string;
-  senderNumber: string;
-  preview: string;
-  time: string;
-  unread: boolean;
-  accent: string;
-  initial: string;
-}
-
 @Component({
   selector: 'app-message-box-popup',
   standalone: true,
@@ -25,7 +15,7 @@ interface MessagePreview {
   templateUrl: './message-box-popup.component.html',
   styleUrl: './message-box-popup.component.css'
 })
-export class MessageBoxPopupComponent implements OnInit {
+export class MessageBoxPopupComponent implements OnInit, OnChanges {
   @Input() MessageList: any[] = [];
   @Output() OnCalculated = new EventEmitter<any>();
   searchTerm = '';
@@ -34,6 +24,10 @@ export class MessageBoxPopupComponent implements OnInit {
   constructor(private modalService: NgbModal, private adminService: AdminService, private toaster: ToastrService, private authService: AuthService) { }
 
   ngOnInit(): void {
+   
+  }
+
+  ngOnChanges(): void {
     this.MessageList.forEach(i => {
       if (i.senderName)
         i.firstLetter = i.senderName?.trim().charAt(0);
@@ -44,7 +38,6 @@ export class MessageBoxPopupComponent implements OnInit {
       i.customerReceive = i.amount;
       if (i.operationType == 1)
         i.customerReceive = i.amount + i.commission;
-
     });
   }
 

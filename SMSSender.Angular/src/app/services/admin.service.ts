@@ -85,4 +85,22 @@ export class AdminService {
   GetWalletAccountSummary(PagingFilter: PagingFilterModel) {
     return this.http.post<ApiResponseModel<any[]>>(this.Url + 'WalletDetail/GetWalletAccountSummary', PagingFilter);
   }
+
+  // ============================== Report ==============================
+
+  GetWalletsReportSummaryByOperationType(PagingFilter: PagingFilterModel) {
+    return this.http.post<ApiResponseModel<any>>(this.Url + 'Report/GetWalletsReportSummaryByOperationType', PagingFilter);
+  }
+
+  GetWalletsReportByOperationType(PagingFilter: PagingFilterModel) {
+    return this.http.post<ApiResponseModel<any>>(this.Url + 'Report/GetWalletsReportByOperationType', PagingFilter);
+  }
+
+  GetWalletProfitReportSummary(PagingFilter: PagingFilterModel) {
+    return this.http.post<ApiResponseModel<any>>(this.Url + 'Report/GetWalletProfitReportSummary', PagingFilter);
+  }
+
+  GetWalletProfitReport(PagingFilter: PagingFilterModel) {
+    return this.http.post<ApiResponseModel<any>>(this.Url + 'Report/GetWalletProfitReport', PagingFilter);
+  }
 }

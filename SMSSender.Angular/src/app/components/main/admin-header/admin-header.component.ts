@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output, TemplateRef, ViewChild, inject } from '@angular/core';
 import { NgClass } from '@angular/common';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { NgbDropdownModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from '../../../auth/auth.service';
 import { MessageBoxPopupComponent } from '../../../shared/message-box-popup/message-box-popup.component';
@@ -30,8 +30,6 @@ export class AdminHeaderComponent {
   TotalCount = 0;
   PagingFilter: PagingFilterModel = { pagesize: 10, currentpage: 1, operationType: 0, filterList: [] };
 
-  private readonly router = inject(Router);
-  private readonly route = inject(ActivatedRoute);
   private readonly authService = inject(AuthService);
   private readonly modalService = inject(NgbModal);
   private readonly adminService = inject(AdminService);
@@ -48,10 +46,17 @@ export class AdminHeaderComponent {
     this.notificationSound.unlockAudio();
     this.notificationSignalrService.startConnection();
     this.refreshUser();
-    this.notificationSignalrService.onMessageAdded(() => {
+    this.notificationSignalrService.onMessageAdded((operationType: number) => {
       this.notificationSound.play();
       this.GetMessageNotification();
-      this.GetMessageBoxTodayData(true);
+      if (operationType == 1 || operationType == 2 || operationType == 3)
+        this.GetMessageBoxTodayData(true);
+    });
+
+    this.notificationSignalrService.onMessageCalculated((messageTransactionId: number) => {
+      if (this.MessageList.some(m => m.messageTransactionId === messageTransactionId)) {
+        this.GetMessageBoxTodayData(false);
+      }
     });
 
     this.GetMessageNotification();
@@ -130,28 +135,7 @@ export class AdminHeaderComponent {
     }
   }
 
-  RedirectToMessagesPage(messageTransactionId: number) {
-    this.adminService.MakeMessageAsRead(messageTransactionId).subscribe(data => {
-      if (data.isSuccess) {
-        const checked = this.MessageList.find(i => i.messageTransactionId === messageTransactionId);
-        if (checked) checked.isRead = true;
-
-        if (this.router.url.includes('/admin/all-message')) {
-          this.router.navigate([], {
-            relativeTo: this.route,
-            queryParams: { id: messageTransactionId },
-            queryParamsHandling: 'merge'
-          });
-        } else {
-          this.router.navigate(['/admin/all-message'], {
-            queryParams: { id: messageTransactionId }
-          });
-        }
-      }
-    })
-  }
-
-  OnCalculated(){
+  OnCalculated() {
     this.GetMessageBoxTodayData(false);
   }
 

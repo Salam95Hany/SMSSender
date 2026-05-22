@@ -118,35 +118,61 @@ export const routes: Routes = [
         },
       },
       {
+        path: 'all-message-report',
+        loadComponent: () => import('./components/admin/Reports/all-message-report/all-message-report.component').then((m) => m.AllMessageReportComponent),
+        canActivate: [authGuard],
+        data: {
+          section: 'التقارير',
+          title: 'تقرير العمليات',
+          opreationType: 0,
+          description: 'عرض مؤشرات وتقارير العمليات ضمن بنية قابلة للتوسعة وملائمة للشاشات الكبيرة والصغيرة.',
+          roles: ['Admin', 'Manager']
+        },
+      },
+      {
         path: 'deposit-report',
-        loadComponent: () => import('./components/admin/Reports/deposit-report/deposit-report.component').then((m) => m.DepositReportComponent),
+        loadComponent: () => import('./components/admin/Reports/all-message-report/all-message-report.component').then((m) => m.AllMessageReportComponent),
         canActivate: [authGuard],
         data: {
           section: 'التقارير',
-          title: 'تقرير الإيداعات',
-          description: 'اعرض مؤشرات وتقارير الإيداعات ضمن بنية قابلة للتوسعة وملائمة للشاشات الكبيرة والصغيرة.',
+          title: 'تقرير الإيداع',
+          opreationType: 1,
+          description: 'عرض مؤشرات وتقارير الإيداع ضمن بنية قابلة للتوسعة وملائمة للشاشات الكبيرة والصغيرة.',
           roles: ['Admin', 'Manager']
         },
       },
       {
-        path: 'withdraw-report',
-        loadComponent: () => import('./components/admin/Reports/withdraw-report/withdraw-report.component').then((m) => m.WithdrawReportComponent),
+        path: 'withdrawal-report',
+        loadComponent: () => import('./components/admin/Reports/all-message-report/all-message-report.component').then((m) => m.AllMessageReportComponent),
         canActivate: [authGuard],
         data: {
           section: 'التقارير',
-          title: 'تقرير السحوبات',
-          description: 'استخرج قراءات واضحة لحركة السحوبات مع تجربة تصفح أكثر هدوءا وتركيزا.',
+          title: 'تقرير السحب',
+          opreationType: 2,
+          description: 'عرض مؤشرات وتقارير السحب ضمن بنية قابلة للتوسعة وملائمة للشاشات الكبيرة والصغيرة.',
           roles: ['Admin', 'Manager']
         },
       },
       {
-        path: 'transformation-report',
-        loadComponent: () => import('./components/admin/Reports/transformation-report/transformation-report.component').then((m) => m.TransformationReportComponent),
+        path: 'cash-withdrawal-report',
+        loadComponent: () => import('./components/admin/Reports/all-message-report/all-message-report.component').then((m) => m.AllMessageReportComponent),
         canActivate: [authGuard],
         data: {
           section: 'التقارير',
-          title: 'تقرير التحويلات',
-          description: 'مؤشرات التحويلات في واجهة أكثر وضوحا، مع بطاقات ملخص وجداول قابلة للتصفح على الهاتف.',
+          title: 'تقرير السيولة',
+          opreationType: 3,
+          description: 'عرض مؤشرات وتقارير السيولة ضمن بنية قابلة للتوسعة وملائمة للشاشات الكبيرة والصغيرة.',
+          roles: ['Admin', 'Manager']
+        },
+      },
+      {
+        path: 'wallet-profit-report',
+        loadComponent: () => import('./components/admin/Reports/wallet-profit-report/wallet-profit-report.component').then((m) => m.WalletProfitReportComponent),
+        canActivate: [authGuard],
+        data: {
+          section: 'التقارير',
+          title: 'تقرير الأرباح',
+          description: 'استخرج قراءات واضحة لحركة الأرباح مع تجربة تصفح أكثر هدوءا وتركيزا.',
           roles: ['Admin', 'Manager']
         },
       },

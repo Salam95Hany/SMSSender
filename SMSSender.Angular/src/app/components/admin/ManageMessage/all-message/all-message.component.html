@@ -22,7 +22,7 @@
             </button>
         </div>
         <div class="page-section-grid mb-2" [ngbCollapse]="isFilter">
-            <app-admin-filter [FilterList]="FilterList" [ReloadFilter]="ReloadFilter" (FilterChecked)="FilterChecked($event)"></app-admin-filter>
+            <app-admin-filter [FilterList]="FilterList" (FilterChecked)="FilterChecked($event)"></app-admin-filter>
         </div>
 
         <div class="admin-table-wrapper" *ngIf="MessageList.length > 0; else emptyState">
@@ -47,7 +47,7 @@
                     <tbody>
                         <tr *ngFor="let item of MessageList">
                             <td data-label="نوع المحفظة">
-                                <span class="status-chip" [ngClass]="{'badge-danger': item.provider == 'فودافون كاش','badge-primary':item.provider == 'انستا باي'}">{{item.provider }}</span>
+                                <span class="status-chip" [ngClass]="{'badge-danger': item.providerAr == 'فودافون كاش','badge-primary':item.providerAr == 'انستا باي'}">{{item.providerAr }}</span>
                             </td>
                             <td data-label="اسم المحفظة">{{ item.providerName ?? '-' }}</td>
                             <td data-label="رقم المحفظة">{{ item.providerPhone ?? '-' }}</td>
@@ -61,12 +61,14 @@
                             <td data-label="رصيد المحفظة">{{ item.balanceAfter ?? 0 | number:'1.2-2'}}</td>
                             <td data-label="العمولة">{{ item.commission ?? 0 | number:'1.2-2'}}</td>
                             <td data-label="الحالة">
-                                <span class="status-chip" [ngClass]="item.transactionStatus == 1 ? 'badge-complete' : 'badge-delayed'">{{ item.transactionStatusName }}</span>
+                                <span class="status-chip" [ngClass]="item.transactionStatus == 1 ? 'badge-complete' : 'badge-delayed'" *ngIf="item.operationType == 1 || item.operationType == 2 || item.operationType == 3">{{ item.transactionStatusName }}</span>
+                                <span *ngIf="item.operationType != 1 && item.operationType != 2 && item.operationType != 3">-</span>
                             </td>
                             <td data-label="تاريخ الوصول">{{ item.operationServerDateTime ?? '-' | arabicDateWithTime}}</td>
                             <td data-label="الإجراءات" class="table-actions-cell">
                                 <div class="table-actions-row">
                                     <button class="btn btn-outline-secondary" (click)="openSidePanel(DetailsSidePanel,item)"><i class="far fa-eye"></i><span>تفاصيل</span></button>
+                                    <button class="btn btn-outline-secondary" (click)="OpenMessageBoxModal(MessageBoxModal,item)" [disabled]="item.transactionStatus == 1 || (item.transactionStatus == 2 && (item.operationType != 1 && item.operationType != 2 && item.operationType != 3))">✓ &nbsp;{{item.operationType == 1 || item.operationType == 3 ? 'تم الاستلام' : 'تم التسليم'}}</button>
                                     <!-- <button class="btn btn-danger"><i class="fas fa-times"></i><span>إلغاء</span></button> -->
                                 </div>
                             </td>
@@ -84,6 +86,10 @@
 
 
 <ngx-loading [show]="ShowLoader"></ngx-loading>
+
+<ng-template #MessageBoxModal>
+    <app-message-box-popup [MessageList]="MessageBoxList" (OnCalculated)="OnCalculated()"></app-message-box-popup>
+</ng-template>
 
 
 <ng-template #DetailsSidePanel let-offcanvas>
@@ -134,12 +140,11 @@
                         <tbody>
                             <tr>
                                 <td data-label="نوع المحفظة">
-                                    <span class="status-chip" [ngClass]="{'badge-danger': MessageDetails.provider == 'فودافون كاش','badge-primary':MessageDetails.provider == 'انستا باي'}">{{MessageDetails.provider }}</span>
+                                    <span class="status-chip" [ngClass]="{'badge-danger': MessageDetails.providerAr == 'فودافون كاش','badge-primary':MessageDetails.providerAr == 'انستا باي'}">{{MessageDetails.providerAr }}</span>
                                 </td>
                                 <td data-label="اسم المحفظة">{{ MessageDetails.providerName ?? '-' }}</td>
                                 <td data-label="رقم المحفظة">{{ MessageDetails.providerPhone ?? '-' }}</td>
                                 <td data-label="نوع العملية">
-
                                     <span class="status-chip" [ngClass]="getOperationClass(MessageDetails.operationType)">{{ MessageDetails.operationTypeName }}</span>
                                 </td>
                                 <td data-label="المبلغ">{{ MessageDetails.amount ?? 0 | number:'1.2-2'}}</td>
@@ -157,13 +162,13 @@
                 <div class="row g-3 p-3">
                     <div class="col-lg-6">
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="item_name" placeholder="new-user" [(ngModel)]="MessageUpdate.amount" [disabled]="MessageUpdate.operationType != 1 && MessageUpdate.operationType != 2">
+                            <input type="text" class="form-control" id="item_name" placeholder="new-user" [(ngModel)]="MessageUpdate.amount" (keypress)="NumbersOnly($event.key)" [disabled]="MessageUpdate.operationType != 1 && MessageUpdate.operationType != 2">
                             <label for="item_name">المبلغ</label>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="item_name" placeholder="new-user" [(ngModel)]="MessageUpdate.fromPhone" [disabled]="MessageUpdate.operationType != 1 && MessageUpdate.operationType != 2">
+                            <input type="text" class="form-control" id="item_name" placeholder="new-user" [(ngModel)]="MessageUpdate.fromPhone" (keypress)="NumbersOnly($event.key)" [disabled]="MessageUpdate.operationType != 1 && MessageUpdate.operationType != 2">
                             <label for="item_name">رقم تلفون المرسل</label>
                         </div>
                     </div>
@@ -175,13 +180,13 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="item_name" placeholder="new-user" [(ngModel)]="MessageUpdate.balanceAfter">
+                            <input type="text" class="form-control" id="item_name" placeholder="new-user" (keypress)="NumbersOnly($event.key)" [(ngModel)]="MessageUpdate.balanceAfter">
                             <label for="item_name">رصيد المحفظة</label>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="item_name" placeholder="new-user" [(ngModel)]="MessageUpdate.commission" [disabled]="MessageUpdate.operationType != 1 && MessageUpdate.operationType != 2">
+                            <input type="text" class="form-control" id="item_name" placeholder="new-user" (keypress)="NumbersOnly($event.key)" [(ngModel)]="MessageUpdate.commission" [disabled]="MessageUpdate.operationType != 1 && MessageUpdate.operationType != 2 && MessageUpdate.operationType != 3">
                             <label for="item_name">العمولة</label>
                         </div>
                     </div>

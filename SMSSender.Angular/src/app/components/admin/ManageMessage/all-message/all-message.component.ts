@@ -1,6 +1,6 @@
 import { CommonModule, NgClass, NgFor, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { NgbModule, NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModule, NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { FilterModel } from '../../../../models/FilterModel';
 import { PagingFilterModel } from '../../../../models/PagingFilterModel';
@@ -13,18 +13,22 @@ import { ActivatedRoute } from '@angular/router';
 import { ArabicDateWithTimePipe } from '../../../../pipes/arabic-date-with-time.pipe';
 import { FormsModule } from '@angular/forms';
 import { NgxLoadingModule } from 'ngx-loading';
+import { FormService } from '../../../../services/form.service';
+import { MessageBoxPopupComponent } from '../../../../shared/message-box-popup/message-box-popup.component';
+import { NotificationSignalrService } from '../../../../services/notification-signalr.service';
 
 @Component({
   selector: 'app-all-message',
   standalone: true,
   imports: [AdminPaginationComponent, NgFor, NgIf, NgClass, AdminFilterComponent, NgbModule, AdminBreadcrumbComponent, AdminEmptyStateComponent, ArabicDateWithTimePipe,
-    CommonModule, FormsModule,NgxLoadingModule
+    CommonModule, FormsModule, NgxLoadingModule, MessageBoxPopupComponent
   ],
   templateUrl: './all-message.component.html',
   styleUrl: './all-message.component.css'
 })
 export class AllMessageComponent implements OnInit {
   MessageList: any[] = [];
+  MessageBoxList: any[] = [];
   FilterList: FilterModel[] = [];
   MessageUpdate: any;
   Title = '';
@@ -33,33 +37,39 @@ export class AllMessageComponent implements OnInit {
   TransactionId: any;
   ProviderName = '';
   ProviderPhone = '';
-  MessageTransactionId
+  MessageTransactionId: any;
   PagingFilter: PagingFilterModel = { pagesize: 20, currentpage: 1, operationType: 0, filterList: [] };
   TotalCount = 0;
   isFilter = true;
   ShowLoader = false;
   ReloadFilter = 0;
 
-  constructor(private adminService: AdminService, private toaster: ToastrService, private route: ActivatedRoute, private offcanvasService: NgbOffcanvas) { }
+  constructor(private adminService: AdminService, private toaster: ToastrService, private route: ActivatedRoute, private offcanvasService: NgbOffcanvas,
+    private formService: FormService, private modalService: NgbModal, private notificationSignalrService: NotificationSignalrService) { }
 
   ngOnInit(): void {
     const data = this.route.snapshot.data;
     this.PagingFilter.operationType = data['opreationType'];
     this.Title = data['title'];
-    this.route.queryParams.subscribe(params => {
-      this.MessageTransactionId = params['id'];
-      this.PagingFilter.filterList = [];
-
-      if (this.MessageTransactionId) {
-        this.PagingFilter.filterList.push({
-          categoryName: 'MessageTransId',
-          itemId: this.MessageTransactionId
-        });
-        this.ReloadFilter++;
+    this.notificationSignalrService.onMessageCalculated((messageTransactionId: number) => {
+      if (this.MessageList.some(m => m.messageTransactionId === messageTransactionId)) {
+        let message = this.MessageList.find(m => m.messageTransactionId === messageTransactionId);
+        if (message) {
+          message.transactionStatus = 1;
+        }
       }
+    });
+    this.GetSmsDataByOperationType();
+    this.GetSmsFilterByOperationType();
+  }
 
-      this.GetSmsDataByOperationType();
-      this.GetSmsFilterByOperationType();
+  OpenMessageBoxModal(content: any, item: any) {
+    this.TransactionId = item.transactionId;
+    this.GetMessageDetailsById(item);
+    this.modalService.open(content, {
+      centered: true,
+      size: 'sm',
+      windowClass: 'messages-modal',
     });
   }
 
@@ -81,6 +91,29 @@ export class AllMessageComponent implements OnInit {
     this.offcanvasService.open(content, { position: 'end' });
   }
 
+  BuildMessageBoxModel(item: any, details: any): any[] {
+    let obj = {
+      messageTransactionId: item.messageTransactionId,
+      transactionId: item.transactionId,
+      provider: item.provider,
+      providerName: item.providerName,
+      providerPhone: item.providerPhone,
+      operationTypeName: item.operationTypeName,
+      senderName: item.senderName,
+      operationType: item.operationType,
+      amount: item.amount,
+      fromPhone: item.fromPhone,
+      balanceAfter: item.balanceAfter,
+      operationServerDateTime: item.operationServerDateTime,
+      commission: item.commission,
+      message: details.message,
+      isCalculated: false,
+    }
+    let list = [obj];
+
+    return list;
+  }
+
   GetSmsDataByOperationType() {
     this.ShowLoader = true;
     this.adminService.GetSmsDataByOperationType(this.PagingFilter).subscribe((data) => {
@@ -96,9 +129,12 @@ export class AllMessageComponent implements OnInit {
     });
   }
 
-  GetMessageDetailsById() {
+  GetMessageDetailsById(item = null) {
     this.adminService.GetMessageDetailsById(this.TransactionId).subscribe(data => {
       this.MessageLog = data.results;
+      if (item) {
+        this.MessageBoxList = this.BuildMessageBoxModel(item, this.MessageLog);
+      }
     });
   }
 
@@ -109,11 +145,6 @@ export class AllMessageComponent implements OnInit {
 
   FilterChecked(filterList: FilterModel[]) {
     this.PagingFilter.filterList = filterList;
-    if (this.MessageTransactionId)
-      this.PagingFilter.filterList.push({
-        categoryName: 'MessageTransId',
-        itemId: this.MessageTransactionId
-      });
     this.GetSmsDataByOperationType();
     this.GetSmsFilterByOperationType();
   }
@@ -167,6 +198,16 @@ export class AllMessageComponent implements OnInit {
       } else
         this.toaster.error('لقد حدث خطا')
     });
+  }
+
+  OnCalculated() {
+    this.GetSmsDataByOperationType();
+    this.GetSmsFilterByOperationType();
+    this.modalService.dismissAll();
+  }
+
+  NumbersOnly(key: any) {
+    return this.formService.NumbersOnly(key);
   }
 
   getOperationClass(type: number): string {

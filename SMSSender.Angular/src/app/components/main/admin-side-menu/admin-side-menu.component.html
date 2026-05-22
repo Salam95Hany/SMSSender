@@ -60,13 +60,25 @@
         <div class="nav-group">
             <div class="nav-group__label" *ngIf="!isCollapsed">التقارير</div>
             <div class="nav-group__items">
+                <a class="nav-item" routerLink="/admin/all-message-report" routerLinkActive="active">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    <span *ngIf="!isCollapsed">تقرير العمليات</span>
+                </a>
                 <a class="nav-item" routerLink="/admin/deposit-report" routerLinkActive="active">
                     <i class="fas fa-file-invoice-dollar"></i>
-                    <span *ngIf="!isCollapsed">تقرير الإيداعات</span>
+                    <span *ngIf="!isCollapsed">تقرير الإيداع</span>
                 </a>
-                <a class="nav-item" routerLink="/admin/withdraw-report" routerLinkActive="active">
-                    <i class="fas fa-chart-column"></i>
-                    <span *ngIf="!isCollapsed">تقرير السحوبات</span>
+                <a class="nav-item" routerLink="/admin/withdrawal-report" routerLinkActive="active">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    <span *ngIf="!isCollapsed">تقرير السحب</span>
+                </a>
+                <a class="nav-item" routerLink="/admin/cash-withdrawal-report" routerLinkActive="active">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    <span *ngIf="!isCollapsed">تقرير السيولة</span>
+                </a>
+                <a class="nav-item" routerLink="/admin/wallet-profit-report" routerLinkActive="active">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    <span *ngIf="!isCollapsed">تقرير الأرباح</span>
                 </a>
             </div>
         </div>

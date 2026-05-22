@@ -9,6 +9,6 @@ namespace SMSSender.Messaging.Models
     public class ProcessResult
     {
         public bool Success { get; set; }
-        public Guid? TransactionId { get; set; }
+        public int? OperationType { get; set; }
     }
 }

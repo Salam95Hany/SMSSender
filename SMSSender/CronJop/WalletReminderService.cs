@@ -32,25 +32,25 @@ namespace SMSSender.CronJop
 
                 if (daysLeft == 30)
                 {
-                    SendReminder(entity, $"باقي 30 يوم على إعادة الشحن . المحفظة: {entity.PhoneNumber}");
+                    SendReminder($"باقي 30 يوم على إعادة الشحن . المحفظة: {entity.PhoneNumber}");
                     hasNotifications = true;
                 }  
 
                 if (daysLeft == 15)
                 {
-                    SendReminder(entity, $"باقي 15 يوم على إعادة الشحن . المحفظة: {entity.PhoneNumber}");
+                    SendReminder($"باقي 15 يوم على إعادة الشحن . المحفظة: {entity.PhoneNumber}");
                     hasNotifications = true;
                 }
                     
                 if (daysLeft == 10)
                 {
-                    SendReminder(entity, $"باقي 10 يوم على إعادة الشحن . المحفظة: {entity.PhoneNumber}");
+                    SendReminder($"باقي 10 يوم على إعادة الشحن . المحفظة: {entity.PhoneNumber}");
                     hasNotifications = true;
                 }
                     
                 if (daysLeft == 5)
                 {
-                    SendReminder(entity, $"باقي 5 يوم على إعادة الشحن . المحفظة: {entity.PhoneNumber}");
+                    SendReminder($"باقي 5 يوم على إعادة الشحن . المحفظة: {entity.PhoneNumber}");
                     hasNotifications = true;
                 }
                     
@@ -59,7 +59,7 @@ namespace SMSSender.CronJop
             await _unitOfWork.CompleteAsync();
 
             if (hasNotifications)
-                await _hubNotificationService.SendMessageAddedAsync();
+                await _hubNotificationService.SendMessageAddedAsync(7);
         }
 
         public async Task ResetWalletDate()
@@ -88,7 +88,7 @@ namespace SMSSender.CronJop
             await _unitOfWork.CompleteAsync();
         }
 
-        private void SendReminder(WalletDetail entity, string message)
+        private void SendReminder(string message)
         {
             _notificationService.CreateNotification("تنبيه إعادة شحن", message, null, NotificationTypes.System, NotificationReferenceTypes.WalletDetail);
         }

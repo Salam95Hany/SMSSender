@@ -69,6 +69,8 @@ namespace SMSSender.DI
             services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<IHubNotificationService, HubNotificationService>();
             services.AddScoped<IWalletReminderService, WalletReminderService>();
+            services.AddScoped<IReportService, ReportService>();
+            
 
             #region ReportsDI
 

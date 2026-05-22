@@ -40,8 +40,8 @@ namespace SMSSender.Messaging.TaskQueue
                         continue;
 
                     var process = await processingService.Process(smsMessage);
-                    if (process.Success && process.TransactionId.HasValue)
-                        await hubService.SendMessageAddedAsync();
+                    if (process.Success && process.OperationType.HasValue)
+                        await hubService.SendMessageAddedAsync(process.OperationType.Value);
                 }
                 catch (OperationCanceledException)
                 {

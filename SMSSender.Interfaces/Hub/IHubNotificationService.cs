@@ -8,6 +8,7 @@ namespace SMSSender.Interfaces.Hub
 {
     public interface IHubNotificationService
     {
-        Task SendMessageAddedAsync();
+        Task SendMessageAddedAsync(int OperationType);
+        Task SendMessageCalculatedAsync(int MessageTransactionId);
     }
 }
