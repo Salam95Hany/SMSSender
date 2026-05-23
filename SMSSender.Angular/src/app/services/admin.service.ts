@@ -86,6 +86,10 @@ export class AdminService {
     return this.http.post<ApiResponseModel<any[]>>(this.Url + 'WalletDetail/GetWalletAccountSummary', PagingFilter);
   }
 
+  UpdateInstaWalletAmount(WalletDetailId: number, Amount: number) {
+    return this.http.get<ApiResponseModel<any[]>>(this.Url + 'WalletDetail/UpdateInstaWalletAmount?WalletDetailId=' + WalletDetailId + '&Amount=' + Amount);
+  }
+
   // ============================== Report ==============================
 
   GetWalletsReportSummaryByOperationType(PagingFilter: PagingFilterModel) {
@@ -112,7 +116,7 @@ export class AdminService {
     return this.http.post<ApiResponseModel<any>>(this.Url + 'Report/ProfitPeriodClosings', Model);
   }
 
-  GetProfitClosingByDate(FromDate:any, ToDate:any) {
+  GetProfitClosingByDate(FromDate: any, ToDate: any) {
     return this.http.get<ApiResponseModel<any>>(this.Url + 'Report/GetProfitClosingByDate?FromDate=' + FromDate + '&ToDate=' + ToDate);
   }
 }

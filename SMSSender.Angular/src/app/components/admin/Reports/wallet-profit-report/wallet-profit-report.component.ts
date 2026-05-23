@@ -54,7 +54,6 @@ export class WalletProfitReportComponent {
     this.Title = data['title'];
     this.Description = data['description'];
     this.GetWalletProfitReport();
-    this.GetWalletProfitReportSummary();
     this.GetProfitPeriodClosings();
   }
 
@@ -83,6 +82,9 @@ export class WalletProfitReportComponent {
   GetWalletProfitReportSummary() {
     this.adminService.GetWalletProfitReportSummary(this.PagingFilter).subscribe((data) => {
       this.SummaryData = data.results[0];
+      this.MessageList.forEach(i => {
+        this.SummaryData.totalWalletBalance += i.finalBalance;
+      });
     });
   }
 
@@ -92,13 +94,13 @@ export class WalletProfitReportComponent {
       this.ShowLoader = false;
       this.MessageList = data.results;
       this.TotalCount = data.totalCount;
+      this.GetWalletProfitReportSummary();
     });
   }
 
   FilterChecked(filterList: FilterModel[]) {
     this.PagingFilter.filterList = filterList;
     this.GetWalletProfitReport();
-    this.GetWalletProfitReportSummary();
   }
 
   ProfitPeriodClosings() {

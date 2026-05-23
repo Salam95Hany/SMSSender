@@ -22,7 +22,7 @@
             <div class="notif-item" data-type="all unread" [ngClass]="{'unread': !item.isRead}" *ngFor="let item of NotificationList">
                 <div class="unread-dot" *ngIf="!item.isRead"></div>
                 <div class="notif-avatar" [ngClass]="getProviderClass(item.provider)">
-                    <span *ngIf="item.provider">👝</span>
+                    <span *ngIf="item.provider"><i class="fas fa-wallet" style="font-size: x-large;"></i></span>
                     <span *ngIf="!item.provider">⚠️</span>
                     <span class="notif-type-badge" style="background:var(--danger);color:#fff;" *ngIf="item.provider == 'VodafoneCash'"><i class="fas fa-arrow-up"></i></span>
                     <span class="notif-type-badge" style="background:var(--info);color:#fff;" *ngIf="item.provider == 'InstaPay'"><i class="fas fa-arrow-up"></i></span>

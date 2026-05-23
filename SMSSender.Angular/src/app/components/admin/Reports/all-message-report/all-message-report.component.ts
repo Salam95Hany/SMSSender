@@ -45,12 +45,14 @@ export class AllMessageReportComponent implements OnInit {
     this.Title = data['title'];
     this.Description = data['description'];
     this.GetWalletsReportByOperationType();
-    this.GetWalletsReportSummaryByOperationType();
   }
 
   GetWalletsReportSummaryByOperationType() {
     this.adminService.GetWalletsReportSummaryByOperationType(this.PagingFilter).subscribe((data) => {
       this.SummaryData = data.results[0];
+      this.MessageList.forEach(i => {
+        this.SummaryData.totalWalletBalance += i.finalBalance;
+      });
     });
   }
 
@@ -60,12 +62,12 @@ export class AllMessageReportComponent implements OnInit {
       this.ShowLoader = false;
       this.MessageList = data.results;
       this.TotalCount = data.totalCount;
+      this.GetWalletsReportSummaryByOperationType();
     });
   }
 
   FilterChecked(filterList: FilterModel[]) {
     this.PagingFilter.filterList = filterList;
     this.GetWalletsReportByOperationType();
-    this.GetWalletsReportSummaryByOperationType();
   }
 }

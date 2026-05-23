@@ -19,7 +19,7 @@
                     </div>
                     <div class="card-number-row">
                         <span class="card-num">{{item.phoneNumber}}</span>
-                        <span class="wallet-icon cursor-pointer" *ngIf="item.type == 'InstaPay'"><i class="fas fa-plus"></i></span>
+                        <span class="wallet-icon cursor-pointer" *ngIf="item.type == 'InstaPay'" (click)="OpenUpdateInstaWalletAmountModal(UpdateInstaWalletAmountModal,item)"><i class="fas fa-edit"></i></span>
                     </div>
                 </div>
                 <div class="card-body">
@@ -127,3 +127,44 @@
         </div>
     </div>
 </section>
+
+<ng-template #UpdateInstaWalletAmountModal let-modal>
+    <div class="modal-header admin-modal-header d-flex align-items-center justify-content-between text-white">
+        <div class="modal-title-wrap d-flex align-items-center gap-3">
+            <span class="modal-title-icon"><i class="fas fa-crosshairs"></i></span>
+            <div>
+                <div class="modal-kicker">إدارة المحفظة</div>
+                <div class="modal-title-text">إضافة رصيد</div>
+            </div>
+        </div>
+        <i class="fas fa-times cursor-pointer fa-2x modal-close-btn" (click)="modal.dismiss()"></i>
+    </div>
+    <div class="modal-body admin-modal-body">
+        <div class="admin-modal-card">
+            <form [formGroup]="ItemForm" autocomplete="off">
+                <div class="row g-3">
+                    <div class="col-lg-12">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" formControlName="amount" id="item_price" placeholder="new-user" min="0.001" step="0.001" (keypress)="NumbersOnly($event.key)" required>
+                            <label for="item_price">رصيد المحفظة</label>
+                            <div *ngIf="ItemForm.controls['amount']?.invalid && (ItemForm.controls['amount']?.dirty || ItemForm.controls['amount']?.touched)" class="text-danger pt-2">
+                                <div *ngIf="ItemForm.controls['amount'].errors?.['required']">هذا الحقل مطلوب</div>
+                                <div *ngIf="ItemForm.controls['amount'].errors?.['min']">يجب أن تكون القيمة أكبر من صفر</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer admin-modal-footer justify-content-start gap-2">
+        <button type="submit" class="btn btn-outline-secondary rounded-25 d-flex align-items-center gap-2" (click)="UpdateInstaWalletAmount()">
+            <i class="fas fa-plus-circle"></i>
+            <span>اضافة</span>
+        </button>
+        <button class="btn btn-outline-secondary rounded-25 d-flex align-items-center gap-2" (click)="modal.close()">
+            <i class="fas fa-times-circle"></i>
+            <span>إلغاء</span>
+        </button>
+    </div>
+</ng-template>

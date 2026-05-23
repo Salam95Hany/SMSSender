@@ -22,12 +22,12 @@
             <div class="stat-label">رصيد المحافظ</div>
         </div>
         <div class="stat-card accent">
-            <div class="stat-icon"><i class="fas fa-file-import"></i></div>
+            <div class="stat-icon"><i class="fas fa-coins"></i></div>
             <div class="stat-value">{{SummaryData?.totalProfit ?? 0 | number:'1.2-2'}} جنيه</div>
             <div class="stat-label">إجمالي الربح</div>
         </div>
         <div class="stat-card accent">
-            <div class="stat-icon"><i class="fas fa-coins"></i></div>
+            <div class="stat-icon"><i class="fas fa-hand-holding-usd"></i></div>
             <div class="stat-value">{{SummaryData?.netProfit ?? 0 | number:'1.2-2'}} جنيه</div>
             <div class="stat-label">صافي الربح</div>
         </div>
@@ -62,6 +62,7 @@
                             <th>اسم المحفظة</th>
                             <th>رقم المحفظة</th>
                             <th>مجموع العمليات</th>
+                            <th>رصيد المحفظة</th>
                             <th>إجمالي المبلغ</th>
                             <th>صافي الربح</th>
                             <th>تاريخ اخر عملية</th>
@@ -75,6 +76,7 @@
                             <td data-label="اسم المحفظة">{{ item.walletName ?? '-' }}</td>
                             <td data-label="رقم المحفظة">{{ item.walletNumber ?? '-' }}</td>
                             <td data-label="مجموع العمليات">{{ item.totalTransactions ?? 0 }}</td>
+                            <td data-label="رصيد المحفظة">{{ item.finalBalance ?? 0 | number:'1.2-2'}}</td>
                             <td data-label="إجمالي المبلغ">{{ item.totalAmount ?? 0 | number:'1.2-2'}}</td>
                             <td data-label="صافي الربح">{{ item.totalProfit ?? 0 | number:'1.2-2'}}</td>
                             <td data-label="تاريخ اخر عملية">{{ item.lastTransactionDate | arabicDateWithTime}}</td>

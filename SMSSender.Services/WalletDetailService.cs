@@ -1,15 +1,11 @@
 ﻿using Microsoft.Data.SqlClient;
 using SMSSender.Entities.Common;
+using SMSSender.Entities.Models.Messaging;
 using SMSSender.Interfaces;
 using SMSSender.Interfaces.Common;
 using SMSSender.Interfaces.Repositories;
 using SMSSender.Services.Common;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SMSSender.Services
 {
@@ -32,6 +28,18 @@ namespace SMSSender.Services
             Params[1] = new SqlParameter("@ToDate", ToDate);
             var dt = await _sQLHelper.ExecuteDataTableAsync("[sms].[SP_GetWalletAccountSummary]", Params);
             return ApiResponseModel<DataTable>.Success(GenericErrors.GetSuccess, dt);
+        }
+
+        public async Task<ApiResponseModel<string>> UpdateInstaWalletAmount(int WalletDetailId, double Amount)
+        {
+            var Entity = await _unitOfWork.Repository<WalletDetail>().GetByIdAsync(WalletDetailId);
+            if (Entity == null)
+                return ApiResponseModel<string>.Failure(GenericErrors.TransFailed);
+
+            Entity.Amount = Amount;
+
+            await _unitOfWork.CompleteAsync();
+            return ApiResponseModel<string>.Success(GenericErrors.UpdateSuccess);
         }
     }
 }
