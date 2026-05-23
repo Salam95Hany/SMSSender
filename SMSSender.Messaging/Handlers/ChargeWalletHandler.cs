@@ -2,6 +2,7 @@
 using SMSSender.Entities.Models.Messaging;
 using SMSSender.Interfaces;
 using SMSSender.Interfaces.Repositories;
+using SMSSender.Messaging.Models;
 using SMSSender.Messaging.Services;
 using System;
 using System.Collections.Generic;
@@ -27,7 +28,7 @@ namespace SMSSender.Messaging.Handlers
             try
             {
                 string NotBody = $"تم شحن رصيد · المحفظة: {message.ProviderPhone}";
-                var Entity = await _unitOfWork.Repository<WalletDetail>().GetByIdAsync(w => w.PhoneNumber == message.ProviderPhone);
+                var Entity = await _unitOfWork.Repository<WalletDetail>().GetByIdAsync(w => w.PhoneNumber == message.ProviderPhone && w.Type == message.Provider);
                 if (Entity != null)
                 {
                     Entity.LastRechargeDate = message.OperationMsgDateTime.Value;

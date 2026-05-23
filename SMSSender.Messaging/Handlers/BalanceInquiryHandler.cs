@@ -26,7 +26,7 @@ namespace SMSSender.Messaging.Handlers
             {
                 string NotBody = $"رصيدك الحالي {message.BalanceAfter:N2} جنيه · المحفظة: {message.ProviderPhone}";
                 _unitOfWork.Repository<MessageTransaction>().Add(message);
-                await UpdateDepositLimitsAsync(message.BalanceAfter, message.ProviderPhone);
+                await UpdateDepositLimitsAsync(message.BalanceAfter, message.ProviderPhone, message.Provider);
                 _notificationService.CreateNotification("استعلام رصيد", NotBody, message.Provider, NotificationTypes.BalanceInquiry, NotificationReferenceTypes.MessageTransaction, message.TransactionId);
                 await _unitOfWork.CompleteAsync();
             }
@@ -39,13 +39,13 @@ namespace SMSSender.Messaging.Handlers
         public async Task Update(MessageTransaction message)
         {
             _unitOfWork.Repository<MessageTransaction>().Update(message);
-            await UpdateDepositLimitsAsync(message.BalanceAfter, message.ProviderPhone);
+            await UpdateDepositLimitsAsync(message.BalanceAfter, message.ProviderPhone, message.Provider);
             await _unitOfWork.CompleteAsync();
         }
 
-        public async Task UpdateDepositLimitsAsync(double? balanceAfter, string phoneNumber)
+        public async Task UpdateDepositLimitsAsync(double? balanceAfter, string phoneNumber, string provider)
         {
-            var Entity = await _unitOfWork.Repository<WalletDetail>().GetByIdAsync(w => w.PhoneNumber == phoneNumber);
+            var Entity = await _unitOfWork.Repository<WalletDetail>().GetByIdAsync(w => w.PhoneNumber == phoneNumber && w.Type == provider);
             if (Entity != null)
             {
                 Entity.Amount = balanceAfter.Value;
