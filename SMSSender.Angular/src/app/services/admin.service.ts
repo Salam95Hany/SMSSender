@@ -103,4 +103,16 @@ export class AdminService {
   GetWalletProfitReport(PagingFilter: PagingFilterModel) {
     return this.http.post<ApiResponseModel<any>>(this.Url + 'Report/GetWalletProfitReport', PagingFilter);
   }
+
+  GetProfitPeriodClosings() {
+    return this.http.get<ApiResponseModel<any[]>>(this.Url + 'Report/GetProfitPeriodClosings');
+  }
+
+  ProfitPeriodClosings(Model: any) {
+    return this.http.post<ApiResponseModel<any>>(this.Url + 'Report/ProfitPeriodClosings', Model);
+  }
+
+  GetProfitClosingByDate(FromDate:any, ToDate:any) {
+    return this.http.get<ApiResponseModel<any>>(this.Url + 'Report/GetProfitClosingByDate?FromDate=' + FromDate + '&ToDate=' + ToDate);
+  }
 }

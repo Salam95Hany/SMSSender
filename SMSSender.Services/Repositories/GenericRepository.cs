@@ -1,15 +1,9 @@
-﻿using iText.Commons.Actions.Contexts;
-using Microsoft.EntityFrameworkCore;
-using Org.BouncyCastle.Asn1;
+﻿using Microsoft.EntityFrameworkCore;
 using SMSSender.Entities.Models;
 using SMSSender.Entities.Specifications;
 using SMSSender.Interfaces.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace SMSSender.Services.Repositories
 {
@@ -156,6 +150,11 @@ namespace SMSSender.Services.Repositories
         public async Task<T?> GetLastAsync<TKey>(Expression<Func<T, TKey>> orderBy)
         {
             return await _dbContext.Set<T>().OrderByDescending(orderBy).FirstOrDefaultAsync();
+        }
+
+        public async Task<double> SumAsync(Expression<Func<T, bool>> predicate, Expression<Func<T, double>> selector)
+        {
+            return await _dbContext.Set<T>().Where(predicate).SumAsync(selector);
         }
     }
 }

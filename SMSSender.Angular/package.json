@@ -21,6 +21,7 @@
         "@microsoft/signalr": "^10.0.0",
         "@ng-bootstrap/ng-bootstrap": "^14.2.0",
         "bootstrap": "^5.3.8",
+        "flatpickr": "^4.6.13",
         "jwt-decode": "^4.0.0",
         "ngx-bootstrap": "^20.0.2",
         "ngx-daterangepicker-material": "^6.0.4",

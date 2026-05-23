@@ -44,6 +44,10 @@
                 <i class="fas fa-filter"></i>
                 <span>{{ isFilter ? 'عرض الفلاتر' : 'إخفاء الفلاتر' }}</span>
             </button>
+            <button type="button" class="btn btn-outline-secondary" (click)="OpenDatePickerModal(DatePickerModal)">
+                 <i class="fas fa-lock"></i>
+                 <span>قفل المدة</span>
+            </button>
         </div>
         <div class="page-section-grid mb-2" [ngbCollapse]="isFilter">
             <app-admin-filter [FilterList]="FilterList" (FilterChecked)="FilterChecked($event)"></app-admin-filter>
@@ -84,6 +88,56 @@
         </ng-template>
     </div>
 </section>
+
+
+
+<ng-template #DatePickerModal let-modal>
+    <div class="modal-header admin-modal-header admin-modal-header--danger text-white">
+        <div class="modal-title-wrap d-flex align-items-center gap-3">
+            <span class="modal-title-icon modal-title-icon--danger"><i class="fas fa-lock"></i></span>
+            <div>
+                <div class="modal-kicker">قفل المدة</div>
+                <div class="modal-title-text">تأكيد عملية القفل</div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body admin-modal-body">
+        <ul>
+            <li>الفترة التي باللون الاحمر تم قفلها من قبل</li>
+        </ul>
+        <div class="mb-3">
+            <app-date-range-picker [closedPeriods]="ClosedPeriods" (rangeSelected)="onRangeSelected($event)">
+            </app-date-range-picker>
+        </div>
+        <ul *ngIf="selectedRange">
+            <li class="mb-2">الفترة من: {{ selectedRange?.from | date:'dd-MM-yyyy' }}</li>
+            <li>الفترة إلى: {{ selectedRange?.to | date:'dd-MM-yyyy' }}</li>
+        </ul>
+
+        <div class="admin-table-wrapper" *ngIf="ProfitObj">
+            <div class="table-responsive table-responsive-card-min">
+                <table class="table align-middle table-hover">
+                    <thead>
+                        <tr>
+                            <th>إجمالي الربح</th>
+                            <th>صافي الربح</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td data-label="إجمالي الربح">{{ ProfitObj.totalProfit ?? 0 | number:'1.2-2'}}</td>
+                            <td data-label="صافي الربح">{{ ProfitObj.netProfit ?? 0 | number:'1.2-2'}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer admin-modal-footer justify-content-start gap-2">
+        <button type="button" class="btn btn-outline-secondary rounded-25 d-flex align-items-center gap-2" (click)="ProfitPeriodClosings()"><i class="fas fa-check"></i><span>حفظ</span></button>
+        <button type="button" class="btn btn-outline-secondary rounded-25 d-flex align-items-center gap-2" (click)="modal.close('cancel')"><i class="fas fa-times"></i><span>الغاء</span></button>
+    </div>
+</ng-template>
 
 
 <ngx-loading [show]="ShowLoader"></ngx-loading>

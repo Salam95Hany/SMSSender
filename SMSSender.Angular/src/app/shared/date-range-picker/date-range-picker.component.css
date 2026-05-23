@@ -1,0 +1,25 @@
+/* .flatpickr-day.flatpickr-disabled.closed-date {
+    background-color: #ffebee !important;
+    color: #d32f2f !important;
+    opacity: 1 !important;
+    border-radius: 50%;
+    cursor: not-allowed;
+}
+
+.closed-date {
+    background-color: #ffebee !important;
+    color: #d32f2f !important;
+    border-radius: 50%;
+} */
+
+::ng-deep .flatpickr-day.flatpickr-disabled,
+.flatpickr-day.flatpickr-disabled:hover {
+    background-color: #ffebee !important;
+    color: #ff0000 !important;
+    opacity: 0.5 !important;
+    cursor: not-allowed;
+}
+
+.date-input {
+    cursor: pointer;
+}

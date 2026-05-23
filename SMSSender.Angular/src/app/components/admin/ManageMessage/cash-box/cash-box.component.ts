@@ -28,7 +28,7 @@ export class CashBoxComponent implements OnInit {
   FilterList: FilterModel[] = [];
   ItemForm: FormGroup;
   UserModel: any;
-  PagingFilter: PagingFilterModel = { pagesize: 10, currentpage: 1, filterList: [] };
+  PagingFilter: PagingFilterModel = { pagesize: 20, currentpage: 1, filterList: [] };
   TotalCount = 0;
   CashBoxId: any;
   isFilter = true;
@@ -142,8 +142,8 @@ export class CashBoxComponent implements OnInit {
       case 1: return 'badge-success';
       case 2: return 'badge-brown';
       case 3: return 'badge-gold';
-      case 4: return 'badge-purple';
-      case 5: return 'badge-secondary';
+      case 4: return 'badge-secondary';
+      case 5: return 'badge-purple';
       default: return 'badge-light';
     }
   }

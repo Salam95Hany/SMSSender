@@ -464,6 +464,10 @@ button:disabled {
     max-width: min(880px, calc(100vw - 1.5rem));
 }
 
+.messages-modal-sm .modal-dialog {
+    max-width: min(340px, calc(100vw - 1.5rem));
+}
+
 .pagination {
     gap: 0.35rem;
 }

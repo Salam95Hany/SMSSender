@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SMSSender.Entities.Common;
+using SMSSender.Entities.Contracts.DTOs;
+using SMSSender.Entities.Models.Messaging;
 using SMSSender.Interfaces;
 using System.Data;
 
@@ -45,5 +47,25 @@ namespace SMSSender.Controllers
             return result;
         }
 
+        [HttpGet("GetProfitPeriodClosings")]
+        public async Task<ApiResponseModel<List<ProfitClosingsDto>>> GetProfitPeriodClosings()
+        {
+            var result = await _reportService.GetProfitPeriodClosings();
+            return result;
+        }
+
+        [HttpPost("ProfitPeriodClosings")]
+        public async Task<ApiResponseModel<string>> ProfitPeriodClosings(ProfitClosing Model)
+        {
+            var result = await _reportService.ProfitPeriodClosings(Model);
+            return result;
+        }
+
+        [HttpGet("GetProfitClosingByDate")]
+        public async Task<ApiResponseModel<ProfitClosingByDateDto>> GetProfitClosingByDate(DateTime FromDate, DateTime ToDate)
+        {
+            var result = await _reportService.GetProfitClosingByDate(FromDate, ToDate);
+            return result;
+        }
     }
 }

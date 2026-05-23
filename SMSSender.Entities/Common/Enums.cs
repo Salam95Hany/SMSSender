@@ -27,7 +27,8 @@ namespace SMSSender.Entities.Common
     {
         Deposit = 1,
         Withdraw = 2,
-        CashWithdrawal = 3
+        CashWithdrawal = 3,
+        ProfitClosingTransfer = 4
     }
 
     public enum NotificationTypes
