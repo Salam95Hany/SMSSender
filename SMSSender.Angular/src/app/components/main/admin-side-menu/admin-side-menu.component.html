@@ -29,27 +29,27 @@
                     <i class="fas fa-envelope-open-text"></i>
                     <span *ngIf="!isCollapsed">الرسائل</span>
                 </a>
-                <a class="nav-item" routerLink="/admin/deposit" routerLinkActive="active">
+                <a class="nav-item" routerLink="/admin/deposit" routerLinkActive="active" appRole [roles]="['Admin', 'Manager']">
                     <i class="fas fa-cash-register"></i>
                     <span *ngIf="!isCollapsed">الإيداع</span>
                 </a>
-                <a class="nav-item" routerLink="/admin/withdraw" routerLinkActive="active">
+                <a class="nav-item" routerLink="/admin/withdraw" routerLinkActive="active" appRole [roles]="['Admin', 'Manager']">
                     <i class="fas fa-money-bill-wave"></i>
                     <span *ngIf="!isCollapsed">السحب</span>
                 </a>
-                <a class="nav-item" routerLink="/admin/cash-withdrawal" routerLinkActive="active">
+                <a class="nav-item" routerLink="/admin/cash-withdrawal" routerLinkActive="active" appRole [roles]="['Admin', 'Manager']">
                     <i class="fas fa-exchange-alt"></i>
                     <span *ngIf="!isCollapsed">السيولة</span>
                 </a>
-                <a class="nav-item" routerLink="/admin/balance-inquiry" routerLinkActive="active">
+                <a class="nav-item" routerLink="/admin/balance-inquiry" routerLinkActive="active" appRole [roles]="['Admin', 'Manager']">
                     <i class="fas fa-coins"></i>
                     <span *ngIf="!isCollapsed">الرصيد</span>
                 </a>
-                <a class="nav-item" routerLink="/admin/wallet-account" routerLinkActive="active">
+                <a class="nav-item" routerLink="/admin/wallet-account" routerLinkActive="active" appRole [roles]="['Admin', 'Manager','Cashier']">
                     <i class="fas fa-wallet"></i>
                     <span *ngIf="!isCollapsed">رصيد المحافظ</span>
                 </a>
-                <a class="nav-item" routerLink="/admin/cash-box" routerLinkActive="active">
+                <a class="nav-item" routerLink="/admin/cash-box" routerLinkActive="active" appRole [roles]="['Admin', 'Manager']">
                     <i class="fas fa-cash-register"></i>
                     <span *ngIf="!isCollapsed">الصندوق</span>
                 </a>
@@ -57,7 +57,7 @@
         </div>
 
         <!-- التقارير -->
-        <div class="nav-group">
+        <div class="nav-group" appRole [roles]="['Admin', 'Manager']">
             <div class="nav-group__label" *ngIf="!isCollapsed">التقارير</div>
             <div class="nav-group__items">
                 <a class="nav-item" routerLink="/admin/all-message-report" routerLinkActive="active">
@@ -84,7 +84,7 @@
         </div>
 
         <!-- الإعدادات -->
-        <div class="nav-group">
+        <div class="nav-group" appRole [roles]="['Admin', 'Manager']">
             <div class="nav-group__label" *ngIf="!isCollapsed">الإعدادات</div>
             <div class="nav-group__items">
                 <a class="nav-item" routerLink="/admin/user" routerLinkActive="active">

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace SMSSender.Entities.Contracts.DTOs
 {
@@ -14,6 +15,7 @@ namespace SMSSender.Entities.Contracts.DTOs
         public string ProviderName { get; set; }
         public string ProviderPhone { get; set; }
         public string OperationTypeName { get; set; }
+        public int TransactionStatus { get; set; }
         public int OperationType { get; set; }
         public double? Amount { get; set; }
         public string FromPhone { get; set; }

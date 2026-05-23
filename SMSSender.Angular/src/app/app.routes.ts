@@ -103,7 +103,7 @@ export const routes: Routes = [
           section: 'إدارة الرسائل',
           title: 'رصيد المحافظ',
           description: 'لوحة بطاقات مرنة لعرض المحافظ والأرصدة الحالية بتوزيع متجاوب وواضح.',
-          roles: ['Admin', 'Manager']
+          roles: ['Admin', 'Manager','Cashier']
         },
       },
       {

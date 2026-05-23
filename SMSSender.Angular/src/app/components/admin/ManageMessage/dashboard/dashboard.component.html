@@ -30,6 +30,7 @@
                             <th>اسم المرسل</th>
                             <th>رصيد المحفظة</th>
                             <th>العمولة</th>
+                            <th>الحالة</th>
                             <th>تاريخ الوصول</th>
                         </tr>
                     </thead>
@@ -48,6 +49,10 @@
                             <td data-label="اسم المرسل">{{ item.senderName ?? '-' }}</td>
                             <td data-label="رصيد المحفظة">{{ item.balanceAfter ?? 0 | number:'1.0-0'}}</td>
                             <td data-label="العمولة">{{ item.commission ?? 0 | number:'1.0-0'}}</td>
+                            <td data-label="الحالة">
+                                <span class="status-chip" [ngClass]="item.transactionStatus == 1 ? 'badge-complete' : 'badge-delayed'" *ngIf="item.operationType == 1 || item.operationType == 2 || item.operationType == 3">{{ item.transactionStatus == 1 ? 'مكتمل' : 'مؤجل' }}</span>
+                                <span *ngIf="item.operationType != 1 && item.operationType != 2 && item.operationType != 3">-</span>
+                            </td>
                             <td data-label="تاريخ الوصول">{{ item.operationServerDateTime ?? '-' | arabicDateWithTime}}</td>
                         </tr>
                     </tbody>

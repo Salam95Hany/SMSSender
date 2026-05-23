@@ -1,11 +1,12 @@
 import { NgClass, NgFor, NgIf } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { RoleCheckerDirective } from '../../../directives/role-checker.directive';
 
 @Component({
   selector: 'app-admin-side-menu',
   standalone: true,
-  imports: [NgClass, NgIf, RouterLink, RouterLinkActive],
+  imports: [NgClass, NgIf, RouterLink, RouterLinkActive,RoleCheckerDirective],
   templateUrl: './admin-side-menu.component.html',
   styleUrl: './admin-side-menu.component.css'
 })

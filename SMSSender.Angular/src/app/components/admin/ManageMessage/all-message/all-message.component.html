@@ -67,7 +67,7 @@
                             <td data-label="تاريخ الوصول">{{ item.operationServerDateTime ?? '-' | arabicDateWithTime}}</td>
                             <td data-label="الإجراءات" class="table-actions-cell">
                                 <div class="table-actions-row">
-                                    <button class="btn btn-outline-secondary" (click)="openSidePanel(DetailsSidePanel,item)"><i class="far fa-eye"></i><span>تفاصيل</span></button>
+                                    <button class="btn btn-outline-secondary" (click)="openSidePanel(DetailsSidePanel,item)" appRole [roles]="['Admin', 'Manager']"><i class="far fa-eye"></i><span>تفاصيل</span></button>
                                     <button class="btn btn-outline-secondary" (click)="OpenMessageBoxModal(MessageBoxModal,item)" [disabled]="item.transactionStatus == 1 || (item.transactionStatus == 2 && (item.operationType != 1 && item.operationType != 2 && item.operationType != 3))">✓ &nbsp;{{item.operationType == 1 || item.operationType == 3 ? 'تم الاستلام' : 'تم التسليم'}}</button>
                                     <!-- <button class="btn btn-danger"><i class="fas fa-times"></i><span>إلغاء</span></button> -->
                                 </div>

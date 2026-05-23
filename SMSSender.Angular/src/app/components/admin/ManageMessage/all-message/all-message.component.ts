@@ -16,12 +16,13 @@ import { NgxLoadingModule } from 'ngx-loading';
 import { FormService } from '../../../../services/form.service';
 import { MessageBoxPopupComponent } from '../../../../shared/message-box-popup/message-box-popup.component';
 import { NotificationSignalrService } from '../../../../services/notification-signalr.service';
+import { RoleCheckerDirective } from '../../../../directives/role-checker.directive';
 
 @Component({
   selector: 'app-all-message',
   standalone: true,
   imports: [AdminPaginationComponent, NgFor, NgIf, NgClass, AdminFilterComponent, NgbModule, AdminBreadcrumbComponent, AdminEmptyStateComponent, ArabicDateWithTimePipe,
-    CommonModule, FormsModule, NgxLoadingModule, MessageBoxPopupComponent
+    CommonModule, FormsModule, NgxLoadingModule, MessageBoxPopupComponent,RoleCheckerDirective
   ],
   templateUrl: './all-message.component.html',
   styleUrl: './all-message.component.css'
