@@ -53,7 +53,7 @@ namespace SMSSender.Messaging.Handlers
                 if (provider == ProviderType.VodafoneCash.ToString())
                     Entity.Amount = balanceAfter.HasValue ? balanceAfter.Value : 0;
                 else
-                    Entity.Amount += amount.Value;
+                    Entity.Amount -= amount.Value;
                 Entity.UsedDailyDeposit += amount.Value;
                 Entity.UsedMonthlyDeposit += amount.Value;
 
