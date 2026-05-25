@@ -5,8 +5,7 @@ namespace SMSSender.Messaging.Parsers
 {
     public class InstaPayParser : RegexMessageParserBase
     {
-        public InstaPayParser(IRegexEngine regexEngine, IMessageProviderRegistry providerRegistry)
-            : base(regexEngine, providerRegistry)
+        public InstaPayParser(IRegexEngine regexEngine, IMessageProviderRegistry providerRegistry): base(regexEngine, providerRegistry)
         {
         }
 
