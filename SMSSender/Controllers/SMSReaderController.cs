@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SMSSender.Entities.Models.Global;
 using SMSSender.Interfaces.Common;
 using SMSSender.Messaging;
 using SMSSender.Messaging.Models;
@@ -12,11 +13,13 @@ namespace SMSSender.Controllers
     {
         private readonly IAppSettings _appSettings;
         private readonly IBackgroundTaskQueue _taskQueue;
+        private readonly ICurrentCustomerService _currentCustomerService;
 
-        public SMSReaderController(IBackgroundTaskQueue taskQueue, IAppSettings appSettings)
+        public SMSReaderController(IBackgroundTaskQueue taskQueue, IAppSettings appSettings, ICurrentCustomerService currentCustomerService)
         {
             _appSettings = appSettings;
             _taskQueue = taskQueue;
+            _currentCustomerService = currentCustomerService;
         }
 
         [HttpGet("test-queue-parallel")]
@@ -65,6 +68,8 @@ namespace SMSSender.Controllers
 
                 var smsMessage = new SmsMessagePure
                 {
+                    CustomerId = Guid.Parse("4E4F1CDF-192C-4DB9-B16D-CB633A874FF4"),//_currentCustomerService.CustomerId,
+                    BranchId = 1,//_currentCustomerService.BranchId,
                     DeviceName = deviceName,
                     PhoneNumber = phoneNumber,
                     Message = model.Text,

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SMSSender.Entities.Models.Global;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -8,9 +9,11 @@ using System.Threading.Tasks;
 namespace SMSSender.Entities.Models.Messaging
 {
     [Table(name: "WalletDetails", Schema = "sms")]
-    public class WalletDetail
+    public class WalletDetail: ICustomerEntity
     {
         public int WalletDetailId { get; set; }
+        public Guid CustomerId { get; set; }
+        public int BranchId { get; set; }
         public string PhoneNumber { get; set; }
         public string Name { get; set; }
         public string Type { get; set; }

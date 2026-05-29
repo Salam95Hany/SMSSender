@@ -24,18 +24,7 @@ export class WalletProfitReportComponent {
   ClosedPeriods: any[] = [];
   SummaryData: any;
   ProfitObj: any;
-  FilterList: FilterModel[] = [
-    {
-      categoryDisplayName: 'باسم ,رقم المحفظة',
-      categoryName: 'SearchText',
-      filterType: 'SearchText',
-    },
-    {
-      categoryDisplayName: 'تاريخ',
-      categoryName: 'DateRange',
-      filterType: 'DateRange',
-    }
-  ];
+  FilterList: FilterModel[] = [];
   selectedRange: { from: Date, to: Date } | null = null;
   Title = '';
   Description = '';
@@ -95,6 +84,7 @@ export class WalletProfitReportComponent {
       this.MessageList = data.results;
       this.TotalCount = data.totalCount;
       this.GetWalletProfitReportSummary();
+      this.CreateBranchFilter();
     });
   }
 
@@ -146,5 +136,45 @@ export class WalletProfitReportComponent {
     const day = String(date.getDate()).padStart(2, '0');
 
     return `${year}-${month}-${day}`;
+  }
+
+  CreateBranchFilter() {
+    let distinctBranches = [...new Set(this.MessageList.map(item => item.branchId))];
+    if (distinctBranches.length == 0) {
+      this.FilterList = [];
+      return;
+    }
+    const branchFilter: FilterModel = {
+      categoryDisplayName: 'الفرع',
+      categoryName: 'Branch',
+      filterType: 'Checkbox',
+      filterItems: distinctBranches.map(branchId => {
+
+        let branchName = this.MessageList.find(item => item.branchId === branchId)?.branchName;
+
+        return {
+          itemId: branchId,
+          itemKey: branchName,
+          itemValue: this.MessageList
+            .filter(item => item.branchId === branchId)
+            .length
+            .toString(),
+        };
+      })
+    };
+
+    this.FilterList = [
+      {
+        categoryDisplayName: 'باسم ,رقم المحفظة',
+        categoryName: 'SearchText',
+        filterType: 'SearchText',
+      },
+      {
+        categoryDisplayName: 'تاريخ',
+        categoryName: 'DateRange',
+        filterType: 'DateRange',
+      },
+      branchFilter
+    ];
   }
 }

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SMSSender.Entities.Auth;
 using SMSSender.Entities.Common;
 using SMSSender.Entities.Contracts.DTOs;
+using SMSSender.Entities.Models.Global;
 using SMSSender.Interfaces.Auth;
 using SMSSender.Interfaces.Repositories;
 using SMSSender.Services.Common;
@@ -14,21 +15,23 @@ using System.Threading.Tasks;
 
 namespace SMSSender.Services.Auth
 {
-    public class AuthService: IAuthService
+    public class AuthService : IAuthService
     {
         private readonly UserManager<AdminUser> _userManager;
         private readonly SignInManager<AdminUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly ICurrentCustomerService _currentCustomerService;
         private readonly IJwtProvider _jwtProvider;
         private readonly IUnitOfWork _unitOfWork;
 
-        public AuthService(UserManager<AdminUser> userManager, SignInManager<AdminUser> signInManager, RoleManager<IdentityRole> roleManager, IJwtProvider jwtProvider, IUnitOfWork unitOfWork)
+        public AuthService(UserManager<AdminUser> userManager, SignInManager<AdminUser> signInManager, RoleManager<IdentityRole> roleManager, IJwtProvider jwtProvider, IUnitOfWork unitOfWork, ICurrentCustomerService currentCustomerService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _jwtProvider = jwtProvider;
             _unitOfWork = unitOfWork;
+            _currentCustomerService = currentCustomerService;
         }
 
         public async Task<ApiResponseModel<List<UserWithRolesDto>>> GetAllUsers()
@@ -119,12 +122,11 @@ namespace SMSSender.Services.Auth
 
             if (result.Succeeded)
             {
-                var (token, expiresIn) = _jwtProvider.GenerateToken(user);
-
                 var roles = await _userManager.GetRolesAsync(user);
                 var roleNme = roles.FirstOrDefault();
+                var (token, expiresIn) = _jwtProvider.GenerateToken(user, roleNme);
                 user.IsActive = true;
-                user.LoginDate = DateTime.UtcNow;
+                user.LoginDate = DateTime.UtcNow.EgyptNow();
                 await _userManager.UpdateAsync(user);
 
                 string roleId = null;
@@ -142,9 +144,9 @@ namespace SMSSender.Services.Auth
                     RoleId = roleId,
                     UserId = user.Id,
                     Token = token,
-                    LoginDate = DateTime.UtcNow,
-                    LoginDateAr = DateTime.UtcNow.ToString("dddd d MMMM , yyyy"),
-                    LoginTimeAr = DateTime.UtcNow.ToString("hh:mm:ss tt"),
+                    LoginDate = DateTime.UtcNow.EgyptNow(),
+                    LoginDateAr = DateTime.UtcNow.EgyptNow().ToString("dddd d MMMM , yyyy"),
+                    LoginTimeAr = DateTime.UtcNow.EgyptNow().ToString("hh:mm:ss tt"),
                     ExpiresIn = expiresIn,
                 };
 
@@ -158,6 +160,8 @@ namespace SMSSender.Services.Auth
         {
             AdminUser appUser = new AdminUser
             {
+                CustomerId = Guid.Parse("4E4F1CDF-192C-4DB9-B16D-CB633A874FF4"),
+                BranchId = model.BranchId,
                 UserName = model.UserName,
                 Email = model.Email,
                 PhoneNumber = model.PhoneNumber,
@@ -200,6 +204,7 @@ namespace SMSSender.Services.Auth
                     return ApiResponseModel<string>.Failure(GenericErrors.UserNotFound);
                 }
 
+                user.BranchId = model.BranchId;
                 user.UserName = model.UserName;
                 user.NormalizedUserName = model.UserName.ToUpperInvariant();
                 user.Address = model.Address;

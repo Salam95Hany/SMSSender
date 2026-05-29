@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SMSSender.Entities.Models.Global;
 using SMSSender.Interfaces;
 using SMSSender.Interfaces.Hub;
 using SMSSender.Messaging.FileLog;
@@ -34,10 +35,15 @@ namespace SMSSender.Messaging.TaskQueue
                     var processingService = scope.ServiceProvider.GetRequiredService<IMessageProcessingService>();
                     var messageService = scope.ServiceProvider.GetRequiredService<IMessageService>();
                     var hubService = scope.ServiceProvider.GetRequiredService<IHubNotificationService>();
+                    var currentCustomer = scope.ServiceProvider.GetRequiredService<ICurrentCustomerService>();
 
                     var acceptedMsg = messageService.GetMessageFiltered(smsMessage.ProviderStr, smsMessage.Message);
                     if (!acceptedMsg)
                         continue;
+
+                    currentCustomer.CustomerId = smsMessage.CustomerId;
+                    currentCustomer.BranchId = smsMessage.BranchId;
+                    currentCustomer.IsAdmin = false;
 
                     var process = await processingService.Process(smsMessage);
                     if (process.Success && process.OperationType.HasValue)

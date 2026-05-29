@@ -1,4 +1,6 @@
 ﻿using SMSSender.Entities.Common;
+using SMSSender.Entities.Models.Config;
+using SMSSender.Entities.Models.Global;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -10,11 +12,15 @@ using System.Threading.Tasks;
 namespace SMSSender.Entities.Models.Messaging
 {
     [Table(name: "MessageTransactions", Schema = "sms")]
-    public class MessageTransaction
+    public class MessageTransaction: ICustomerEntity
     {
         [Key]
         public int MessageTransactionId { get; set; }
         public Guid TransactionId { get; set; }
+        public Guid CustomerId { get; set; }
+        public int BranchId { get; set; }
+        [ForeignKey(nameof(BranchId))]
+        public Branch Branch { get; set; }
         public string Provider { get; set; } // مزوّد الخدمة: Vodafone Cash / InstaPay
         public string ProviderName { get; set; } // اسم مزوّد الخدمة
         public string ProviderPhone { get; set; } // رقم مزوّد الخدمة

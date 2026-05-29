@@ -8,6 +8,7 @@ using RazorLight;
 using SMSSender.CronJop;
 using SMSSender.Entities.Auth;
 using SMSSender.Entities.Models;
+using SMSSender.Entities.Models.Global;
 using SMSSender.Hubs;
 using SMSSender.Interfaces;
 using SMSSender.Interfaces.Auth;
@@ -57,6 +58,7 @@ namespace SMSSender.DI
                 config.UseSqlServerStorage(appSettings.ConnectionStrings.DBConnection);
             });
             services.AddHangfireServer();
+            services.AddHttpContextAccessor();
             services.AddAuthConfig(configuration);
 
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
@@ -70,7 +72,8 @@ namespace SMSSender.DI
             services.AddScoped<IHubNotificationService, HubNotificationService>();
             services.AddScoped<IWalletReminderService, WalletReminderService>();
             services.AddScoped<IReportService, ReportService>();
-            
+            services.AddScoped<ICurrentCustomerService, CurrentCustomerService>();
+
 
             #region ReportsDI
 

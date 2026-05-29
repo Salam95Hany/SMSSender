@@ -31,6 +31,7 @@
                     <thead>
                         <tr>
                             <th>نوع المحفظة</th>
+                            <th>الفرع</th>
                             <th>اسم المحفظة</th>
                             <th>رقم المحفظة</th>
                             <th>نوع العملية</th>
@@ -49,6 +50,7 @@
                             <td data-label="نوع المحفظة">
                                 <span class="status-chip" [ngClass]="{'badge-danger': item.providerAr == 'فودافون كاش','badge-primary':item.providerAr == 'انستا باي'}">{{item.providerAr }}</span>
                             </td>
+                            <td data-label="الفرع">{{ item.branchName ?? '-' }}</td>
                             <td data-label="اسم المحفظة">{{ item.providerName ?? '-' }}</td>
                             <td data-label="رقم المحفظة">{{ item.providerPhone ?? '-' }}</td>
                             <td data-label="نوع العملية">
@@ -126,6 +128,7 @@
                         <thead>
                             <tr>
                                 <th>نوع المحفظة</th>
+                                <th>الفرع</th>
                                 <th>اسم المحفظة</th>
                                 <th>رقم المحفظة</th>
                                 <th>نوع العملية</th>
@@ -142,6 +145,7 @@
                                 <td data-label="نوع المحفظة">
                                     <span class="status-chip" [ngClass]="{'badge-danger': MessageDetails.providerAr == 'فودافون كاش','badge-primary':MessageDetails.providerAr == 'انستا باي'}">{{MessageDetails.providerAr }}</span>
                                 </td>
+                                <td data-label="الفرع">{{ MessageDetails.branchName ?? '-' }}</td>
                                 <td data-label="اسم المحفظة">{{ MessageDetails.providerName ?? '-' }}</td>
                                 <td data-label="رقم المحفظة">{{ MessageDetails.providerPhone ?? '-' }}</td>
                                 <td data-label="نوع العملية">

@@ -1,4 +1,5 @@
 ﻿using SMSSender.Entities.Common;
+using SMSSender.Entities.Models.Global;
 using SMSSender.Entities.Models.Messaging;
 using SMSSender.Interfaces;
 using SMSSender.Interfaces.CronJop;
@@ -13,58 +14,64 @@ namespace SMSSender.CronJop
         private readonly IUnitOfWork _unitOfWork;
         private readonly INotificationService _notificationService;
         private readonly IHubNotificationService _hubNotificationService;
-        public WalletReminderService(IUnitOfWork unitOfWork, INotificationService notificationService, IHubNotificationService hubNotificationService)
+        private readonly ICurrentCustomerService _currentCustomerService;
+        public WalletReminderService(IUnitOfWork unitOfWork, INotificationService notificationService, IHubNotificationService hubNotificationService, ICurrentCustomerService currentCustomerService)
         {
             _unitOfWork = unitOfWork;
             _notificationService = notificationService;
             _hubNotificationService = hubNotificationService;
+            _currentCustomerService = currentCustomerService;
         }
         public async Task CheckRechargeReminders()
         {
-            var now = DateTime.UtcNow.EgyptNow();
-            bool hasNotifications = false;
-            var wallets = _unitOfWork.Repository<WalletDetail>().GetAllAsQueryable();
+            var now = DateTime.UtcNow.EgyptNow().Date;
 
-            foreach (var entity in wallets)
+            _currentCustomerService.IsSystemJob = true;
+
+            var wallets = _unitOfWork.Repository<WalletDetail>().GetAllAsQueryable().AsEnumerable().Select(w =>
+                {
+                    var nextRecharge = w.LastRechargeDate.AddMonths(3).Date;
+                    var daysLeft = (nextRecharge - now).Days;
+
+                    return new
+                    {
+                        Wallet = w,
+                        DaysLeft = daysLeft
+                    };
+                }).Where(x => x.DaysLeft is 30 or 15 or 10 or 5).ToList();
+
+            if (!wallets.Any())
+                return;
+
+            var CustomerIds = wallets.Select(w => w.Wallet.CustomerId).Distinct().ToList();
+            foreach (var item in wallets)
             {
-                var nextRecharge = entity.LastRechargeDate.AddMonths(3);
-                var daysLeft = (nextRecharge - now.Date).Days;
+                var message = item.DaysLeft switch
+                {
+                    30 => $"باقي 30 يوم على إعادة الشحن . المحفظة: {item.Wallet.PhoneNumber}",
+                    15 => $"باقي 15 يوم على إعادة الشحن . المحفظة: {item.Wallet.PhoneNumber}",
+                    10 => $"باقي 10 يوم على إعادة الشحن . المحفظة: {item.Wallet.PhoneNumber}",
+                    5 => $"باقي 5 يوم على إعادة الشحن . المحفظة: {item.Wallet.PhoneNumber}",
+                    _ => null
+                };
 
-                if (daysLeft == 30)
+                if (message != null)
                 {
-                    SendReminder($"باقي 30 يوم على إعادة الشحن . المحفظة: {entity.PhoneNumber}");
-                    hasNotifications = true;
-                }  
-
-                if (daysLeft == 15)
-                {
-                    SendReminder($"باقي 15 يوم على إعادة الشحن . المحفظة: {entity.PhoneNumber}");
-                    hasNotifications = true;
+                    SendReminder(message, item.Wallet.CustomerId, item.Wallet.BranchId);
                 }
-                    
-                if (daysLeft == 10)
-                {
-                    SendReminder($"باقي 10 يوم على إعادة الشحن . المحفظة: {entity.PhoneNumber}");
-                    hasNotifications = true;
-                }
-                    
-                if (daysLeft == 5)
-                {
-                    SendReminder($"باقي 5 يوم على إعادة الشحن . المحفظة: {entity.PhoneNumber}");
-                    hasNotifications = true;
-                }
-                    
             }
 
             await _unitOfWork.CompleteAsync();
 
-            if (hasNotifications)
-                await _hubNotificationService.SendMessageAddedAsync(7);
+            foreach (var custId in CustomerIds)
+                await _hubNotificationService.SendMessageAddedAsync(7, custId);
+
         }
 
         public async Task ResetWalletDate()
         {
             var now = DateTime.UtcNow.EgyptNow().Date;
+            _currentCustomerService.IsSystemJob = true;
             var wallets = _unitOfWork.Repository<WalletDetail>().GetAllAsQueryable();
 
             foreach (var entity in wallets)
@@ -88,9 +95,9 @@ namespace SMSSender.CronJop
             await _unitOfWork.CompleteAsync();
         }
 
-        private void SendReminder(string message)
+        private void SendReminder(string message, Guid CustomerId, int BranchId)
         {
-            _notificationService.CreateNotification("تنبيه إعادة شحن", message, null, NotificationTypes.System, NotificationReferenceTypes.WalletDetail);
+            _notificationService.CreateSystemNotification("تنبيه إعادة شحن", message, CustomerId, BranchId);
         }
     }
 }

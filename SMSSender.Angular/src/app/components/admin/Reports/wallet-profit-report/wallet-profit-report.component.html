@@ -59,6 +59,7 @@
                     <thead>
                         <tr>
                             <th>نوع المحفظة</th>
+                            <th>الفرع</th>
                             <th>اسم المحفظة</th>
                             <th>رقم المحفظة</th>
                             <th>مجموع العمليات</th>
@@ -73,6 +74,7 @@
                             <td data-label="نوع المحفظة">
                                 <span class="status-chip" [ngClass]="{'badge-danger': item.provider == 'فودافون كاش','badge-primary':item.provider == 'انستا باي'}">{{item.provider }}</span>
                             </td>
+                            <td data-label="الفرع">{{ item.branchName ?? '-' }}</td>
                             <td data-label="اسم المحفظة">{{ item.walletName ?? '-' }}</td>
                             <td data-label="رقم المحفظة">{{ item.walletNumber ?? '-' }}</td>
                             <td data-label="مجموع العمليات">{{ item.totalTransactions ?? 0 }}</td>

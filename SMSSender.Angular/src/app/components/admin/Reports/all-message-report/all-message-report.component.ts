@@ -18,18 +18,7 @@ import { CommonModule, NgFor, NgIf } from '@angular/common';
 export class AllMessageReportComponent implements OnInit {
   MessageList: any[] = [];
   SummaryData: any;
-  FilterList: FilterModel[] = [
-    {
-      categoryDisplayName: 'باسم ,رقم المحفظة',
-      categoryName: 'SearchText',
-      filterType: 'SearchText',
-    },
-    {
-      categoryDisplayName: 'تاريخ',
-      categoryName: 'DateRange',
-      filterType: 'DateRange',
-    }
-  ];
+  FilterList: FilterModel[] = [];
   Title = '';
   Description = '';
   PagingFilter: PagingFilterModel = { pagesize: 20, currentpage: 1, operationType: 0, filterList: [] };
@@ -63,11 +52,53 @@ export class AllMessageReportComponent implements OnInit {
       this.MessageList = data.results;
       this.TotalCount = data.totalCount;
       this.GetWalletsReportSummaryByOperationType();
+      this.CreateBranchFilter();
     });
   }
 
   FilterChecked(filterList: FilterModel[]) {
     this.PagingFilter.filterList = filterList;
     this.GetWalletsReportByOperationType();
+  }
+
+  CreateBranchFilter() {
+    debugger;
+    let distinctBranches = [...new Set(this.MessageList.map(item => item.branchId))];
+    if (distinctBranches.length == 0) {
+      this.FilterList = [];
+      return;
+    }
+    const branchFilter: FilterModel = {
+      categoryDisplayName: 'الفرع',
+      categoryName: 'Branch',
+      filterType: 'Checkbox',
+      filterItems: distinctBranches.map(branchId => {
+
+        let branchName = this.MessageList.find(item => item.branchId === branchId)?.branchName;
+
+        return {
+          itemId: branchId,
+          itemKey: branchName,
+          itemValue: this.MessageList
+            .filter(item => item.branchId === branchId)
+            .length
+            .toString(),
+        };
+      })
+    };
+
+    this.FilterList = [
+      {
+        categoryDisplayName: 'باسم ,رقم المحفظة',
+        categoryName: 'SearchText',
+        filterType: 'SearchText',
+      },
+      {
+        categoryDisplayName: 'تاريخ',
+        categoryName: 'DateRange',
+        filterType: 'DateRange',
+      },
+      branchFilter
+    ];
   }
 }

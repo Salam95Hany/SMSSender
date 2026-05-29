@@ -29,6 +29,7 @@
                     <thead>
                         <tr>
                             <th>رقم العملية</th>
+                            <th>الفرع</th>
                             <th>نوع العملية</th>
                             <th>السبب</th>
                             <th>المبلغ</th>
@@ -41,6 +42,7 @@
                     <tbody>
                         <tr *ngFor="let item of CashList">
                             <td data-label="رقم العملية">{{ item.cashBoxNumber }}</td>
+                            <td data-label="الفرع">{{ item.branchName }}</td>
                             <td data-label="نوع العملية">
                                 <span class="status-chip" [ngClass]="getOperationClass(item.transactionType)">{{ item.transactionTypeName }}</span>
                             </td>

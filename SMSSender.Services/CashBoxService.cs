@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using SMSSender.Entities.Common;
+using SMSSender.Entities.Models.Global;
 using SMSSender.Entities.Models.Messaging;
 using SMSSender.Interfaces;
 using SMSSender.Interfaces.Common;
@@ -15,11 +16,13 @@ namespace SMSSender.Services
         private readonly ISQLHelper _sQLHelper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IHubNotificationService _hubNotificationService;
-        public CashBoxService(ISQLHelper sQLHelper, IUnitOfWork unitOfWork, IHubNotificationService hubNotificationService)
+        private readonly ICurrentCustomerService _currentCustomerService;
+        public CashBoxService(ISQLHelper sQLHelper, IUnitOfWork unitOfWork, IHubNotificationService hubNotificationService, ICurrentCustomerService currentCustomerService)
         {
             _sQLHelper = sQLHelper;
             _unitOfWork = unitOfWork;
             _hubNotificationService = hubNotificationService;
+            _currentCustomerService = currentCustomerService;
         }
 
         public async Task<ApiResponseModel<DataTable>> GetCashBoxData(PagingFilterModel PagingFilter)
@@ -27,13 +30,15 @@ namespace SMSSender.Services
             var FromDate = PagingFilter.FilterList.FirstOrDefault(i => i.CategoryName == "DateRange")?.From;
             var ToDate = PagingFilter.FilterList.FirstOrDefault(i => i.CategoryName == "DateRange")?.To;
             var FilterDt = PagingFilter.FilterList.ToDataTableFromFilterModel();
-            var Params = new SqlParameter[6];
+            var Params = new SqlParameter[8];
             Params[0] = new SqlParameter("@FilterList", FilterDt);
             Params[1] = new SqlParameter("@CurrentPage", PagingFilter.Currentpage);
             Params[2] = new SqlParameter("@PageSize", PagingFilter.Pagesize);
             Params[3] = new SqlParameter("@IsFilter", false);
             Params[4] = new SqlParameter("@FromDate", FromDate);
             Params[5] = new SqlParameter("@ToDate", ToDate);
+            Params[6] = new SqlParameter("@CustomerId", _currentCustomerService.CustomerId);
+            Params[7] = new SqlParameter("@BranchId", _currentCustomerService.BranchId);
             var dt = await _sQLHelper.ExecuteDataTableAsync("[sms].[SP_GetCashBoxData]", Params);
             return ApiResponseModel<DataTable>.Success(GenericErrors.GetSuccess, dt);
         }
@@ -43,13 +48,15 @@ namespace SMSSender.Services
             var FromDate = PagingFilter.FilterList.FirstOrDefault(i => i.CategoryName == "DateRange")?.From;
             var ToDate = PagingFilter.FilterList.FirstOrDefault(i => i.CategoryName == "DateRange")?.To;
             var FilterDt = PagingFilter.FilterList.ToDataTableFromFilterModel();
-            var Params = new SqlParameter[6];
+            var Params = new SqlParameter[8];
             Params[0] = new SqlParameter("@FilterList", FilterDt);
             Params[1] = new SqlParameter("@CurrentPage", PagingFilter.Currentpage);
             Params[2] = new SqlParameter("@PageSize", PagingFilter.Pagesize);
             Params[3] = new SqlParameter("@IsFilter", true);
             Params[4] = new SqlParameter("@FromDate", FromDate);
             Params[5] = new SqlParameter("@ToDate", ToDate);
+            Params[6] = new SqlParameter("@CustomerId", _currentCustomerService.CustomerId);
+            Params[7] = new SqlParameter("@BranchId", _currentCustomerService.BranchId);
             var dt = await _sQLHelper.ExecuteDataTableAsync("[sms].[SP_GetCashBoxData]", Params);
             var Filters = dt.ToGroupedFilters();
             return ApiResponseModel<List<FilterModel>>.Success(GenericErrors.GetSuccess, Filters);

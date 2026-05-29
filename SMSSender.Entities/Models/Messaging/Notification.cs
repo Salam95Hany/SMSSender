@@ -1,4 +1,5 @@
 ﻿using SMSSender.Entities.Common;
+using SMSSender.Entities.Models.Global;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,10 +10,12 @@ using System.Threading.Tasks;
 namespace SMSSender.Entities.Models.Messaging
 {
     [Table(name: "Notifications", Schema = "sms")]
-    public class Notification
+    public class Notification: ICustomerEntity
     {
         public int NotificationId { get; set; }
         public Guid TransactionId { get; set; }
+        public Guid CustomerId { get; set; }
+        public int BranchId { get; set; }
         public string Title { get; set; }
         public string Body { get; set; }
         public string? Provider { get; set; }

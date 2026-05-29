@@ -4,6 +4,7 @@ using SMSSender.DI;
 using SMSSender.Hubs;
 using SMSSender.Interfaces.CronJop;
 using SMSSender.Messaging;
+using SMSSender.Middleware;
 using SMSSender.Services.Common;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -41,6 +42,7 @@ if (app.Environment.IsDevelopment())
 app.UseCors(DependencyInjection.GetCorsPolicyName());
 app.UseHttpsRedirection();
 app.UseAuthentication();
+app.UseMiddleware<TenantMiddleware>();
 app.UseAuthorization();
 app.MapControllers();
 app.MapHub<NotificationHub>("/notificationHub");

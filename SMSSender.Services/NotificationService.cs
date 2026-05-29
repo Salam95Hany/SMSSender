@@ -1,5 +1,6 @@
 ﻿using ICU4N.Impl;
 using SMSSender.Entities.Common;
+using SMSSender.Entities.Models.Global;
 using SMSSender.Entities.Models.Messaging;
 using SMSSender.Interfaces;
 using SMSSender.Interfaces.Repositories;
@@ -10,9 +11,30 @@ namespace SMSSender.Services
     public class NotificationService : INotificationService
     {
         private readonly IUnitOfWork _unitOfWork;
-        public NotificationService(IUnitOfWork unitOfWork)
+        private readonly ICurrentCustomerService _currentCustomerService;
+        public NotificationService(IUnitOfWork unitOfWork, ICurrentCustomerService currentCustomerService)
         {
             _unitOfWork = unitOfWork;
+            _currentCustomerService = currentCustomerService;
+        }
+
+        public void CreateSystemNotification(string Title, string Body, Guid CustomerId,int BranchId)
+        {
+            var notification = new Notification
+            {
+                TransactionId = Guid.Empty,
+                CustomerId = CustomerId,
+                BranchId = BranchId,
+                Title = Title,
+                Body = Body,
+                Provider = null,
+                NotificationType = NotificationTypes.System,
+                ReferenceType = NotificationReferenceTypes.System,
+                IsRead = false,
+                CreatedAt = DateTime.UtcNow.EgyptNow()
+            };
+
+            _unitOfWork.Repository<Notification>().Add(notification);
         }
 
         public void CreateNotification(string Title, string Body, string? Provider = null, NotificationTypes NotificationType = NotificationTypes.System, NotificationReferenceTypes ReferenceType = NotificationReferenceTypes.System, Guid TransactionId = default(Guid))
@@ -20,6 +42,8 @@ namespace SMSSender.Services
             var notification = new Notification
             {
                 TransactionId = TransactionId,
+                CustomerId = _currentCustomerService.CustomerId,
+                BranchId = _currentCustomerService.BranchId,
                 Title = Title,
                 Body = Body,
                 Provider = Provider,

@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using SMSSender.Entities.Auth;
 using SMSSender.Interfaces.Auth;
 using SMSSender.Interfaces.Common;
@@ -20,14 +21,18 @@ namespace SMSSender.Services.Auth
             _appSettings = appSettings;
         }
 
-        public (string token, int expiresIn) GenerateToken(AdminUser user)
+        public (string token, int expiresIn) GenerateToken(AdminUser user, string roleNme)
         {
             Claim[] claims = [
             new(JwtRegisteredClaimNames.Sub, user.Id),
             new(JwtRegisteredClaimNames.Email, user.Email!),
             new(JwtRegisteredClaimNames.GivenName, user.UserName),
             new(JwtRegisteredClaimNames.FamilyName, user.UserName),
-            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            new(JwtRegisteredClaimNames.FamilyName, user.UserName),
+            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new(ClaimTypes.Role, roleNme),
+            new("CustomerId", user.CustomerId.ToString()),
+            new("BranchId", user.BranchId.ToString())
             ];
 
             var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.Jwt.Key));

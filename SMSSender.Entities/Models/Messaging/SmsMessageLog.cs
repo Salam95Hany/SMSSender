@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SMSSender.Entities.Models.Global;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -10,11 +11,13 @@ using System.Threading.Tasks;
 namespace SMSSender.Entities.Models.Messaging
 {
     [Table(name: "SmsMessageLogs", Schema = "sms")]
-    public class SmsMessageLog
+    public class SmsMessageLog: ICustomerEntity
     {
         [Key]
         public int SmsMessageLogId { get; set; }
         public Guid TransactionId { get; set; }
+        public Guid CustomerId { get; set; }
+        public int BranchId { get; set; }
         public string Message { get; set; }
         public string ErrorMessage { get; set; }
         public string MsgStatus { get; set; }

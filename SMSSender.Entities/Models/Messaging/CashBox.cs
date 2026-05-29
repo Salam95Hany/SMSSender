@@ -1,4 +1,5 @@
 ﻿using SMSSender.Entities.Common;
+using SMSSender.Entities.Models.Global;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,10 +10,12 @@ using System.Threading.Tasks;
 namespace SMSSender.Entities.Models.Messaging
 {
     [Table(name: "CashBoxes", Schema = "sms")]
-    public class CashBox
+    public class CashBox: ICustomerEntity
     {
         public int CashBoxId { get; set; }
         public int? MessageTransactionId { get; set; }
+        public Guid CustomerId { get; set; }
+        public int BranchId { get; set; }
         public CashBoxTransactionType TransactionType { get; set; }
         public string? Reason { get; set; }
         public string? CashBoxNumber { get; set; }

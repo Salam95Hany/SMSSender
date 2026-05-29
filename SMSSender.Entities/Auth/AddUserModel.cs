@@ -9,6 +9,7 @@ namespace SMSSender.Entities.Auth
     public class AddUserModel
     {
         public string? UserId { get; set; }
+        public int BranchId { get; set; }
         public string? UserName { get; set; }
         public string? Email { get; set; }
         public string? Password { get; set; }

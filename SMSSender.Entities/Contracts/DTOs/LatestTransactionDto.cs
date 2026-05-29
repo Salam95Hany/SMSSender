@@ -21,6 +21,7 @@ namespace SMSSender.Entities.Contracts.DTOs
         public string FromPhone { get; set; }
         public string SenderName { get; set; }
         public string Message { get; set; }
+        public string BranchName { get; set; }
         public double? BalanceAfter { get; set; }
         public string TransactionNumber { get; set; }
         public DateTime OperationServerDateTime { get; set; }
