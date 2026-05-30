@@ -160,7 +160,7 @@ namespace SMSSender.Services.Auth
         {
             AdminUser appUser = new AdminUser
             {
-                CustomerId = Guid.Parse("4E4F1CDF-192C-4DB9-B16D-CB633A874FF4"),
+                CustomerId = _currentCustomerService.CustomerId,
                 BranchId = model.BranchId,
                 UserName = model.UserName,
                 Email = model.Email,

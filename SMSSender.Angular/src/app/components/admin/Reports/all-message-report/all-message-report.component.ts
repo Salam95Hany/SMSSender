@@ -62,7 +62,6 @@ export class AllMessageReportComponent implements OnInit {
   }
 
   CreateBranchFilter() {
-    debugger;
     let distinctBranches = [...new Set(this.MessageList.map(item => item.branchId))];
     if (distinctBranches.length == 0) {
       this.FilterList = [];

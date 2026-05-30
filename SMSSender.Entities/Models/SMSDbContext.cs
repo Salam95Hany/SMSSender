@@ -51,14 +51,15 @@ namespace SMSSender.Entities.Models
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
+            if (_currentCustomerService.IsSystemJob)
+                return await base.SaveChangesAsync(cancellationToken);
+
             var customerId = _currentCustomerService.CustomerId;
             var branchId = _currentCustomerService.BranchId;
             var isAdmin = _currentCustomerService.IsAdmin;
 
             foreach (var entry in ChangeTracker.Entries<ICustomerEntity>())
             {
-                if (_currentCustomerService.IsSystemJob)
-                    continue;
                 // CustomerId
                 if (entry.State == EntityState.Added)
                 {

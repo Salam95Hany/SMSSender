@@ -124,6 +124,22 @@ namespace SMSSender.DI
                     ValidIssuer = jwt.Issuer,
                     ValidAudience = jwt.Audience
                 };
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+
+                        if (!string.IsNullOrEmpty(accessToken) &&
+                            context.HttpContext.Request.Path.StartsWithSegments("/notificationhub"))
+                        {
+                            context.Token = accessToken;
+                        }
+
+                        return Task.CompletedTask;
+                    }
+                };
             });
 
             services.Configure<IdentityOptions>(options =>

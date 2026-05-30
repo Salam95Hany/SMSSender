@@ -68,8 +68,8 @@ namespace SMSSender.Controllers
 
                 var smsMessage = new SmsMessagePure
                 {
-                    CustomerId = Guid.Parse("4E4F1CDF-192C-4DB9-B16D-CB633A874FF4"),//_currentCustomerService.CustomerId,
-                    BranchId = 1,//_currentCustomerService.BranchId,
+                    CustomerId = _currentCustomerService.CustomerId,
+                    BranchId = _currentCustomerService.BranchId,
                     DeviceName = deviceName,
                     PhoneNumber = phoneNumber,
                     Message = model.Text,

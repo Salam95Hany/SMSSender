@@ -16,9 +16,7 @@ namespace SMSSender.Hubs
 
         public async Task SendMessageAddedAsync(int OperationType, Guid CustomerId)
         {
-            var customerId = _currentCustomerService.CustomerId;
-
-            await _hubContext.Clients.Group($"Customer_{customerId}").SendAsync("Message_Added", OperationType);
+            await _hubContext.Clients.Group($"Customer_{CustomerId}").SendAsync("Message_Added", OperationType);
         }
 
         public async Task SendMessageAddedAsync(int OperationType)
