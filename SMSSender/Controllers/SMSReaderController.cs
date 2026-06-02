@@ -2,6 +2,7 @@
 using SMSSender.Entities.Models.Global;
 using SMSSender.Interfaces.Common;
 using SMSSender.Messaging;
+using SMSSender.Messaging.FileLog;
 using SMSSender.Messaging.Models;
 using SMSSender.Messaging.TaskQueue;
 
@@ -14,12 +15,14 @@ namespace SMSSender.Controllers
         private readonly IAppSettings _appSettings;
         private readonly IBackgroundTaskQueue _taskQueue;
         private readonly ICurrentCustomerService _currentCustomerService;
+        private readonly IFileLoggerService _fileLogger;
 
-        public SMSReaderController(IBackgroundTaskQueue taskQueue, IAppSettings appSettings, ICurrentCustomerService currentCustomerService)
+        public SMSReaderController(IBackgroundTaskQueue taskQueue, IAppSettings appSettings, ICurrentCustomerService currentCustomerService, IFileLoggerService fileLogger)
         {
             _appSettings = appSettings;
             _taskQueue = taskQueue;
             _currentCustomerService = currentCustomerService;
+            _fileLogger = fileLogger;
         }
 
         [HttpGet("test-queue-parallel")]
@@ -78,7 +81,7 @@ namespace SMSSender.Controllers
                     SentStamp = model.SentStamp,
                     Sim = model.Sim
                 };
-
+                await _fileLogger.LogMessageData(smsMessage);
                 await _taskQueue.QueueAsync(smsMessage);
 
                 return Content("success", "text/plain");
