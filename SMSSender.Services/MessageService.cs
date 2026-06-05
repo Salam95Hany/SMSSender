@@ -46,7 +46,7 @@ namespace SMSSender.Services
             Params[5] = new SqlParameter("@FromDate", FromDate);
             Params[6] = new SqlParameter("@ToDate", ToDate);
             Params[7] = new SqlParameter("@CustomerId", _currentCustomerService.CustomerId);
-            Params[8] = new SqlParameter("@BranchId", _currentCustomerService.BranchId);
+            Params[8] = new SqlParameter("@BranchId", _currentCustomerService.IsAdmin ? 0 : _currentCustomerService.BranchId);
             var dt = await _sQLHelper.ExecuteDataTableAsync("[sms].[SP_GetSmsDateByOperationType]", Params);
             return ApiResponseModel<DataTable>.Success(GenericErrors.GetSuccess, dt);
         }
@@ -65,7 +65,7 @@ namespace SMSSender.Services
             Params[5] = new SqlParameter("@FromDate", FromDate);
             Params[6] = new SqlParameter("@ToDate", ToDate);
             Params[7] = new SqlParameter("@CustomerId", _currentCustomerService.CustomerId);
-            Params[8] = new SqlParameter("@BranchId", _currentCustomerService.BranchId);
+            Params[8] = new SqlParameter("@BranchId", _currentCustomerService.IsAdmin ? 0 : _currentCustomerService.BranchId);
             var dt = await _sQLHelper.ExecuteDataTableAsync("[sms].[SP_GetSmsDateByOperationType]", Params);
             var Filters = dt.ToGroupedFilters();
             return ApiResponseModel<List<FilterModel>>.Success(GenericErrors.GetSuccess, Filters);
@@ -75,7 +75,7 @@ namespace SMSSender.Services
         {
             var Params = new SqlParameter[2];
             Params[0] = new SqlParameter("@CustomerId", _currentCustomerService.CustomerId);
-            Params[1] = new SqlParameter("@BranchId", _currentCustomerService.BranchId);
+            Params[1] = new SqlParameter("@BranchId", _currentCustomerService.IsAdmin ? 0 : _currentCustomerService.BranchId);
             var dt = await _sQLHelper.ExecuteDataTableAsync("[sms].[SP_GetOperationCountDashboardSummary]", Params);
             return ApiResponseModel<DataTable>.Success(GenericErrors.GetSuccess, dt);
         }
@@ -125,7 +125,7 @@ namespace SMSSender.Services
             Params[0] = new SqlParameter("@CurrentPage", PagingFilter.Currentpage);
             Params[1] = new SqlParameter("@PageSize", PagingFilter.Pagesize);
             Params[2] = new SqlParameter("@CustomerId", _currentCustomerService.CustomerId);
-            Params[3] = new SqlParameter("@BranchId", _currentCustomerService.BranchId);
+            Params[3] = new SqlParameter("@BranchId", _currentCustomerService.IsAdmin ? 0 : _currentCustomerService.BranchId);
             var dt = await _sQLHelper.ExecuteDataTableAsync("[sms].[SP_GetMessageNotification]", Params);
             return ApiResponseModel<DataTable>.Success(GenericErrors.GetSuccess, dt);
         }
@@ -134,7 +134,7 @@ namespace SMSSender.Services
         {
             var Params = new SqlParameter[2];
             Params[0] = new SqlParameter("@CustomerId", _currentCustomerService.CustomerId);
-            Params[1] = new SqlParameter("@BranchId", _currentCustomerService.BranchId);
+            Params[1] = new SqlParameter("@BranchId", _currentCustomerService.IsAdmin ? 0 : _currentCustomerService.BranchId);
             var dt = await _sQLHelper.ExecuteDataTableAsync("[sms].[SP_GetMessageBoxTodayData]", Params);
             return ApiResponseModel<DataTable>.Success(GenericErrors.GetSuccess, dt);
         }

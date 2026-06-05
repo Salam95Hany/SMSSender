@@ -62,24 +62,19 @@ namespace SMSSender.Entities.Models
             {
                 // CustomerId
                 if (entry.State == EntityState.Added)
-                {
                     entry.Entity.CustomerId = customerId;
-                }
 
                 if (entry.State == EntityState.Modified)
                 {
                     if (entry.Entity.CustomerId != customerId)
-                    {
                         throw new Exception("Cross-tenant update detected");
-                    }
                 }
 
                 // BranchId
                 if (entry.Entity is ICustomerEntity branchEntity)
                 {
                     if (entry.State == EntityState.Added)
-                        if (!isAdmin)
-                            branchEntity.BranchId = branchId;
+                        branchEntity.BranchId = branchId;
 
                     if (entry.State == EntityState.Modified)
                         if (!isAdmin && branchEntity.BranchId != branchId)

@@ -9,11 +9,14 @@ import { FormService } from '../../../../services/form.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
+import { RoleCheckerDirective } from '../../../../directives/role-checker.directive';
 
 @Component({
   selector: 'app-wallet-account',
   standalone: true,
-  imports: [NgFor, AdminBreadcrumbComponent, CommonModule, ArabicDateWithTimePipe, ReactiveFormsModule],
+  imports: [NgFor, AdminBreadcrumbComponent, CommonModule, ArabicDateWithTimePipe, ReactiveFormsModule,
+    RoleCheckerDirective
+  ],
   templateUrl: './wallet-account.component.html',
   styleUrl: './wallet-account.component.css'
 })

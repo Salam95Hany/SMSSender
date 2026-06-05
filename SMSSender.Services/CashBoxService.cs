@@ -38,7 +38,7 @@ namespace SMSSender.Services
             Params[4] = new SqlParameter("@FromDate", FromDate);
             Params[5] = new SqlParameter("@ToDate", ToDate);
             Params[6] = new SqlParameter("@CustomerId", _currentCustomerService.CustomerId);
-            Params[7] = new SqlParameter("@BranchId", _currentCustomerService.BranchId);
+            Params[7] = new SqlParameter("@BranchId", _currentCustomerService.IsAdmin ? 0 : _currentCustomerService.BranchId);
             var dt = await _sQLHelper.ExecuteDataTableAsync("[sms].[SP_GetCashBoxData]", Params);
             return ApiResponseModel<DataTable>.Success(GenericErrors.GetSuccess, dt);
         }
@@ -56,7 +56,7 @@ namespace SMSSender.Services
             Params[4] = new SqlParameter("@FromDate", FromDate);
             Params[5] = new SqlParameter("@ToDate", ToDate);
             Params[6] = new SqlParameter("@CustomerId", _currentCustomerService.CustomerId);
-            Params[7] = new SqlParameter("@BranchId", _currentCustomerService.BranchId);
+            Params[7] = new SqlParameter("@BranchId", _currentCustomerService.IsAdmin ? 0 : _currentCustomerService.BranchId);
             var dt = await _sQLHelper.ExecuteDataTableAsync("[sms].[SP_GetCashBoxData]", Params);
             var Filters = dt.ToGroupedFilters();
             return ApiResponseModel<List<FilterModel>>.Success(GenericErrors.GetSuccess, Filters);

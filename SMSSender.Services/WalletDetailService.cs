@@ -30,7 +30,7 @@ namespace SMSSender.Services
             Params[0] = new SqlParameter("@FromDate", FromDate);
             Params[1] = new SqlParameter("@ToDate", ToDate);
             Params[2] = new SqlParameter("@CustomerId", _currentCustomerService.CustomerId);
-            Params[3] = new SqlParameter("@BranchId", _currentCustomerService.BranchId);
+            Params[3] = new SqlParameter("@BranchId", _currentCustomerService.IsAdmin ? 0 : _currentCustomerService.BranchId);
             var dt = await _sQLHelper.ExecuteDataTableAsync("[sms].[SP_GetWalletAccountSummary]", Params);
             return ApiResponseModel<DataTable>.Success(GenericErrors.GetSuccess, dt);
         }

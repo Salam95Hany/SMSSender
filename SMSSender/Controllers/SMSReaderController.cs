@@ -25,37 +25,6 @@ namespace SMSSender.Controllers
             _fileLogger = fileLogger;
         }
 
-        [HttpGet("test-queue-parallel")]
-        public async Task<IActionResult> TestQueueParallel()
-        {
-            var tasks = new List<Task>();
-
-            for (int i = 1; i <= 500; i++)
-            {
-                int index = i;
-
-                tasks.Add(Task.Run(async () =>
-                {
-                    var smsMessage = new SmsMessagePure
-                    {
-                        DeviceName = "TestDevice",
-                        PhoneNumber = "01124564843",
-                        Message = $"تم تحويل 490 جنيه لرقم 01030579175 مصاريف الخدمة 1 جنيه رصيد حسابك فى فودافون كاش الحالي 50361.08. تاريخ العملية: 00:43 26-05-15 رقم العملية: 020001129645 مع كل معاملة بفودافون كاش هتزود فرصتك انك تكسب جنيه دهب لست الحبايب ,حول، اشحن،جدد باقتك، وادفع فواتيرك علشان تزود فرصتك من خلال http://vf.eg/vfcash",
-                        ProviderStr = "VF-Cash",
-                        ReceivedStamp = "1778795024000",
-                        SentStamp = "1778795027999",
-                        Sim = "sim1"
-                    };
-
-                    await _taskQueue.QueueAsync(smsMessage);
-                }));
-            }
-
-            await Task.WhenAll(tasks);
-
-            return Ok("100 messages queued in parallel");
-        }
-
         [HttpPost("webhook")]
         public async Task<IActionResult> IncomingMessage([FromBody] IncomingSmsParam model)
         {
@@ -81,7 +50,7 @@ namespace SMSSender.Controllers
                     SentStamp = model.SentStamp,
                     Sim = model.Sim
                 };
-                await _fileLogger.LogMessageData(smsMessage);
+                //await _fileLogger.LogMessageData(smsMessage);
                 await _taskQueue.QueueAsync(smsMessage);
 
                 return Content("success", "text/plain");

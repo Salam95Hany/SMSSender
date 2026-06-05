@@ -20,7 +20,7 @@
                     </div>
                     <div class="card-number-row">
                         <span class="card-num">{{item.phoneNumber}}</span>
-                        <span class="wallet-icon cursor-pointer" *ngIf="item.type == 'InstaPay'" (click)="OpenUpdateInstaWalletAmountModal(UpdateInstaWalletAmountModal,item)"><i class="fas fa-edit"></i></span>
+                        <span class="wallet-icon cursor-pointer" *ngIf="item.type == 'InstaPay'" (click)="OpenUpdateInstaWalletAmountModal(UpdateInstaWalletAmountModal,item)" appRole [roles]="['Admin', 'Manager']"><i class="fas fa-edit"></i></span>
                     </div>
                 </div>
                 <div class="card-body">

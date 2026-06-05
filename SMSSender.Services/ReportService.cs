@@ -35,7 +35,7 @@ namespace SMSSender.Services
             Params[2] = new SqlParameter("@FromDate", FromDate);
             Params[3] = new SqlParameter("@ToDate", ToDate);
             Params[4] = new SqlParameter("@CustomerId", _currentCustomerService.CustomerId);
-            Params[5] = new SqlParameter("@BranchId", _currentCustomerService.BranchId);
+            Params[5] = new SqlParameter("@BranchId", _currentCustomerService.IsAdmin ? 0 : _currentCustomerService.BranchId);
             var dt = await _sQLHelper.ExecuteDataTableAsync("[report].[SP_WalletsReportSummaryByOperationType]", Params);
             return ApiResponseModel<DataTable>.Success(GenericErrors.GetSuccess, dt);
         }
@@ -51,7 +51,7 @@ namespace SMSSender.Services
             Params[2] = new SqlParameter("@FromDate", FromDate);
             Params[3] = new SqlParameter("@ToDate", ToDate);
             Params[4] = new SqlParameter("@CustomerId", _currentCustomerService.CustomerId);
-            Params[5] = new SqlParameter("@BranchId", _currentCustomerService.BranchId);
+            Params[5] = new SqlParameter("@BranchId", _currentCustomerService.IsAdmin ? 0 : _currentCustomerService.BranchId);
             var dt = await _sQLHelper.ExecuteDataTableAsync("[report].[SP_WalletsReportByOperationType]", Params);
             return ApiResponseModel<DataTable>.Success(GenericErrors.GetSuccess, dt);
         }
@@ -66,7 +66,7 @@ namespace SMSSender.Services
             Params[1] = new SqlParameter("@FromDate", FromDate);
             Params[2] = new SqlParameter("@ToDate", ToDate);
             Params[3] = new SqlParameter("@CustomerId", _currentCustomerService.CustomerId);
-            Params[4] = new SqlParameter("@BranchId", _currentCustomerService.BranchId);
+            Params[4] = new SqlParameter("@BranchId", _currentCustomerService.IsAdmin ? 0 : _currentCustomerService.BranchId);
             var dt = await _sQLHelper.ExecuteDataTableAsync("[report].[SP_WalletProfitReportSummary]", Params);
             return ApiResponseModel<DataTable>.Success(GenericErrors.GetSuccess, dt);
         }
@@ -81,7 +81,7 @@ namespace SMSSender.Services
             Params[1] = new SqlParameter("@FromDate", FromDate);
             Params[2] = new SqlParameter("@ToDate", ToDate);
             Params[3] = new SqlParameter("@CustomerId", _currentCustomerService.CustomerId);
-            Params[4] = new SqlParameter("@BranchId", _currentCustomerService.BranchId);
+            Params[4] = new SqlParameter("@BranchId", _currentCustomerService.IsAdmin ? 0 : _currentCustomerService.BranchId);
             var dt = await _sQLHelper.ExecuteDataTableAsync("[report].[SP_WalletProfitReport]", Params);
             return ApiResponseModel<DataTable>.Success(GenericErrors.GetSuccess, dt);
         }
