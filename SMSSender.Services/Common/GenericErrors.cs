@@ -9,58 +9,46 @@ namespace SMSSender.Services.Common
 {
     public class GenericErrors
     {
-        public static Error GetSuccess = new("Operation completed successfully");
+        public static Error GetSuccess = new("اكتملت العملية بنجاح");
 
-        public static Error AddSuccess = new("Added successfully");
+        public static Error AddSuccess = new("تمت الإضافة بنجاح");
 
-        public static Error UpdateSuccess = new("Updated successfully");
+        public static Error UpdateSuccess = new("تم التعديل بنجاح");
 
-        public static Error DeleteSuccess = new("Deleted successfully");
+        public static Error DeleteSuccess = new("تم الحذف بنجاح");
 
-        public static Error TransFailed = new("An error has occurred");
+        public static Error TransFailed = new("لقد حدث خطأ");
 
-        public static Error NotFound = new("This item was not found");
+        public static Error NotFound = new("هذا العنصر غير موجود");
 
-        public static Error InvalidStatus = new("Invalid status");
+        public static Error InvalidCredentials = new("اسم المستخدم أو كلمة المرور غير صحيحة");
 
-        public static Error InvalidType = new("Invalid type");
+        public static Error DuplicateEmail = new("البريد الإلكتروني مسجل بالفعل");
 
-        public static Error InvalidCredentials = new("Invalid username or password");
+        public static Error SuccessLogin = new("تم تسجيل الدخول بنجاح");
 
-        public static Error DuplicateEmail = new("Email is already registered");
+        public static Error SuccessRegister = new("تم تسجيل المستخدم بنجاح");
 
-        public static Error SuccessLogin = new("Login successful");
+        public static Error AlreadyExists = new("هذا العنصر موجود");
 
-        public static Error SuccessRegister = new("User registered successfully");
+        public static Error UserNotFound = new("لم يتم العثور على المستخدم");
 
-        public static Error AlreadyExists = new("This item already exists");
+        public static Error EmailAlreadyExists = new("البريد الإلكتروني مستخدم بالفعل من قبل مستخدم آخر");
 
-        public static Error ScheduleFull = new("The booking limit for today has been reached");
+        public static Error FailedToUpdateEmail = new("فشل تحديث البريد الإلكتروني");
 
-        public static Error ScheduleNotFound = new("No available schedule at this time");
+        public static Error FailedToUpdatePassword = new("فشل تحديث كلمة المرور");
 
-        public static Error UserNotFound = new("User not found");
+        public static Error FailedToAssignNewRole = new("فشل تعيين صلاحية جديدة");
 
-        public static Error EmailAlreadyExists = new("Email is already used by another user");
+        public static Error DeletePassFailed = new("فشل حذف كلمة المرور القديمة");
 
-        public static Error FailedToUpdateEmail = new("Failed to update email");
+        public static Error NewPassFailed = new("كلمة مرور جديدة غير صالحة");
 
-        public static Error FailedToUpdatePassword = new("Failed to update password");
+        public static Error UpdateRoleFailed = new("فشل تحديث صلاحية المستخدم");
 
-        public static Error FailedToAssignNewRole = new("Failed to assign new role");
+        public static Error DelayedTransactionsExist = new("توجد معاملات متأخرة ضمن النطاق الزمني المحدد. يرجى حلها قبل حساب صافي الربح.");
 
-        public static Error ParentAccountNotFound = new("Parent account not found");
-
-        public static Error DeletePassFailed = new("Failed to delete old password");
-
-        public static Error NewPassFailed = new("Invalid new password");
-
-        public static Error UpdateRoleFailed = new("Failed to update user roles");
-
-        public static Error ApplySort = new("Sorting applied successfully");
-
-        public static Error ChangeStatusSuccess = new("Status changed successfully");
-
-        public static Error AdmissionExist = new("This patient already has an admission on this date");
+        public static Error ProfitPeriodClosingSuccess = new("تم قفل الفترة بنجاح.");
     }
 }

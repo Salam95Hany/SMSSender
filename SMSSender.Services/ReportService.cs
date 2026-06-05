@@ -88,6 +88,11 @@ namespace SMSSender.Services
 
         public async Task<ApiResponseModel<string>> ProfitPeriodClosings(ProfitClosing Model)
         {
+            var entity = await _unitOfWork.Repository<MessageTransaction>().AnyAsync(x => x.OperationMsgDateTime.Value.Date >= Model.FromDate.Date &&
+               x.OperationMsgDateTime.Value.Date <= Model.ToDate.Date && x.Commission.HasValue && x.TransactionStatus == TransactionStatus.Delayed);
+            if (entity)
+                return ApiResponseModel<string>.Failure(GenericErrors.DelayedTransactionsExist);
+
             var Now = DateTime.UtcNow.EgyptNow();
             var CashBoxObj = new CashBox();
             var LastTransaction = await _unitOfWork.Repository<CashBox>().GetLastAsync(i => i.InsertDate);
@@ -131,27 +136,37 @@ namespace SMSSender.Services
 
         public async Task<ApiResponseModel<ProfitClosingByDateDto>> GetProfitClosingByDate(DateTime FromDate, DateTime ToDate)
         {
-            var totalProfit = await _unitOfWork.Repository<MessageTransaction>().SumAsync(
-            x => x.OperationMsgDateTime.Value.Date >= FromDate.Date && x.OperationMsgDateTime.Value.Date <= ToDate.Date && x.Commission.HasValue,
-            x => (double)x.Commission.Value);
-
-            var netProfit = await _unitOfWork.Repository<MessageTransaction>()
-                .SumAsync(
-                    x => x.OperationMsgDateTime.Value.Date >= FromDate.Date && x.OperationMsgDateTime.Value.Date <= ToDate.Date && x.Commission.HasValue,
-                    x =>
-                        x.OperationType == OperationType.Deposit ? (double)x.Commission.Value :
-                        x.OperationType == OperationType.Withdraw ? (double)x.Commission.Value :
-                        x.OperationType == OperationType.CashWithdrawal ? -(double)x.Commission.Value :
-                        0
-                );
-
-            var Results = new ProfitClosingByDateDto
+            try
             {
-                TotalProfit = totalProfit,
-                NetProfit = netProfit
-            };
+                var totalProfit = await _unitOfWork.Repository<MessageTransaction>().SumAsync(
+                x => x.OperationMsgDateTime.Value.Date >= FromDate.Date && x.OperationMsgDateTime.Value.Date <= ToDate.Date && x.Commission.HasValue
+                && x.TransactionStatus == TransactionStatus.Completed,
+                x => (double)x.Commission.Value);
 
-            return ApiResponseModel<ProfitClosingByDateDto>.Success(GenericErrors.GetSuccess, Results);
+                var netProfit = await _unitOfWork.Repository<MessageTransaction>()
+                    .SumAsync(
+                        x => x.OperationMsgDateTime.Value.Date >= FromDate.Date && x.OperationMsgDateTime.Value.Date <= ToDate.Date && x.Commission.HasValue
+                        && x.TransactionStatus == TransactionStatus.Completed,
+                        x =>
+                            x.OperationType == OperationType.Deposit ? (double)x.Commission.Value :
+                            x.OperationType == OperationType.Withdraw ? (double)x.Commission.Value :
+                            x.OperationType == OperationType.CashWithdrawal ? -(double)x.Commission.Value :
+                            0
+                    );
+
+                var Results = new ProfitClosingByDateDto
+                {
+                    TotalProfit = totalProfit,
+                    NetProfit = netProfit
+                };
+
+                return ApiResponseModel<ProfitClosingByDateDto>.Success(GenericErrors.ProfitPeriodClosingSuccess, Results);
+            }
+            catch (Exception)
+            {
+                return ApiResponseModel<ProfitClosingByDateDto>.Failure(GenericErrors.TransFailed);
+            }
+
         }
     }
 }

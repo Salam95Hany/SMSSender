@@ -71,9 +71,6 @@ export class WalletProfitReportComponent {
   GetWalletProfitReportSummary() {
     this.adminService.GetWalletProfitReportSummary(this.PagingFilter).subscribe((data) => {
       this.SummaryData = data.results[0];
-      this.MessageList.forEach(i => {
-        this.SummaryData.totalWalletBalance += i.finalBalance;
-      });
     });
   }
 
@@ -116,11 +113,11 @@ export class WalletProfitReportComponent {
     this.adminService.ProfitPeriodClosings(Model).subscribe((data) => {
       this.ShowLoader = false;
       if (data.isSuccess) {
-        this.toaster.success('تم قفل الفترة بنجاح');
+        this.toaster.success(data.message);
         this.modalService.dismissAll();
         window.location.reload();
       } else {
-        this.toaster.error('حدث خطأ أثناء قفل الفترة');
+        this.toaster.error(data.message);
       }
     });
   }
