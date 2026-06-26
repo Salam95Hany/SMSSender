@@ -103,7 +103,7 @@ export const routes: Routes = [
           section: 'إدارة الرسائل',
           title: 'رصيد المحافظ',
           description: 'لوحة بطاقات مرنة لعرض المحافظ والأرصدة الحالية بتوزيع متجاوب وواضح.',
-          roles: ['Admin', 'Manager','Cashier']
+          roles: ['Admin', 'Manager', 'Cashier']
         },
       },
       {
@@ -239,7 +239,7 @@ export const routes: Routes = [
           section: 'الأجهزة',
           title: 'حالة الأجهزة',
           description: 'عرض منظم لحالة الأجهزة.',
-          roles: ['Admin', 'Manager']
+          roles: ['Admin', 'Manager', 'Cashier']
         },
       },
       {
@@ -250,7 +250,7 @@ export const routes: Routes = [
           section: 'الأجهزة',
           title: 'تحديث صندوق الرسائل',
           description: 'عرض منظم لبيانات تحديث صندوق الرسائل.',
-          roles: ['Admin', 'Manager', 'Cashier']
+          roles: ['Admin', 'Manager']
         },
       },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },

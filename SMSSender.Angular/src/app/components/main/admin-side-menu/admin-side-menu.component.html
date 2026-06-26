@@ -84,7 +84,7 @@
         </div>
 
         <!-- الإعدادات -->
-        <div class="nav-group" appRole [roles]="['Admin', 'Manager']">
+        <div class="nav-group" appRole [roles]="['Admin', 'Manager','Cashier']">
             <div class="nav-group__label" *ngIf="!isCollapsed">الإعدادات</div>
             <div class="nav-group__items">
                 <!-- <a class="nav-item" routerLink="/admin/user" routerLinkActive="active">
@@ -99,15 +99,15 @@
                     <i class="fas fa-history"></i>
                     <span *ngIf="!isCollapsed">سجل تغييرات الأجهزة</span>
                 </a>
-                <a class="nav-item" routerLink="/admin/customer-device-health-status" routerLinkActive="active">
+                <a class="nav-item" routerLink="/admin/customer-device-health-status" routerLinkActive="active" appRole [roles]="['Manager','Admin','Cashier']">
                     <i class="fas fa-heartbeat"></i>
                     <span *ngIf="!isCollapsed">حالة الأجهزة</span>
                 </a>
-                <a class="nav-item" routerLink="/admin/customer-device-refresh-inbox" routerLinkActive="active">
+                <a class="nav-item" routerLink="/admin/customer-device-refresh-inbox" routerLinkActive="active" appRole [roles]="['Manager','Admin']">
                     <i class="fas fa-inbox"></i>
                     <span *ngIf="!isCollapsed">تحديث صندوق الرسائل</span>
                 </a>
-                <a class="nav-item" routerLink="/admin/factory" routerLinkActive="active">
+                <a class="nav-item" routerLink="/admin/factory" routerLinkActive="active" appRole [roles]="['Manager','Admin']">
                     <i class="fas fa-undo"></i>
                     <span *ngIf="!isCollapsed">إعادة ضبط المصنع</span>
                 </a>
