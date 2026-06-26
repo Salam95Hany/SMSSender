@@ -15,5 +15,6 @@ namespace SMSSender.Interfaces
         Task<RefreshInboxDto> GetDeviceRefreshInboxSetting(Guid CustomerId, int BranchId);
         Task<bool> UpdateDeviceRefreshInboxStatus(Guid CustomerId, int BranchId, string DeviceId);
         Task<ApiResponseModel<string>> UpdateDeviceHealth(List<DeviceHealthDetailsRequest> Model);
+        Task<ApiResponseModel<string>> AddWorkerLogException(DeviceErrorLog Model);
     }
 }

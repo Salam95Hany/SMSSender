@@ -10,6 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormService } from '../../../../services/form.service';
 import { AdminGeneralInputComponent } from '../../../../shared/admin-general-input/admin-general-input.component';
+import { NotificationSignalrService } from '../../../../services/notification-signalr.service';
 
 @Component({
   selector: 'app-customer-device-refresh-inbox',
@@ -26,11 +27,16 @@ export class CustomerDeviceRefreshInboxComponent {
     To: ''
   };
 
-  constructor(private deviceService: DeviceService, private toaster: ToastrService, private modalService: NgbModal, private fb: FormBuilder, private formService: FormService) { }
+  constructor(private deviceService: DeviceService, private toaster: ToastrService, private modalService: NgbModal, private fb: FormBuilder, private formService: FormService,
+    private notificationSignalrService: NotificationSignalrService
+  ) { }
 
   ngOnInit(): void {
     this.FormInit();
     this.GetCustomerDeviceRefreshInbox();
+    this.notificationSignalrService.onSystemMessageAdded(() => {
+      this.GetCustomerDeviceRefreshInbox();
+    });
   }
 
   FormInit() {
@@ -64,6 +70,10 @@ export class CustomerDeviceRefreshInboxComponent {
     this.deviceService.GetCustomerDeviceRefreshInbox().subscribe(data => {
       this.ShowLoader = false;
       this.DeviceInboxList = data;
+      if (this.DeviceInboxList.some(i => i.refreshStatus == 1))
+        this.DeviceInboxList.forEach(i => i.isDisabled = true);
+      else
+        this.DeviceInboxList.forEach(i => i.isDisabled = false);
     });
   }
 
@@ -82,6 +92,19 @@ export class CustomerDeviceRefreshInboxComponent {
     let isValid = this.validateForm();
     if (!isValid)
       return;
+
+    const from = new Date(this.ItemForm.value.From);
+    const to = new Date(this.ItemForm.value.To);
+
+    if (to < from) {
+      this.toaster.warning('تاريخ النهاية يجب أن يكون أكبر من أو يساوي تاريخ البداية');
+      return;
+    }
+
+    if (from.getFullYear() !== to.getFullYear() || from.getMonth() !== to.getMonth()) {
+      this.toaster.warning('يجب أن يكون تاريخ البداية والنهاية ضمن نفس الشهر');
+      return;
+    }
 
     this.deviceService.RefreshDeviceInbox(this.ItemForm.value).subscribe(data => {
       if (data.isSuccess) {

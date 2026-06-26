@@ -40,7 +40,7 @@
                             <td data-label="تاريخ اخر عملية تحديث">{{ item?.lastUpdate | arabicDateWithTime }}</td>
                             <td data-label="الإجراءات" class="table-actions-cell">
                                 <div class="table-actions-row">
-                                    <button class="btn btn-outline-secondary rounded-25 d-flex align-items-center gap-2" (click)="openAddItemModal(OpenItemModal,item)">
+                                    <button class="btn btn-outline-secondary rounded-25 d-flex align-items-center gap-2" [disabled]="item.isDisabled" (click)="openAddItemModal(OpenItemModal,item)">
                                         <i class="fas fa-sync"></i>
                                         <span>تحديث</span>
                                     </button>

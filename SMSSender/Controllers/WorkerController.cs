@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SMSSender.Entities.Common;
 using SMSSender.Entities.Contracts.DTOs.Worker;
+using SMSSender.Entities.Models.DeviceConfig;
 using SMSSender.Interfaces;
 using SMSSender.Interfaces.Common;
 using SMSSender.Messaging.FileLog;
@@ -103,6 +105,27 @@ namespace SMSSender.Controllers
                 await _fileLogger.LogError(ex);
                 return BadRequest();
             }
-        } 
+        }
+
+        [HttpPost("log")]
+        public async Task<IActionResult> AddWorkerLogException(DeviceErrorLog Model)
+        {
+            try
+            {
+                string secretKey = Request.Headers["Secret_Key"];
+
+                if (secretKey != _appSettings.SecretKey)
+                    return Unauthorized("unauthorized");
+
+                await _workerService.AddWorkerLogException(Model);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                await _fileLogger.LogError(ex);
+                return BadRequest();
+            }
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using SMSSender.Entities.Common;
 using SMSSender.Entities.Contracts.DTOs.Worker;
 using SMSSender.Entities.Models.DeviceConfig;
+using SMSSender.Entities.Models.Global;
 using SMSSender.Interfaces;
 using SMSSender.Interfaces.Hub;
 using SMSSender.Interfaces.Repositories;
@@ -18,11 +19,13 @@ namespace SMSSender.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly INotificationService _notificationService;
         private readonly IHubNotificationService _hubNotificationService;
-        public WorkerService(IUnitOfWork unitOfWork, INotificationService notificationService, IHubNotificationService hubNotificationService)
+        private readonly ICurrentCustomerService _currentCustomerService;
+        public WorkerService(IUnitOfWork unitOfWork, INotificationService notificationService, IHubNotificationService hubNotificationService, ICurrentCustomerService currentCustomerService)
         {
             _unitOfWork = unitOfWork;
             _notificationService = notificationService;
             _hubNotificationService = hubNotificationService;
+            _currentCustomerService = currentCustomerService;
         }
 
         public async Task<DeviceWorkrtDto> GetAllDevices(Guid CustomerId, int BranchId, int Version)
@@ -93,6 +96,7 @@ namespace SMSSender.Services
             {
                 Setting.RefreshStatus = Entities.Common.InboxRefreshStatus.Completed;
                 string NotBody = $"تم تحديث صندوق الرسائل لجهاز ({Device.DeviceName}). الفترة من {Setting.From?.ToString("")} الى {Setting.To?.ToString("")}";
+                _currentCustomerService.IsSystemJob = true;
                 _notificationService.CreateSystemNotification("تحددث صندوق الرسائل", NotBody, CustomerId, BranchId);
                 await _unitOfWork.CompleteAsync();
                 await _hubNotificationService.SendSystemMessageAddedAsync(CustomerId, BranchId);
@@ -107,53 +111,72 @@ namespace SMSSender.Services
         {
             try
             {
-                var CustomerId = Model.FirstOrDefault()?.CustomerId;
-                var BranchId = Model.FirstOrDefault()?.BranchId;
+                var CustomerId = Model.First().CustomerId;
+                var BranchId = Model.First().BranchId;
                 var Today = DateTime.Now.EgyptNow();
-                var Entities = await _unitOfWork.Repository<DeviceHealth>().WhereAsync(i => i.CustomerId == CustomerId && i.BranchId == BranchId);
-                if (Entities.Count == 0)
-                {
-                    var Details = Model.Select(i => new DeviceHealth
-                    {
-                        DeviceId = i.DeviceId,
-                        CustomerId = CustomerId.Value,
-                        BranchId = BranchId.Value,
-                        DeviceName = i.DeviceName,
-                        MessagesFailed = i.MessagesFailed,
-                        ConnectionStatus = i.ConnectionStatus,
-                        ConnectionTransport = i.ConnectionTransport,
-                        BatteryLevel = i.BatteryLevel,
-                        BatteryCharging = i.BatteryCharging,
-                        LastSeen = i.LastSeen,
-                        LastSyncDate = i.LastSyncDate,
-                        LastUpdated = Today
-                    }).ToList();
+                var Entities = await _unitOfWork.Repository<DeviceHealth>().WhereAsync(x => x.CustomerId == CustomerId && x.BranchId == BranchId);
+                var EntityLookup = Entities.ToDictionary(x => x.DeviceId);
+                var NewDevices = new List<DeviceHealth>();
 
-                    await _unitOfWork.Repository<DeviceHealth>().AddRangeAsync(Details);
-                }
-                else
+                foreach (var item in Model)
                 {
-                    var modelLookup = Model.ToDictionary(x => x.DeviceId);
-
-                    foreach (var entity in Entities)
+                    if (EntityLookup.TryGetValue(item.DeviceId, out var entity))
                     {
-                        if (modelLookup.TryGetValue(entity.DeviceId, out var modelEntity))
+                        entity.DeviceName = item.DeviceName;
+                        entity.MessagesFailed = item.MessagesFailed;
+                        entity.ConnectionStatus = item.ConnectionStatus;
+                        entity.ConnectionTransport = item.ConnectionTransport;
+                        entity.BatteryLevel = item.BatteryLevel;
+                        entity.BatteryCharging = item.BatteryCharging;
+                        entity.LastSeen = item.LastSeen;
+                        entity.LastSyncDate = item.LastSyncDate;
+                        entity.LastUpdated = Today;
+                    }
+                    else
+                    {
+                        NewDevices.Add(new DeviceHealth
                         {
-                            entity.MessagesFailed = modelEntity.MessagesFailed;
-                            entity.ConnectionStatus = modelEntity.ConnectionStatus;
-                            entity.ConnectionTransport = modelEntity.ConnectionTransport;
-                            entity.BatteryLevel = modelEntity.BatteryLevel;
-                            entity.BatteryCharging = modelEntity.BatteryCharging;
-                            entity.LastSeen = modelEntity.LastSeen;
-                            entity.LastSyncDate = modelEntity.LastSyncDate;
-                            entity.LastUpdated = Today;
-                        }
+                            DeviceId = item.DeviceId,
+                            CustomerId = CustomerId,
+                            BranchId = BranchId,
+                            DeviceName = item.DeviceName,
+                            MessagesFailed = item.MessagesFailed,
+                            ConnectionStatus = item.ConnectionStatus,
+                            ConnectionTransport = item.ConnectionTransport,
+                            BatteryLevel = item.BatteryLevel,
+                            BatteryCharging = item.BatteryCharging,
+                            LastSeen = item.LastSeen,
+                            LastSyncDate = item.LastSyncDate,
+                            LastUpdated = Today
+                        });
                     }
                 }
+
+                if (NewDevices.Any())
+                {
+                    await _unitOfWork.Repository<DeviceHealth>().AddRangeAsync(NewDevices);
+                }
+
                 await _unitOfWork.CompleteAsync();
+
                 return ApiResponseModel<string>.Success(GenericErrors.UpdateSuccess);
             }
-            catch (Exception)
+            catch
+            {
+                return ApiResponseModel<string>.Failure(GenericErrors.TransFailed);
+            }
+        }
+
+        public async Task<ApiResponseModel<string>> AddWorkerLogException(DeviceErrorLog Model)
+        {
+            try
+            {
+                await _unitOfWork.Repository<DeviceErrorLog>().AddAsync(Model);
+                await _unitOfWork.CompleteAsync();
+
+                return ApiResponseModel<string>.Success(GenericErrors.UpdateSuccess);
+            }
+            catch
             {
                 return ApiResponseModel<string>.Failure(GenericErrors.TransFailed);
             }

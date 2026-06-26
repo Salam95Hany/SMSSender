@@ -132,6 +132,19 @@ namespace SMSSender.Services
         {
             try
             {
+                var DeviceIsExist = await _unitOfWork.Repository<Device>().AnyAsync(i =>
+                i.CustomerId == CustomerId &&
+                i.BranchId == Model.BranchId &&
+                (
+                    i.DeviceUniqueId == Model.DeviceUniqueId ||
+                    (!string.IsNullOrWhiteSpace(Model.Sim1Number) && i.Sim1Number == Model.Sim1Number) ||
+                    (!string.IsNullOrWhiteSpace(Model.Sim1Name) && i.Sim1Name == Model.Sim1Name) ||
+                    (!string.IsNullOrWhiteSpace(Model.Sim2Number) && i.Sim2Number == Model.Sim2Number) ||
+                    (!string.IsNullOrWhiteSpace(Model.Sim2Name) && i.Sim2Name == Model.Sim2Name)
+                ));
+                if (DeviceIsExist)
+                    return ApiResponseModel<string>.Failure(GenericErrors.DeviceIsExist);
+
                 var LastVersion = await _unitOfWork.Repository<DeviceSyncVersion>().FirstOrDefaultAsync(i => i.CustomerId == CustomerId);
                 Model.CustomerId = CustomerId;
                 Model.BranchId = Model.BranchId;
@@ -168,6 +181,22 @@ namespace SMSSender.Services
 
                 if (Entity == null)
                     return ApiResponseModel<string>.Failure(GenericErrors.NotFound);
+
+                var DeviceIsExist = await _unitOfWork.Repository<Device>().AnyAsync(i =>
+                i.CustomerId == CustomerId &&
+                i.BranchId == Model.BranchId &&
+                i.DeviceId != Model.DeviceId &&
+                i.DeviceId != Model.DeviceId &&
+                (
+                    i.DeviceUniqueId == Model.DeviceUniqueId ||
+                    (!string.IsNullOrWhiteSpace(Model.Sim1Number) && i.Sim1Number == Model.Sim1Number) ||
+                    (!string.IsNullOrWhiteSpace(Model.Sim1Name) && i.Sim1Name == Model.Sim1Name) ||
+                    (!string.IsNullOrWhiteSpace(Model.Sim2Number) && i.Sim2Number == Model.Sim2Number) ||
+                    (!string.IsNullOrWhiteSpace(Model.Sim2Name) && i.Sim2Name == Model.Sim2Name)
+                ));
+
+                if (DeviceIsExist)
+                    return ApiResponseModel<string>.Failure(GenericErrors.DeviceIsExist);
 
 
                 var LastVersion = await _unitOfWork.Repository<DeviceSyncVersion>().FirstOrDefaultAsync(i => i.CustomerId == CustomerId && i.BranchId == Model.BranchId);

@@ -50,5 +50,7 @@ namespace SMSSender.Services.Common
         public static Error DelayedTransactionsExist = new("توجد معاملات متأخرة ضمن النطاق الزمني المحدد. يرجى حلها قبل حساب صافي الربح.");
 
         public static Error ProfitPeriodClosingSuccess = new("تم قفل الفترة بنجاح.");
+
+        public static Error DeviceIsExist = new("معرف الجهاز او رقم الشريحة او اسم الشريحة موجود.");
     }
 }

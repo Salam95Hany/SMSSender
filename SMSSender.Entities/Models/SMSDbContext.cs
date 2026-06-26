@@ -37,8 +37,8 @@ namespace SMSSender.Entities.Models
         public DbSet<DeviceHealth> DeviceHealthes { get; set; }
         public DbSet<DeviceRefreshInbox> DeviceRefreshInboxes { get; set; }
         public DbSet<DeviceSyncVersion> DeviceSyncVersions { get; set; }
-
-
+        public DbSet<DeviceErrorLog> DeviceErrorLogs { get; set; }
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
