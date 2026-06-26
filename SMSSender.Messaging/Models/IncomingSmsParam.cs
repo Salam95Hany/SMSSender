@@ -9,19 +9,14 @@ namespace SMSSender.Messaging.Models
 {
     public class IncomingSmsParam
     {
-        [JsonPropertyName("from")]
-        public string From { get; set; }
-
-        [JsonPropertyName("text")]
-        public string Text { get; set; }
-
-        [JsonPropertyName("sentStamp")]
-        public string SentStamp { get; set; }
-
-        [JsonPropertyName("receivedStamp")]
-        public string ReceivedStamp { get; set; }
-
-        [JsonPropertyName("sim")]
-        public string Sim { get; set; }
+        public string SmsGateId { get; set; }
+        public Guid CustomerId { get; set; }
+        public int BranchId { get; set; }
+        public string Message { get; set; }
+        public string DeviceName { get; set; }
+        public string ProviderPhone { get; set; }
+        public string ProviderName { get; set; }
+        public string SimNumber { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }

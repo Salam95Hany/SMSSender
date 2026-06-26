@@ -36,5 +36,11 @@ namespace SMSSender.Hubs
             await _hubContext.Clients.Group($"Customer_{customerId}_Branch_{branchId}").SendAsync("Message_Calculated", MessageTransactionId);
             await _hubContext.Clients.Group($"Customer_{customerId}").SendAsync("Message_Calculated", MessageTransactionId);
         }
+
+        public async Task SendSystemMessageAddedAsync(Guid CustomerId, int BranchId)
+        {
+            await _hubContext.Clients.Group($"Customer_{CustomerId}_Branch_{BranchId}").SendAsync("System_Message_Added");
+            await _hubContext.Clients.Group($"Customer_{CustomerId}").SendAsync("System_Message_Added");
+        }
     }
 }

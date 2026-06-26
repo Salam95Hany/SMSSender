@@ -30,8 +30,7 @@ namespace SMSSender.Messaging.Services
                     Provider = model.ProviderStr ?? string.Empty,
                     ProviderName = model.DeviceName ?? string.Empty,
                     ProviderPhone = model.PhoneNumber ?? string.Empty,
-                    SentStamp = model.SentStamp ?? string.Empty,
-                    ReceivedStamp = model.ReceivedStamp ?? string.Empty,
+                    CreatedAt = model.CreatedAt,
                     Sim = model.Sim ?? string.Empty,
                     CreatedDate = createdAt,
                 });

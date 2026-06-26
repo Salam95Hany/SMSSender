@@ -1,5 +1,6 @@
 using SMSSender.Entities.Common;
 using SMSSender.Entities.Contracts.DTOs;
+using SMSSender.Entities.Contracts.DTOs.Worker;
 using SMSSender.Entities.Models.Messaging;
 using System.Data;
 
@@ -18,5 +19,6 @@ namespace SMSSender.Interfaces
         Task<ApiResponseModel<DataTable>> GetMessageBoxTodayData();
         Task<ApiResponseModel<string>> MakeMessageAsRead(int MessageTransactionId);
         Task<ApiResponseModel<string>> MakeMessageAsDelayed(int MessageTransactionId);
+        Task<List<string>> GetMessageNotExist(List<string> SmsIds);
     }
 }

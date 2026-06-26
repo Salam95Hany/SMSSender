@@ -18,7 +18,7 @@ namespace SMSSender.Services
             _currentCustomerService = currentCustomerService;
         }
 
-        public void CreateSystemNotification(string Title, string Body, Guid CustomerId,int BranchId)
+        public void CreateSystemNotification(string Title, string Body, Guid CustomerId, int BranchId)
         {
             var notification = new Notification
             {

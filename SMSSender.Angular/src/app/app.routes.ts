@@ -209,6 +209,50 @@ export const routes: Routes = [
           roles: ['Admin', 'Manager', 'Cashier']
         },
       },
+      {
+        path: 'customer-devices',
+        loadComponent: () => import('./components/admin/devices/customer-device/customer-device.component').then((m) => m.CustomerDeviceComponent),
+        canActivate: [authGuard],
+        data: {
+          section: 'الأجهزة',
+          title: 'كل الأجهزة',
+          description: 'إدارة الأجهزة المتصلة بالنظام مع عرض حالة الصحة وسجل التغييرات لكل جهاز.',
+          roles: ['Manager']
+        },
+      },
+      {
+        path: 'customer-device-log',
+        loadComponent: () => import('./components/admin/devices/customer-device-log/customer-device-log.component').then((m) => m.CustomerDeviceLogComponent),
+        canActivate: [authGuard],
+        data: {
+          section: 'الأجهزة',
+          title: 'سجل تغييرات الأجهزة',
+          description: 'عرض منظم لسجل تغييرات الأجهزة.',
+          roles: ['Manager']
+        },
+      },
+      {
+        path: 'customer-device-health-status',
+        loadComponent: () => import('./components/admin/devices/customer-device-health-status/customer-device-health-status.component').then((m) => m.CustomerDeviceHealthStatusComponent),
+        canActivate: [authGuard],
+        data: {
+          section: 'الأجهزة',
+          title: 'حالة الأجهزة',
+          description: 'عرض منظم لحالة الأجهزة.',
+          roles: ['Admin', 'Manager']
+        },
+      },
+      {
+        path: 'customer-device-refresh-inbox',
+        loadComponent: () => import('./components/admin/devices/customer-device-refresh-inbox/customer-device-refresh-inbox.component').then((m) => m.CustomerDeviceRefreshInboxComponent),
+        canActivate: [authGuard],
+        data: {
+          section: 'الأجهزة',
+          title: 'تحديث صندوق الرسائل',
+          description: 'عرض منظم لبيانات تحديث صندوق الرسائل.',
+          roles: ['Admin', 'Manager', 'Cashier']
+        },
+      },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: '**', redirectTo: 'dashboard', pathMatch: 'full' },
     ],

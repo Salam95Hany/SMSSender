@@ -63,9 +63,9 @@ export class FormService {
 
   public validationMessages() {
     const messages = {
-      required: 'This field is required',
+      required: 'هذا الحقل مطلوب',
       email: 'Invalid email address',
-      pattern: 'Invalid input pattern',
+      pattern: 'تنسيق ال IP غير صحيح',
       min: 'The entered value is less than the minimum allowed',
       max: 'The entered value is greater than the maximum allowed',
       invalid_URL: 'Invalid URL',

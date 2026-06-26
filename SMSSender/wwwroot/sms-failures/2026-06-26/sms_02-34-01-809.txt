@@ -1,0 +1,16 @@
+﻿CreatedAt: 2026-06-26T02:34:01.8098012
+ErrorReason: Provider could not be resolved.
+InputParam: {
+  "MessageTransactionId": null,
+  "TransactionId": null,
+  "SmsGateId": "text:-1345121838",
+  "CustomerId": "4e4f1cdf-192c-4db9-b16d-cb633a874ff4",
+  "BranchId": 1,
+  "DeviceName": "TestDevice",
+  "PhoneNumber": "01124564843",
+  "Message": "تم استهلاك %100 من الساعات الهدية.",
+  "Provider": 0,
+  "ProviderStr": "etisalat",
+  "CreatedAt": "2026-06-18T23:59:28.492+03:00",
+  "Sim": "1"
+}

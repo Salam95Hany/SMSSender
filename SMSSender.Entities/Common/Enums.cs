@@ -48,4 +48,17 @@ namespace SMSSender.Entities.Common
         WalletDetail = 2,
         System = 3
     }
+
+    public enum InboxRefreshStatus
+    {
+        Pending = 1,
+        Completed = 2
+    }
+
+    public enum ChangeLogAction
+    {
+        Created = 1,
+        Updated = 2,
+        Deleted = 3
+    }
 }

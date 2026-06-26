@@ -88,8 +88,8 @@ namespace SMSSender.Services
 
         public async Task<ApiResponseModel<string>> ProfitPeriodClosings(ProfitClosing Model)
         {
-            var entity = await _unitOfWork.Repository<MessageTransaction>().AnyAsync(x => x.OperationMsgDateTime.Value.Date >= Model.FromDate.Date &&
-               x.OperationMsgDateTime.Value.Date <= Model.ToDate.Date && x.Commission.HasValue && x.TransactionStatus == TransactionStatus.Delayed);
+            var entity = await _unitOfWork.Repository<MessageTransaction>().AnyAsync(x => x.CreatedAt.Date >= Model.FromDate.Date &&
+               x.CreatedAt.Date <= Model.ToDate.Date && x.Commission.HasValue && x.TransactionStatus == TransactionStatus.Delayed);
             if (entity)
                 return ApiResponseModel<string>.Failure(GenericErrors.DelayedTransactionsExist);
 
@@ -139,13 +139,13 @@ namespace SMSSender.Services
             try
             {
                 var totalProfit = await _unitOfWork.Repository<MessageTransaction>().SumAsync(
-                x => x.OperationMsgDateTime.Value.Date >= FromDate.Date && x.OperationMsgDateTime.Value.Date <= ToDate.Date && x.Commission.HasValue
+                x => x.CreatedAt.Date >= FromDate.Date && x.CreatedAt.Date <= ToDate.Date && x.Commission.HasValue
                 && x.TransactionStatus == TransactionStatus.Completed,
                 x => (double)x.Commission.Value);
 
                 var netProfit = await _unitOfWork.Repository<MessageTransaction>()
                     .SumAsync(
-                        x => x.OperationMsgDateTime.Value.Date >= FromDate.Date && x.OperationMsgDateTime.Value.Date <= ToDate.Date && x.Commission.HasValue
+                        x => x.CreatedAt.Date >= FromDate.Date && x.CreatedAt.Date <= ToDate.Date && x.Commission.HasValue
                         && x.TransactionStatus == TransactionStatus.Completed,
                         x =>
                             x.OperationType == OperationType.Deposit ? (double)x.Commission.Value :

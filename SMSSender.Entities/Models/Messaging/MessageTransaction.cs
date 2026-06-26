@@ -17,6 +17,7 @@ namespace SMSSender.Entities.Models.Messaging
         [Key]
         public int MessageTransactionId { get; set; }
         public Guid TransactionId { get; set; }
+        public string SmsGateId { get; set; }
         public Guid CustomerId { get; set; }
         public int BranchId { get; set; }
         [ForeignKey(nameof(BranchId))]
@@ -33,8 +34,7 @@ namespace SMSSender.Entities.Models.Messaging
         public string? TransactionNumber { get; set; } // رقم العملية
         public TransactionStatus TransactionStatus { get; set; } // حالة العملية : مؤجل \ مكتمل
         public DateTime OperationServerDateTime { get; set; } // تاريخ ووقت العملية في السيرفر
-        public DateTime? OperationMsgDateTime { get; set; } // تاريخ ووقت الاستلام من الـ ReceivedStamp
-        public DateTime? OperationSentDateTime { get; set; } // تاريخ ووقت الإرسال من الـ SentStamp
+        public DateTime CreatedAt { get; set; } // تاريخ ووقت الاستلام
         public bool? IsCalculated { get; set; }
     }
 }

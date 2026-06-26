@@ -11,5 +11,6 @@ namespace SMSSender.Interfaces.Hub
         Task SendMessageAddedAsync(int OperationType);
         Task SendMessageAddedAsync(int OperationType, Guid CustomerId);
         Task SendMessageCalculatedAsync(int MessageTransactionId);
+        Task SendSystemMessageAddedAsync(Guid CustomerId, int BranchId);
     }
 }

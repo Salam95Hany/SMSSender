@@ -1,0 +1,613 @@
+﻿
+====================================
+CreatedAt: 2026-06-19T23:39:33.9162273+03:00
+InputParam: [
+  {
+    "DeviceId": "000000007677b9020000019ec11ff75c",
+    "MessagesFailed": 0,
+    "ConnectionStatus": 1,
+    "ConnectionTransport": 4,
+    "BatteryLevel": 97,
+    "BatteryCharging": false
+  }
+]
+
+====================================
+CreatedAt: 2026-06-19T23:39:33.9196409+03:00
+InputParam: {
+  "MessageTransactionId": null,
+  "TransactionId": null,
+  "SmsGateId": "text:1691074311",
+  "CustomerId": "4e4f1cdf-192c-4db9-b16d-cb633a874ff4",
+  "BranchId": 1,
+  "DeviceName": "TestDevice",
+  "PhoneNumber": "01124564843",
+  "Message": "عميلنا العزيز لاحظنا إنك مش بتستخدم باقتك من فترة وده يهمنا نعرف أسبابه علشان نطور من خدماتنا https://cxsurvey.te.eg/MCE-694554069 شكراً",
+  "Provider": 0,
+  "ProviderStr": "WE Feedback",
+  "CreatedAt": "2026-06-19T22:56:50+03:00",
+  "Sim": "1"
+}
+
+====================================
+CreatedAt: 2026-06-19T23:39:33.9498572+03:00
+InputParam: {
+  "MessageTransactionId": null,
+  "TransactionId": null,
+  "SmsGateId": "text:730171232",
+  "CustomerId": "4e4f1cdf-192c-4db9-b16d-cb633a874ff4",
+  "BranchId": 1,
+  "DeviceName": "TestDevice",
+  "PhoneNumber": "01124564843",
+  "Message": "اتصالات بتسهلك تجديد باقتك ,هنجددلك جزء من الباقة عشان تستفيد بأحسن سعر للدقيقة و الميجابايتس \nدوس على اللينك وشوف عروض 011 على  &My e\nhttps://myeand.go.link/i32cm",
+  "Provider": 0,
+  "ProviderStr": "011 Offers",
+  "CreatedAt": "2026-06-19T19:02:49+03:00",
+  "Sim": "1"
+}
+
+====================================
+CreatedAt: 2026-06-19T23:39:33.9510362+03:00
+InputParam: {
+  "MessageTransactionId": null,
+  "TransactionId": null,
+  "SmsGateId": "text:-581967769",
+  "CustomerId": "4e4f1cdf-192c-4db9-b16d-cb633a874ff4",
+  "BranchId": 1,
+  "DeviceName": "TestDevice",
+  "PhoneNumber": "01124564843",
+  "Message": "الناس حظوظ وانت محظوظ مع &e\r\nكلم #5040* بدون مقابل\r\nوليك 30 وحدة مكالمات وانترنت هدية \r\nوكمان فرصة تكسب 5,000 جنية شهريا\r\nوجايزة كبرى\r\n30,000جنية\r\nمع العالم بين ايديك\r\nيوم هديه بعدها 2 جنيه  او20 وحدات يومياَ\r\nكلم #5040* بدون مقابل\r\nحماية المستهلك 132/2026",
+  "Provider": 0,
+  "ProviderStr": "5040",
+  "CreatedAt": "2026-06-19T10:59:44+03:00",
+  "Sim": "1"
+}
+
+====================================
+CreatedAt: 2026-06-19T23:39:33.9519744+03:00
+InputParam: {
+  "MessageTransactionId": null,
+  "TransactionId": null,
+  "SmsGateId": "text:-889055092",
+  "CustomerId": "4e4f1cdf-192c-4db9-b16d-cb633a874ff4",
+  "BranchId": 1,
+  "DeviceName": "TestDevice",
+  "PhoneNumber": "01124564843",
+  "Message": "100 جنيه خصم من Kansas مستنيك🍔\n\nنزل أبلكيشن تويست دلوقتي واسمع كل اللي بتحبه واستمتع بالخصم على طلبك اللي جاي\n\nنزل الأبلكيشن دلوقتي من هنا\nhttps://twist-music.go.link/uvup4",
+  "Provider": 0,
+  "ProviderStr": "Twist",
+  "CreatedAt": "2026-06-19T09:55:27+03:00",
+  "Sim": "1"
+}
+
+====================================
+CreatedAt: 2026-06-19T23:39:33.9529200+03:00
+InputParam: {
+  "MessageTransactionId": null,
+  "TransactionId": null,
+  "SmsGateId": "text:-1345121838",
+  "CustomerId": "4e4f1cdf-192c-4db9-b16d-cb633a874ff4",
+  "BranchId": 1,
+  "DeviceName": "TestDevice",
+  "PhoneNumber": "01124564843",
+  "Message": "تم استهلاك %100 من الساعات الهدية.",
+  "Provider": 0,
+  "ProviderStr": "etisalat",
+  "CreatedAt": "2026-06-18T23:59:19+03:00",
+  "Sim": "1"
+}
+
+====================================
+CreatedAt: 2026-06-19T23:39:33.9538786+03:00
+InputParam: {
+  "MessageTransactionId": null,
+  "TransactionId": null,
+  "SmsGateId": "text:-1300721727",
+  "CustomerId": "4e4f1cdf-192c-4db9-b16d-cb633a874ff4",
+  "BranchId": 1,
+  "DeviceName": "TestDevice",
+  "PhoneNumber": "01124564843",
+  "Message": "عفوا، لا يوجد لديك رصيد كافٍ لتجديد  جزء  من باقة دماغ تانية",
+  "Provider": 0,
+  "ProviderStr": "e&",
+  "CreatedAt": "2026-06-18T18:31:47+03:00",
+  "Sim": "1"
+}
+
+====================================
+CreatedAt: 2026-06-19T23:39:33.9548024+03:00
+InputParam: {
+  "MessageTransactionId": null,
+  "TransactionId": null,
+  "SmsGateId": "text:-784066551",
+  "CustomerId": "4e4f1cdf-192c-4db9-b16d-cb633a874ff4",
+  "BranchId": 1,
+  "DeviceName": "TestDevice",
+  "PhoneNumber": "01124564843",
+  "Message": "الباقه بقت الضعف مع حكايه ميكسات بمناسبه كاس العالم 🏆\nحول دلوقتي لباقة حكاية ميكسات 52 و ليك 3000 ميكس بدل من 1500 تقدر تستخدمهم ميجابيتس او ساعات انترنت وليك فرصة تكسب دهب!\nحول لحكايه ميكسات من خلال *319# و اطلب #2626* عشان تختار هديتك أو ادخل على تطبيق &My e \nhttps://myeand.go.link/incGM \n",
+  "Provider": 0,
+  "ProviderStr": "HekayaMixat",
+  "CreatedAt": "2026-06-18T16:04:57+03:00",
+  "Sim": "1"
+}
+
+====================================
+CreatedAt: 2026-06-19T23:39:33.9558034+03:00
+InputParam: {
+  "MessageTransactionId": null,
+  "TransactionId": null,
+  "SmsGateId": "text:1866940257",
+  "CustomerId": "4e4f1cdf-192c-4db9-b16d-cb633a874ff4",
+  "BranchId": 1,
+  "DeviceName": "TestDevice",
+  "PhoneNumber": "01124564843",
+  "Message": "انت بالفعل مشترك في العرض",
+  "Provider": 0,
+  "ProviderStr": "e&",
+  "CreatedAt": "2026-06-17T18:18:26+03:00",
+  "Sim": "1"
+}
+
+====================================
+CreatedAt: 2026-06-19T23:39:33.9568006+03:00
+InputParam: {
+  "MessageTransactionId": null,
+  "TransactionId": null,
+  "SmsGateId": "text:-1591696772",
+  "CustomerId": "4e4f1cdf-192c-4db9-b16d-cb633a874ff4",
+  "BranchId": 1,
+  "DeviceName": "TestDevice",
+  "PhoneNumber": "01124564843",
+  "Message": "مع انكورة.. كن أول من يعرف أخبار كأس العالم والكرة، اطلب #4*1*166* سعر الخدمة 30ق/اليوم",
+  "Provider": 0,
+  "ProviderStr": "InKoora",
+  "CreatedAt": "2026-06-17T17:30:59+03:00",
+  "Sim": "1"
+}
+
+====================================
+CreatedAt: 2026-06-19T23:39:33.9575370+03:00
+InputParam: {
+  "MessageTransactionId": null,
+  "TransactionId": null,
+  "SmsGateId": "text:-240984809",
+  "CustomerId": "4e4f1cdf-192c-4db9-b16d-cb633a874ff4",
+  "BranchId": 1,
+  "DeviceName": "TestDevice",
+  "PhoneNumber": "01124564843",
+  "Message": "جالك 50 ميجا هدية من اتصالات لما تكلم #9090* وكول تون وفرصة تكسب 10 الف جنيه، يلا كلم #9090* ببلاش، الكول تون ب5جنيه/شهر إخطار 171لـ26",
+  "Provider": 0,
+  "ProviderStr": "1500",
+  "CreatedAt": "2026-06-17T14:26:43+03:00",
+  "Sim": "1"
+}
+
+====================================
+CreatedAt: 2026-06-19T23:39:33.9583796+03:00
+InputParam: {
+  "MessageTransactionId": null,
+  "TransactionId": null,
+  "SmsGateId": "text:983068913",
+  "CustomerId": "4e4f1cdf-192c-4db9-b16d-cb633a874ff4",
+  "BranchId": 1,
+  "DeviceName": "TestDevice",
+  "PhoneNumber": "01124564843",
+  "Message": "جالك 10 دقايق و30ميجا هدية من &e\r\nلما تكلم #8088* بدون مقابل\r\nمبروك\r\n10دقايق فورية و30 ميجا هدية\r\nوليك يوم بدون مقابل مع She Academy\r\nاتفرج علي حلقات تعليمية مع انجح الشخصيات في مجالات المرأه\r\nبعد كده بجنية أو10وحدات يومياَ\r\nاطلب#8088* بدون مقابل",
+  "Provider": 0,
+  "ProviderStr": "SHE Academy",
+  "CreatedAt": "2026-06-17T13:55:11+03:00",
+  "Sim": "1"
+}
+
+====================================
+CreatedAt: 2026-06-19T23:39:33.9595492+03:00
+InputParam: {
+  "MessageTransactionId": null,
+  "TransactionId": null,
+  "SmsGateId": "text:-711476819",
+  "CustomerId": "4e4f1cdf-192c-4db9-b16d-cb633a874ff4",
+  "BranchId": 1,
+  "DeviceName": "TestDevice",
+  "PhoneNumber": "01124564843",
+  "Message": "ليك 50 وحدة هدية فورية انترنت او مكالمات من &e\r\nلما تكلم #8545* بدون مقابل\r\nتوقع نتائج واحداث المباريات\r\nونافس على جايزة شهرية 10000جنيه\r\nمع اهلاوي في الملعب\r\nيوم هديه بعدها 2 جنيه او 20وحدة يومياَ\r\nكلم #8545* بدون مقابل\r\nحماية المستهلك176/2026",
+  "Provider": 0,
+  "ProviderStr": "AhlawyXMl3b",
+  "CreatedAt": "2026-06-17T11:32:55+03:00",
+  "Sim": "1"
+}
+
+====================================
+CreatedAt: 2026-06-19T23:39:33.9605947+03:00
+InputParam: {
+  "MessageTransactionId": null,
+  "TransactionId": null,
+  "SmsGateId": "text:1507333029",
+  "CustomerId": "4e4f1cdf-192c-4db9-b16d-cb633a874ff4",
+  "BranchId": 1,
+  "DeviceName": "TestDevice",
+  "PhoneNumber": "01124564843",
+  "Message": "اي اند كاش بقت e& money \nالرصيد المتاح بمحفظة  e& money  0.94 ج. \nدلوقتي رسوم السحب والتحويل ثابتة وكمان تحويلة عليك و خمسة علينا للاشتراك كلم *777*16#  \n وكمان تقدر تستمتع بخصم حتى 33% على وجبة كومبو من Buffalo Burger ب 235 جنيه بدل 295 جنيه لفترة محدودة https://spr.ly/BuffaloBurger",
+  "Provider": 0,
+  "ProviderStr": "e& money",
+  "CreatedAt": "2026-06-15T18:20:35+03:00",
+  "Sim": "1"
+}
+
+====================================
+CreatedAt: 2026-06-19T23:39:33.9619946+03:00
+InputParam: {
+  "MessageTransactionId": null,
+  "TransactionId": null,
+  "SmsGateId": "text:544505333",
+  "CustomerId": "4e4f1cdf-192c-4db9-b16d-cb633a874ff4",
+  "BranchId": 1,
+  "DeviceName": "TestDevice",
+  "PhoneNumber": "01124564843",
+  "Message": "مبروك كسبت 10 جنيه كاش باك  من e& money تستخدمها انترنت.\nزور\nhttp://spr.ly/eandmoney\n\nأو كلم#111*777**  خلال يومين للاستمتاع بالهدية",
+  "Provider": 0,
+  "ProviderStr": "e& money",
+  "CreatedAt": "2026-06-15T16:07:30+03:00",
+  "Sim": "1"
+}
+
+====================================
+CreatedAt: 2026-06-19T23:39:33.9630146+03:00
+InputParam: {
+  "MessageTransactionId": null,
+  "TransactionId": null,
+  "SmsGateId": "text:1247206680",
+  "CustomerId": "4e4f1cdf-192c-4db9-b16d-cb633a874ff4",
+  "BranchId": 1,
+  "DeviceName": "TestDevice",
+  "PhoneNumber": "01124564843",
+  "Message": "اي اند كاش بقت e& money \nتم تحويل مبلغ 190.00 ج.م الى رقم 01011679878 بنجاح. \nرسوم التحويل 1.00  جنيه.\nرصيد محفظتك الحالى 0.94. \nدلوقتي رسوم السحب والتحويل ثابتة وكمان تحويلة عليك و خمسة علينا للاشتراك كلم *777*16# \n وكمان تقدر تستمتع بخصم حتى 33% على وجبة كومبو من Buffalo Burger ب 235 جنيه بدل 295 جنيه لفترة محدودة https://spr.ly/BuffaloBurger",
+  "Provider": 0,
+  "ProviderStr": "e& money",
+  "CreatedAt": "2026-06-15T16:07:26+03:00",
+  "Sim": "1"
+}
+
+====================================
+CreatedAt: 2026-06-19T23:39:33.9641437+03:00
+InputParam: {
+  "MessageTransactionId": null,
+  "TransactionId": null,
+  "SmsGateId": "text:451055230",
+  "CustomerId": "4e4f1cdf-192c-4db9-b16d-cb633a874ff4",
+  "BranchId": 1,
+  "DeviceName": "TestDevice",
+  "PhoneNumber": "01124564843",
+  "Message": "اي اند كاش بقت e& money \nالرصيد المتاح بمحفظة  e& money  191.94 ج. \nدلوقتي رسوم السحب والتحويل ثابتة وكمان تحويلة عليك و خمسة علينا للاشتراك كلم *777*16#  \n وكمان تقدر تستمتع بخصم حتى 33% على وجبة كومبو من Buffalo Burger ب 235 جنيه بدل 295 جنيه لفترة محدودة https://spr.ly/BuffaloBurger",
+  "Provider": 0,
+  "ProviderStr": "e& money",
+  "CreatedAt": "2026-06-15T16:06:23+03:00",
+  "Sim": "1"
+}
+
+====================================
+CreatedAt: 2026-06-19T23:39:33.9657442+03:00
+InputParam: {
+  "MessageTransactionId": null,
+  "TransactionId": null,
+  "SmsGateId": "text:-1279928875",
+  "CustomerId": "4e4f1cdf-192c-4db9-b16d-cb633a874ff4",
+  "BranchId": 1,
+  "DeviceName": "TestDevice",
+  "PhoneNumber": "01124564843",
+  "Message": "جالك 50 ميجا هدية من اتصالات لما تكلم #9091* وكول تون وفرصة تكسب 10 الف جنيه، يلا كلم #9091* ببلاش، الكول تون ب5جنيه/شهر إخطار 171لـ26",
+  "Provider": 0,
+  "ProviderStr": "1500",
+  "CreatedAt": "2026-06-14T14:20:23+03:00",
+  "Sim": "1"
+}
+
+====================================
+CreatedAt: 2026-06-19T23:39:33.9667526+03:00
+InputParam: {
+  "MessageTransactionId": null,
+  "TransactionId": null,
+  "SmsGateId": "text:144347667",
+  "CustomerId": "4e4f1cdf-192c-4db9-b16d-cb633a874ff4",
+  "BranchId": 1,
+  "DeviceName": "TestDevice",
+  "PhoneNumber": "01124564843",
+  "Message": "ليك 10 دقايق و30 ميجا هدية فورية من &e\r\nلما تطلب #8080* بدون مقابل\r\nمبروك\r\n10دقايق فورية و30 ميجا هدية\r\nوليك يوم بدون مقابل مع Art &Cinema Academy \r\nهتتفرج علي حلقات تعليمية عن التصوير والاخراج والكتابة\r\nبعد كده بجنية أو10 وحدات يومياَ\r\nاطلب #8080* بدون مقابل",
+  "Provider": 0,
+  "ProviderStr": "ART Academy",
+  "CreatedAt": "2026-06-14T10:38:51+03:00",
+  "Sim": "1"
+}
+
+====================================
+CreatedAt: 2026-06-19T23:39:33.9680411+03:00
+InputParam: {
+  "MessageTransactionId": null,
+  "TransactionId": null,
+  "SmsGateId": "text:1433710490",
+  "CustomerId": "4e4f1cdf-192c-4db9-b16d-cb633a874ff4",
+  "BranchId": 1,
+  "DeviceName": "TestDevice",
+  "PhoneNumber": "01124564843",
+  "Message": ".الزمالك يصارع الوقت لفك القيد. والأهلي يبدأ خطة الإصلاح اشترك في خدمة الكرة المحلية مع تويست سبورتس لمتابعة كل جديد .ليك 50 وحدة مجانا مع تويست سبورتس! إطلب #5150* أول يوم بدون مقابل وبعدين ب2جنيه/ اليوم",
+  "Provider": 0,
+  "ProviderStr": "TwistSports",
+  "CreatedAt": "2026-06-14T09:29:16+03:00",
+  "Sim": "1"
+}
+
+====================================
+CreatedAt: 2026-06-19T23:39:33.9694892+03:00
+InputParam: {
+  "MessageTransactionId": null,
+  "TransactionId": null,
+  "SmsGateId": "text:-1835754568",
+  "CustomerId": "4e4f1cdf-192c-4db9-b16d-cb633a874ff4",
+  "BranchId": 1,
+  "DeviceName": "TestDevice",
+  "PhoneNumber": "01124564843",
+  "Message": "100 وحدة هدية و كمان أول يوم ببلاش!\n\nاشترك في باقة تويست ميوزك اليومية واستمتع بمزيكتك من غير اي إعلانات طول اليوم\n\n استفيد بالوحدات صالحة لأخر اليوم بعد كدة الإشتراك بجنيه واحد بس في اليوم\n\nيلا اشترك عن طريق الكود #4144* أو عن طريق التطبيق\nhttps://myeand.go.link/gnOkb",
+  "Provider": 0,
+  "ProviderStr": "Twist",
+  "CreatedAt": "2026-06-13T19:42:54+03:00",
+  "Sim": "1"
+}
+
+====================================
+CreatedAt: 2026-06-19T23:40:34.4768612+03:00
+InputParam: [
+  {
+    "DeviceId": "000000007677b9020000019ec11ff75c",
+    "MessagesFailed": 0,
+    "ConnectionStatus": 1,
+    "ConnectionTransport": 4,
+    "BatteryLevel": 97,
+    "BatteryCharging": false
+  }
+]
+
+====================================
+CreatedAt: 2026-06-19T23:41:34.6948376+03:00
+InputParam: [
+  {
+    "DeviceId": "000000007677b9020000019ec11ff75c",
+    "MessagesFailed": 0,
+    "ConnectionStatus": 1,
+    "ConnectionTransport": 4,
+    "BatteryLevel": 97,
+    "BatteryCharging": false
+  }
+]
+
+====================================
+CreatedAt: 2026-06-19T23:42:34.8397909+03:00
+InputParam: [
+  {
+    "DeviceId": "000000007677b9020000019ec11ff75c",
+    "MessagesFailed": 0,
+    "ConnectionStatus": 1,
+    "ConnectionTransport": 4,
+    "BatteryLevel": 97,
+    "BatteryCharging": false
+  }
+]
+
+====================================
+CreatedAt: 2026-06-19T23:43:35.0031976+03:00
+InputParam: [
+  {
+    "DeviceId": "000000007677b9020000019ec11ff75c",
+    "MessagesFailed": 0,
+    "ConnectionStatus": 1,
+    "ConnectionTransport": 4,
+    "BatteryLevel": 97,
+    "BatteryCharging": false
+  }
+]
+
+====================================
+CreatedAt: 2026-06-19T23:44:35.5086694+03:00
+InputParam: [
+  {
+    "DeviceId": "000000007677b9020000019ec11ff75c",
+    "MessagesFailed": 0,
+    "ConnectionStatus": 1,
+    "ConnectionTransport": 4,
+    "BatteryLevel": 97,
+    "BatteryCharging": false
+  }
+]
+
+====================================
+CreatedAt: 2026-06-19T23:45:35.7250430+03:00
+InputParam: [
+  {
+    "DeviceId": "000000007677b9020000019ec11ff75c",
+    "MessagesFailed": 0,
+    "ConnectionStatus": 1,
+    "ConnectionTransport": 4,
+    "BatteryLevel": 97,
+    "BatteryCharging": false
+  }
+]
+
+====================================
+CreatedAt: 2026-06-19T23:46:35.8631676+03:00
+InputParam: [
+  {
+    "DeviceId": "000000007677b9020000019ec11ff75c",
+    "MessagesFailed": 0,
+    "ConnectionStatus": 1,
+    "ConnectionTransport": 4,
+    "BatteryLevel": 97,
+    "BatteryCharging": false
+  }
+]
+
+====================================
+CreatedAt: 2026-06-19T23:47:35.9943286+03:00
+InputParam: [
+  {
+    "DeviceId": "000000007677b9020000019ec11ff75c",
+    "MessagesFailed": 0,
+    "ConnectionStatus": 1,
+    "ConnectionTransport": 4,
+    "BatteryLevel": 97,
+    "BatteryCharging": false
+  }
+]
+
+====================================
+CreatedAt: 2026-06-19T23:48:36.3527241+03:00
+InputParam: [
+  {
+    "DeviceId": "000000007677b9020000019ec11ff75c",
+    "MessagesFailed": 0,
+    "ConnectionStatus": 1,
+    "ConnectionTransport": 4,
+    "BatteryLevel": 97,
+    "BatteryCharging": false
+  }
+]
+
+====================================
+CreatedAt: 2026-06-19T23:49:36.4734807+03:00
+InputParam: [
+  {
+    "DeviceId": "000000007677b9020000019ec11ff75c",
+    "MessagesFailed": 0,
+    "ConnectionStatus": 1,
+    "ConnectionTransport": 4,
+    "BatteryLevel": 97,
+    "BatteryCharging": false
+  }
+]
+
+====================================
+CreatedAt: 2026-06-19T23:50:36.6550974+03:00
+InputParam: [
+  {
+    "DeviceId": "000000007677b9020000019ec11ff75c",
+    "MessagesFailed": 0,
+    "ConnectionStatus": 1,
+    "ConnectionTransport": 4,
+    "BatteryLevel": 97,
+    "BatteryCharging": false
+  }
+]
+
+====================================
+CreatedAt: 2026-06-19T23:51:37.0053205+03:00
+InputParam: [
+  {
+    "DeviceId": "000000007677b9020000019ec11ff75c",
+    "MessagesFailed": 0,
+    "ConnectionStatus": 1,
+    "ConnectionTransport": 4,
+    "BatteryLevel": 97,
+    "BatteryCharging": false
+  }
+]
+
+====================================
+CreatedAt: 2026-06-19T23:52:37.1600000+03:00
+InputParam: [
+  {
+    "DeviceId": "000000007677b9020000019ec11ff75c",
+    "MessagesFailed": 0,
+    "ConnectionStatus": 1,
+    "ConnectionTransport": 4,
+    "BatteryLevel": 97,
+    "BatteryCharging": false
+  }
+]
+
+====================================
+CreatedAt: 2026-06-19T23:53:37.3144130+03:00
+InputParam: [
+  {
+    "DeviceId": "000000007677b9020000019ec11ff75c",
+    "MessagesFailed": 0,
+    "ConnectionStatus": 1,
+    "ConnectionTransport": 4,
+    "BatteryLevel": 96,
+    "BatteryCharging": false
+  }
+]
+
+====================================
+CreatedAt: 2026-06-19T23:54:37.7312759+03:00
+InputParam: [
+  {
+    "DeviceId": "000000007677b9020000019ec11ff75c",
+    "MessagesFailed": 0,
+    "ConnectionStatus": 1,
+    "ConnectionTransport": 4,
+    "BatteryLevel": 96,
+    "BatteryCharging": false
+  }
+]
+
+====================================
+CreatedAt: 2026-06-19T23:55:38.0502774+03:00
+InputParam: [
+  {
+    "DeviceId": "000000007677b9020000019ec11ff75c",
+    "MessagesFailed": 0,
+    "ConnectionStatus": 1,
+    "ConnectionTransport": 4,
+    "BatteryLevel": 96,
+    "BatteryCharging": false
+  }
+]
+
+====================================
+CreatedAt: 2026-06-19T23:56:38.2526139+03:00
+InputParam: [
+  {
+    "DeviceId": "000000007677b9020000019ec11ff75c",
+    "MessagesFailed": 0,
+    "ConnectionStatus": 1,
+    "ConnectionTransport": 4,
+    "BatteryLevel": 96,
+    "BatteryCharging": false
+  }
+]
+
+====================================
+CreatedAt: 2026-06-19T23:57:38.3912461+03:00
+InputParam: [
+  {
+    "DeviceId": "000000007677b9020000019ec11ff75c",
+    "MessagesFailed": 0,
+    "ConnectionStatus": 1,
+    "ConnectionTransport": 4,
+    "BatteryLevel": 96,
+    "BatteryCharging": false
+  }
+]
+
+====================================
+CreatedAt: 2026-06-19T23:58:38.7708932+03:00
+InputParam: [
+  {
+    "DeviceId": "000000007677b9020000019ec11ff75c",
+    "MessagesFailed": 0,
+    "ConnectionStatus": 1,
+    "ConnectionTransport": 4,
+    "BatteryLevel": 96,
+    "BatteryCharging": false
+  }
+]
+
+====================================
+CreatedAt: 2026-06-19T23:59:39.0087747+03:00
+InputParam: [
+  {
+    "DeviceId": "000000007677b9020000019ec11ff75c",
+    "MessagesFailed": 0,
+    "ConnectionStatus": 1,
+    "ConnectionTransport": 4,
+    "BatteryLevel": 96,
+    "BatteryCharging": false
+  }
+]

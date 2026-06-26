@@ -1,0 +1,95 @@
+<section class="page-shell">
+    <app-admin-breadcrumb title="الأجهزة" icon="fas fa-vault" [items]="[{ label: 'إدارة الرسائل', route: '/admin/dashboard' }, { label: 'سجلات الأجهزة' }]"></app-admin-breadcrumb>
+    <div class="surface-card page-panel">
+        <div class="page-toolbar">
+            <div class="page-toolbar__meta">
+                <h2>الأجهزة ({{ DeviceInboxList.length }})</h2>
+                <p>تحديث صندوق الرسائل خلال فترة زمنية محددة.</p>
+            </div>
+        </div>
+        <div class="admin-table-wrapper" *ngIf="DeviceInboxList.length > 0; else emptyState">
+            <div class="table-responsive table-responsive-card">
+                <table class="table align-middle table-hover">
+                    <thead>
+                        <tr>
+                            <th>اسم الجهاز</th>
+                            <th>الفرع</th>
+                            <th>حالة الجهاز</th>
+                            <th>حالة التحديث</th>
+                            <th>التاريخ من</th>
+                            <th>التاريخ الى</th>
+                            <th>تاريخ اخر عملية تحديث</th>
+                            <th class="text-center">الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of DeviceInboxList">
+                            <td data-label="اسم الجهاز">{{ item.deviceName }}</td>
+                            <td data-label="الفرع">{{ item.branchName }}</td>
+                            <td data-label="حالة الجهاز">
+                                <span class="status-chip badge-success" *ngIf="item.isActive">نشط</span>
+                                <span class="status-chip badge-danger" *ngIf="!item.isActive">غير نشط</span>
+                            </td>
+                            <td data-label="حالة التحديث">
+                                <span class="status-chip badge-gold" *ngIf="item?.refreshStatus == '1'">...جاري التحديث</span>
+                                <span class="status-chip badge-success" *ngIf="item?.refreshStatus == '2'">تم التحديث</span>
+                                <span *ngIf="!item?.refreshStatus">-</span>
+                            </td>
+                            <td data-label="التاريخ من">{{ item?.from | arabicDateWithTime }}</td>
+                            <td data-label="التاريخ الى">{{ item?.to | arabicDateWithTime }}</td>
+                            <td data-label="تاريخ اخر عملية تحديث">{{ item?.lastUpdate | arabicDateWithTime }}</td>
+                            <td data-label="الإجراءات" class="table-actions-cell">
+                                <div class="table-actions-row">
+                                    <button class="btn btn-outline-secondary rounded-25 d-flex align-items-center gap-2" (click)="openAddItemModal(OpenItemModal,item)">
+                                        <i class="fas fa-sync"></i>
+                                        <span>تحديث</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <ng-template #emptyState>
+            <app-admin-empty-state></app-admin-empty-state>
+        </ng-template>
+    </div>
+</section>
+
+<ngx-loading [show]="ShowLoader"></ngx-loading>
+
+
+<ng-template #OpenItemModal let-modal>
+    <div class="modal-header admin-modal-header d-flex align-items-center justify-content-between text-white">
+        <div class="modal-title-wrap d-flex align-items-center gap-3">
+            <span class="modal-title-icon"><i class="fas fa-crosshairs"></i></span>
+            <div>
+                <div class="modal-kicker">إدارة الأجهزة</div>
+                <div class="modal-title-text">تحديث الصندوق</div>
+            </div>
+        </div>
+        <i class="fas fa-times cursor-pointer fa-2x modal-close-btn" (click)="modal.dismiss()"></i>
+    </div>
+    <div class="modal-body admin-modal-body">
+        <div class="admin-modal-card">
+            <form [formGroup]="ItemForm" autocomplete="off">
+                <div class="row g-3">
+                    <app-admin-general-input [type]="'date'" [placeholder]="'التاريخ من'" [label]="'التاريخ من'" class="col-md-6" formControlName="From" [error]="formErrors.From"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'date'" [placeholder]="'التاريخ إلى'" [label]="'التاريخ إلى'" class="col-md-6" formControlName="To" [error]="formErrors.To"></app-admin-general-input>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer admin-modal-footer justify-content-start gap-2">
+        <button type="submit" class="btn btn-outline-secondary rounded-25 d-flex align-items-center gap-2" (click)="AddNewItem()">
+            <i class="fas fa-sync"></i>
+            <span>تحديث</span>
+        </button>
+        <button class="btn btn-outline-secondary rounded-25 d-flex align-items-center gap-2" (click)="modal.close()">
+            <i class="fas fa-times-circle"></i>
+            <span>إلغاء</span>
+        </button>
+    </div>
+</ng-template>

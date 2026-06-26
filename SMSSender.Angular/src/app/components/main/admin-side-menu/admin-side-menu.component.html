@@ -87,9 +87,25 @@
         <div class="nav-group" appRole [roles]="['Admin', 'Manager']">
             <div class="nav-group__label" *ngIf="!isCollapsed">الإعدادات</div>
             <div class="nav-group__items">
-                <a class="nav-item" routerLink="/admin/user" routerLinkActive="active">
+                <!-- <a class="nav-item" routerLink="/admin/user" routerLinkActive="active">
                     <i class="fas fa-users-cog"></i>
                     <span *ngIf="!isCollapsed">المستخدمون</span>
+                </a> -->
+                <a class="nav-item" routerLink="/admin/customer-devices" routerLinkActive="active" appRole [roles]="['Manager']">
+                    <i class="fas fa-mobile-alt"></i>
+                    <span *ngIf="!isCollapsed">الأجهزة</span>
+                </a>
+                <a class="nav-item" routerLink="/admin/customer-device-log" routerLinkActive="active" appRole [roles]="['Manager']">
+                    <i class="fas fa-history"></i>
+                    <span *ngIf="!isCollapsed">سجل تغييرات الأجهزة</span>
+                </a>
+                <a class="nav-item" routerLink="/admin/customer-device-health-status" routerLinkActive="active">
+                    <i class="fas fa-heartbeat"></i>
+                    <span *ngIf="!isCollapsed">حالة الأجهزة</span>
+                </a>
+                <a class="nav-item" routerLink="/admin/customer-device-refresh-inbox" routerLinkActive="active">
+                    <i class="fas fa-inbox"></i>
+                    <span *ngIf="!isCollapsed">تحديث صندوق الرسائل</span>
                 </a>
                 <a class="nav-item" routerLink="/admin/factory" routerLinkActive="active">
                     <i class="fas fa-undo"></i>

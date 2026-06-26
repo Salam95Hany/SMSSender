@@ -6,6 +6,8 @@ namespace SMSSender.Messaging.FileLog
 {
     public class FileLoggerService : IFileLoggerService
     {
+        private static readonly SemaphoreSlim _fileLock = new(1, 1);
+
         public async Task LogMessageData(object model)
         {
             var createdAt = DateTime.Now;
@@ -25,7 +27,16 @@ namespace SMSSender.Messaging.FileLog
                 .AppendLine($"InputParam: {JsonConvert.SerializeObject(model, Formatting.Indented)}")
                 .ToString();
 
-            await File.AppendAllTextAsync(filePath, fileContent, Encoding.UTF8);
+            await _fileLock.WaitAsync();
+
+            try
+            {
+                await File.AppendAllTextAsync(filePath, fileContent, Encoding.UTF8);
+            }
+            finally
+            {
+                _fileLock.Release();
+            }
         }
 
         public async Task LogError(Exception ex)
@@ -38,7 +49,7 @@ namespace SMSSender.Messaging.FileLog
             if (!Directory.Exists(targetDirectory))
                 Directory.CreateDirectory(targetDirectory);
 
-            var filePath = Path.Combine(targetDirectory,$"errors_{createdAt:yyyy-MM-dd}.txt");
+            var filePath = Path.Combine(targetDirectory, $"errors_{createdAt:yyyy-MM-dd}.txt");
 
             var sb = new StringBuilder()
                 .AppendLine()
@@ -60,7 +71,16 @@ namespace SMSSender.Messaging.FileLog
                 level++;
             }
 
-            await File.AppendAllTextAsync(filePath, sb.ToString(), Encoding.UTF8);
+            await _fileLock.WaitAsync();
+
+            try
+            {
+                await File.AppendAllTextAsync(filePath, sb.ToString(), Encoding.UTF8);
+            }
+            finally
+            {
+                _fileLock.Release();
+            }
         }
     }
 }

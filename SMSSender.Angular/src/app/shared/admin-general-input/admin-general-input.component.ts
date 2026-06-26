@@ -51,7 +51,7 @@ export class AdminGeneralInputComponent {
 
   writeValue(obj: any): void {
     this.isUsingFormControl = true;
-    this.value = obj;
+    this.value = obj ?? '';
   }
 
   registerOnChange(fn: any): void {

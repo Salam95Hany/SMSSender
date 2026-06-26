@@ -1,0 +1,65 @@
+<section class="page-shell">
+    <app-admin-breadcrumb title="حالة الأجهزة" icon="fas fa-vault" [items]="[{ label: 'إدارة الرسائل', route: '/admin/dashboard' }, { label: 'حالة الأجهزة' }]"></app-admin-breadcrumb>
+    <div class="surface-card page-panel">
+        <div class="page-toolbar">
+            <div class="page-toolbar__meta">
+                <h2>الأجهزة ({{ DeviceHealthList.length }})</h2>
+                <p>إدارة الأجهزة المتصلة بالنظام مع عرض حالة الصحة وسجل التغييرات لكل جهاز.</p>
+            </div>
+        </div>
+        <div class="admin-table-wrapper" *ngIf="DeviceHealthList.length > 0; else emptyState">
+            <div class="table-responsive table-responsive-card">
+                <table class="table align-middle table-hover">
+                    <thead>
+                        <tr>
+                            <th>اسم الجهاز</th>
+                            <th>الفرع</th>
+                            <th>عدد الرسائل الغير مستلمة</th>
+                            <th>حالة اتصال الجهاز بالانترنت</th>
+                            <th>طريقة الاتصال بالانترنت</th>
+                            <th>مستوى البطارية</th>
+                            <th>يتم شحن الجهاز</th>
+                            <th>تاريخ اخر اتصال للجهاز مع التطبيق</th>
+                            <th>حالة اتصال الجهاز مع التطبيق</th>
+                            <th>تاريخ اخر ارسال</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of DeviceHealthList">
+                            <td data-label="اسم الجهاز">{{ item.deviceName }}</td>
+                            <td data-label="الفرع">{{ item.branchName }}</td>
+                            <td data-label="عدد الرسائل الغير مستلمة">{{ item.messagesFailed }}</td>
+                            <td data-label="حالة اتصال الانترنت">
+                                <span *ngIf="item.connectionStatus == 1"><i class="fas fa-circle text-success"></i> متصل</span>
+                                <span *ngIf="item.connectionStatus != 1"><i class="fas fa-circle text-danger"></i> غير متصل</span>
+                            </td>
+                            <td data-label="طريقة الاتصال بالانترنت">واي فاي</td>
+                            <td data-label="مستوى البطارية">
+                                <span *ngIf="item.batteryLevel >= 0 && item.batteryLevel <= 20"><i class="fas fa-battery-empty text-danger battery-vertical"></i> {{ item.batteryLevel }}%</span>
+                                <span *ngIf="item.batteryLevel >= 21 && item.batteryLevel <= 40"><i class="fas fa-battery-quarter text-warning battery-vertical"></i> {{ item.batteryLevel }}%</span>
+                                <span *ngIf="item.batteryLevel >= 41 && item.batteryLevel <= 60"><i class="fas fa-battery-half text-success battery-vertical"></i> {{ item.batteryLevel }}%</span>
+                                <span *ngIf="item.batteryLevel >= 60 && item.batteryLevel <= 80"><i class="fas fa-three-quarters text-success battery-vertical"></i> {{ item.batteryLevel }}%</span>
+                                <span *ngIf="item.batteryLevel >= 81 && item.batteryLevel <= 100"><i class="fas fa-battery-full text-success battery-vertical"></i> {{ item.batteryLevel }}%</span>
+                            </td>
+                            <td data-label="يتم شحن الجهاز">
+                                <span *ngIf="item.batteryCharging"><i class="fas fa-bolt me-2"></i>جاري الشحن</span>
+                                <span *ngIf="!item.batteryCharging"><i class="fas fa-power-off me-2"></i>الشحن متوقف</span>
+                            </td>
+                            <td data-label="تاريخ اخر اتصال مع السيرفر">{{ item.lastSeen | arabicDateWithTime}}</td>
+                            <td data-label="حالة الاتصال مع السيرفر">
+                                <span *ngIf="isDeviceOnline(item.lastSeen)"><i class="fas fa-circle text-success"></i> متصل</span>
+                                <span *ngIf="!isDeviceOnline(item.lastSeen)"><i class="fas fa-circle text-danger"></i> غير متصل</span>
+                            </td>
+                            <td data-label="تاريخ اخر ارسال">{{ item.lastSyncDate | arabicDateWithTime}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <ng-template #emptyState>
+            <app-admin-empty-state></app-admin-empty-state>
+        </ng-template>
+    </div>
+</section>
+
+<ngx-loading [show]="ShowLoader"></ngx-loading>

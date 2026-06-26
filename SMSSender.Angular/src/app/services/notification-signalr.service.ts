@@ -31,6 +31,10 @@ export class NotificationSignalrService {
     this.hubConnection.on('Message_Calculated', (messageTransactionId: number) => { callback(messageTransactionId); });
   }
 
+  onSystemMessageAdded(callback: () => void) {
+    this.hubConnection.on('System_Message_Added', () => { callback(); });
+  }
+
   stopConnection() {
     if (this.hubConnection) {
       this.hubConnection.stop().then(() => { }).catch(err => console.log(err));

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SMSSender.Messaging.TaskQueue
 {
-    public class BackgroundTaskQueue: IBackgroundTaskQueue
+    public class BackgroundTaskQueue : IBackgroundTaskQueue
     {
         private readonly Channel<SmsMessagePure> _queue;
 
@@ -19,6 +19,12 @@ namespace SMSSender.Messaging.TaskQueue
         public async ValueTask QueueAsync(SmsMessagePure workItem)
         {
             await _queue.Writer.WriteAsync(workItem);
+        }
+
+        public async ValueTask QueueRangeAsync(IEnumerable<SmsMessagePure> workItems)
+        {
+            foreach (var item in workItems)
+                await _queue.Writer.WriteAsync(item);
         }
 
         public async ValueTask<SmsMessagePure> DequeueAsync(CancellationToken cancellationToken)

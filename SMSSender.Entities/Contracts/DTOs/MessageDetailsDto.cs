@@ -13,8 +13,7 @@ namespace SMSSender.Entities.Contracts.DTOs
         public string ProviderName { get; set; }
         public string ProviderPhone { get; set; }
         public string Sim { get; set; }
-        public string SentStamp { get; set; }
-        public string ReceivedStamp { get; set; }
+        public DateTime CreatedAt { get; set; }
         public string Message { get; set; }
     }
 }

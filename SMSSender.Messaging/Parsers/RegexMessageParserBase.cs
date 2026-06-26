@@ -1,7 +1,6 @@
 using System.Globalization;
 using SMSSender.Entities.Common;
 using SMSSender.Interfaces.Common;
-using SMSSender.Messaging;
 using SMSSender.Messaging.Models;
 using SMSSender.Messaging.Services;
 
@@ -9,10 +8,6 @@ namespace SMSSender.Messaging.Parsers
 {
     public abstract class RegexMessageParserBase : IMessageParser
     {
-        private const long MinUnixMilliseconds = -62135596800000;
-        private const long MaxUnixMilliseconds = 253402300799999;
-        private const long MinUnixSeconds = -62135596800;
-        private const long MaxUnixSeconds = 253402300799;
         private static readonly OperationType[] DetectionOrder =
         {
             OperationType.Deposit,
@@ -56,8 +51,7 @@ namespace SMSSender.Messaging.Parsers
                 SenderName = ExtractField(normalizedMessage, settings, nameof(FieldPatterns.SenderName)),
                 BalanceAfter = ParseDecimal(ExtractField(normalizedMessage, settings, nameof(FieldPatterns.BalanceAfter))),
                 TransactionNumber = ExtractField(normalizedMessage, settings, nameof(FieldPatterns.TransactionNumber)),
-                OperationDateTime = ParseStampDateTime(message.ReceivedStamp) ?? DateTime.UtcNow.EgyptNow(),
-                SentDateTime = ParseStampDateTime(message.SentStamp)
+                CreatedAt = message.CreatedAt,
             };
         }
 
@@ -115,50 +109,6 @@ namespace SMSSender.Messaging.Parsers
             }
 
             return value.Trim().Trim('.', ',', ';', ':', '،', '؛');
-        }
-
-        protected DateTime? ParseStampDateTime(string? value)
-        {
-            if (string.IsNullOrWhiteSpace(value))
-                return null;
-
-            var egyptTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time");
-            var normalizedValue = SmsTextNormalizer.Normalize(value);
-
-            if (long.TryParse(normalizedValue, NumberStyles.Integer, CultureInfo.InvariantCulture, out var numericStamp))
-            {
-                if (numericStamp >= MinUnixMilliseconds &&
-                    numericStamp <= MaxUnixMilliseconds)
-                {
-                    var utc = DateTimeOffset.FromUnixTimeMilliseconds(numericStamp).UtcDateTime;
-                    return TimeZoneInfo.ConvertTimeFromUtc(utc, egyptTimeZone);
-                }
-
-                if (numericStamp >= MinUnixSeconds &&
-                    numericStamp <= MaxUnixSeconds)
-                {
-                    var utc = DateTimeOffset.FromUnixTimeSeconds(numericStamp).UtcDateTime;
-                    return TimeZoneInfo.ConvertTimeFromUtc(utc, egyptTimeZone);
-                }
-
-                if (numericStamp >= DateTime.MinValue.Ticks && numericStamp <= DateTime.MaxValue.Ticks)
-                {
-                    var utc = new DateTime(numericStamp, DateTimeKind.Utc);
-                    return TimeZoneInfo.ConvertTimeFromUtc(utc, egyptTimeZone);
-                }
-            }
-
-            if (DateTimeOffset.TryParse(normalizedValue, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out var parsedOffset))
-            {
-                return TimeZoneInfo.ConvertTimeFromUtc(parsedOffset.UtcDateTime, egyptTimeZone);
-            }
-
-            if (DateTime.TryParse(normalizedValue, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out var parsedDateTime))
-            {
-                return TimeZoneInfo.ConvertTimeFromUtc(parsedDateTime.ToUniversalTime(), egyptTimeZone);
-            }
-
-            return null;
         }
 
         public decimal CalculateFee(decimal amount, OperationType type, ProviderType Provider)

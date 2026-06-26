@@ -16,6 +16,7 @@ namespace SMSSender.Entities.Models.Messaging
         [Key]
         public int SmsMessageLogId { get; set; }
         public Guid TransactionId { get; set; }
+        public string SmsGateId { get; set; }
         public Guid CustomerId { get; set; }
         public int BranchId { get; set; }
         public string Message { get; set; }
@@ -24,8 +25,7 @@ namespace SMSSender.Entities.Models.Messaging
         public string Provider { get; set; }
         public string ProviderName { get; set; }
         public string ProviderPhone { get; set; }
-        public string SentStamp { get; set; }
-        public string ReceivedStamp { get; set; }
+        public DateTime CreatedAt { get; set; }
         public DateTime CreatedDate { get; set; }
         public string Sim { get; set; }
 

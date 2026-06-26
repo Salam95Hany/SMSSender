@@ -14,12 +14,7 @@ namespace SMSSender.Messaging.Services
         private readonly IEnumerable<IMessageParser> _parsers;
         private readonly IMessageProviderRegistry _providerRegistry;
 
-        public MessageProcessingService(
-            IMessageProviderRegistry providerRegistry,
-            IEnumerable<IMessageParser> parsers,
-            IEnumerable<IOperationHandler> operationHandlers,
-            IMessageLogRepository logRepo,
-            IFailedSmsLogger failedSmsLogger)
+        public MessageProcessingService(IMessageProviderRegistry providerRegistry, IEnumerable<IMessageParser> parsers, IEnumerable<IOperationHandler> operationHandlers, IMessageLogRepository logRepo, IFailedSmsLogger failedSmsLogger)
         {
             _providerRegistry = providerRegistry;
             _parsers = parsers;
@@ -82,6 +77,7 @@ namespace SMSSender.Messaging.Services
                 var transaction = new MessageTransaction
                 {
                     TransactionId = transactionId,
+                    SmsGateId = model.SmsGateId,
                     Provider = parsedMessage.Provider,
                     ProviderName = model.DeviceName,
                     ProviderPhone = model.PhoneNumber,
@@ -94,8 +90,7 @@ namespace SMSSender.Messaging.Services
                     TransactionNumber = parsedMessage.TransactionNumber,
                     TransactionStatus = Entities.Common.TransactionStatus.Delayed,
                     OperationServerDateTime = DateTime.UtcNow.EgyptNow(),
-                    OperationMsgDateTime = parsedMessage.OperationDateTime,
-                    OperationSentDateTime = parsedMessage.SentDateTime
+                    CreatedAt = parsedMessage.CreatedAt
                 };
 
                 await handler.Handle(transaction);
@@ -151,6 +146,7 @@ namespace SMSSender.Messaging.Services
                 var transaction = new MessageTransaction
                 {
                     MessageTransactionId = model.MessageTransactionId.Value,
+                    SmsGateId = model.SmsGateId,
                     TransactionId = transactionId.Value,
                     Provider = parsedMessage.Provider,
                     ProviderName = model.DeviceName,
@@ -163,8 +159,7 @@ namespace SMSSender.Messaging.Services
                     BalanceAfter = parsedMessage.BalanceAfter.HasValue ? (double)parsedMessage.BalanceAfter.Value : null,
                     TransactionNumber = parsedMessage.TransactionNumber,
                     OperationServerDateTime = DateTime.UtcNow.EgyptNow(),
-                    OperationMsgDateTime = parsedMessage.OperationDateTime,
-                    OperationSentDateTime = parsedMessage.SentDateTime
+                    CreatedAt = parsedMessage.CreatedAt
                 };
 
                 await handler.Update(transaction);
@@ -188,6 +183,7 @@ namespace SMSSender.Messaging.Services
             {
                 await _logRepo.LogMsgStatus(new SmsMessageLog
                 {
+                    SmsGateId = model.SmsGateId,
                     TransactionId = transactionId,
                     Message = model.Message ?? string.Empty,
                     ErrorMessage = errorMessage,
@@ -195,8 +191,7 @@ namespace SMSSender.Messaging.Services
                     Provider = model.ProviderStr ?? string.Empty,
                     ProviderName = model.DeviceName ?? string.Empty,
                     ProviderPhone = model.PhoneNumber ?? string.Empty,
-                    SentStamp = model.SentStamp ?? string.Empty,
-                    ReceivedStamp = model.ReceivedStamp ?? string.Empty,
+                    CreatedAt = model.CreatedAt,
                     Sim = model.Sim ?? string.Empty,
                     CreatedDate = DateTime.UtcNow.EgyptNow(),
                 });

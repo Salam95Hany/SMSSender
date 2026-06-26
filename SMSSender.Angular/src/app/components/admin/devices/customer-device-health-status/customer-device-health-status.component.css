@@ -1,0 +1,4 @@
+.battery-vertical {
+    transform: rotate(-90deg);
+    display: inline-block;
+}

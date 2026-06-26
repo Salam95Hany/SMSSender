@@ -1,0 +1,48 @@
+<section class="page-shell">
+    <app-admin-breadcrumb title="سجلات الأجهزة" icon="fas fa-vault" [items]="[{ label: 'إدارة الرسائل', route: '/admin/dashboard' }, { label: 'سجلات الأجهزة' }]"></app-admin-breadcrumb>
+    <div class="surface-card page-panel">
+        <div class="page-toolbar">
+            <div class="page-toolbar__meta">
+                <h2>سجلات الأجهزة</h2>
+                <p>إدارة سجلات الأجهزة المتصلة بالنظام مع عرض حالة الصحة وسجل التغييرات لكل جهاز.</p>
+            </div>
+        </div>
+        <div class="admin-table-wrapper" *ngIf="DeviceLogList.length > 0; else emptyState">
+            <div class="table-responsive table-responsive-card">
+                <table class="table align-middle table-hover">
+                    <thead>
+                        <tr>
+                            <th>اسم الجهاز</th>
+                            <th>رقم الاصدار</th>
+                            <th>نوع الاكشن</th>
+                            <th>اسم الحقل</th>
+                            <th>قيمة الحقل</th>
+                            <th>تاريخ الاضافة</th>
+                            <th>اخر رقم اصدار</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of DeviceLogList">
+                            <td data-label="اسم الجهاز">{{ item.deviceName }}</td>
+                            <td data-label="رقم الاصدار">{{ item.version }}</td>
+                            <td data-label="نوع الاكشن">
+                                <span class="status-chip badge-success" *ngIf="item.action == '1'">إضافة</span>
+                                <span class="status-chip badge-gold" *ngIf="item.action == '2'">تعديل</span>
+                                <span class="status-chip badge-danger" *ngIf="item.action == '3'">حذف</span>
+                            </td>
+                            <td data-label="اسم الحقل">{{ item.fieldKey }}</td>
+                            <td data-label="قيمة الحقل">{{ item.fieldValue }}</td>
+                            <td data-label="تاريخ الاضافة">{{ item.createdAt | arabicDateWithTime }}</td>
+                            <td data-label="اخر رقم اصدار">{{ item.lastVersion}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <ng-template #emptyState>
+            <app-admin-empty-state icon="fas fa-vault" title="لا توجد سجلات" description="يمكنك إضافة جهاز جديد أو انتظار تحميل النتائج المطابقة للمعايير الحالية."></app-admin-empty-state>
+        </ng-template>
+    </div>
+</section>
+
+<ngx-loading [show]="ShowLoader"></ngx-loading>

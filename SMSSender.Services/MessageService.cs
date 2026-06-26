@@ -10,7 +10,6 @@ using SMSSender.Interfaces.Common;
 using SMSSender.Interfaces.Repositories;
 using SMSSender.Services.Common;
 using System.Data;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace SMSSender.Services
@@ -86,8 +85,8 @@ namespace SMSSender.Services
             var Tomorrow = Today.AddDays(1);
 
             var Data = await _unitOfWork.Repository<MessageTransaction>()
-                .GetAllAsQueryable().Include(x => x.Branch).Where(x => x.OperationMsgDateTime >= Today && x.OperationMsgDateTime < Tomorrow)
-                .OrderByDescending(x => x.OperationMsgDateTime)
+                .GetAllAsQueryable().Include(x => x.Branch).Where(x => x.CreatedAt >= Today && x.CreatedAt < Tomorrow)
+                .OrderByDescending(x => x.CreatedAt)
                 .Take(5).AsNoTracking().ToListAsync();
 
             var Results = Data.Select(x => new LatestTransactionDto
@@ -110,7 +109,7 @@ namespace SMSSender.Services
                 BalanceAfter = x.BalanceAfter,
                 TransactionNumber = x.TransactionNumber,
                 TransactionStatus = (int)x.TransactionStatus,
-                OperationServerDateTime = x.OperationMsgDateTime.Value,
+                OperationServerDateTime = x.CreatedAt,
                 Commission = x.Commission
             }).ToList();
 
@@ -150,8 +149,7 @@ namespace SMSSender.Services
                 ProviderName = LogData.ProviderName,
                 ProviderPhone = LogData.ProviderPhone,
                 Sim = LogData.Sim,
-                SentStamp = LogData.SentStamp,
-                ReceivedStamp = LogData.ReceivedStamp,
+                CreatedAt = LogData.CreatedAt,
                 Message = LogData.Message
             };
             return ApiResponseModel<MessageDetailsDto>.Success(GenericErrors.GetSuccess, Results);
@@ -246,6 +244,12 @@ namespace SMSSender.Services
             {
                 return false;
             }
+        }
+
+        public async Task<List<string>> GetMessageNotExist(List<string> SmsIds)
+        {
+            var existingSmsIds = await _unitOfWork.Repository<MessageTransaction>().GetAllAsQueryable().Where(x => SmsIds.Contains(x.SmsGateId)).Select(x => x.SmsGateId).ToListAsync();
+            return SmsIds.Except(existingSmsIds).ToList();
         }
     }
 }

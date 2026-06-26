@@ -73,8 +73,9 @@ namespace SMSSender.DI
             services.AddScoped<IWalletReminderService, WalletReminderService>();
             services.AddScoped<IReportService, ReportService>();
             services.AddScoped<ICurrentCustomerService, CurrentCustomerService>();
-
-
+            services.AddScoped<IDeviceService, DeviceService>();
+            services.AddScoped<IWorkerService, WorkerService>();
+            
             #region ReportsDI
 
             services.AddSingleton<IRazorLightEngine>(serviceProvider =>

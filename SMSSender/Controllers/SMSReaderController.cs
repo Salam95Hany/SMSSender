@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SMSSender.Entities.Models.Global;
+using SMSSender.Interfaces;
 using SMSSender.Interfaces.Common;
 using SMSSender.Messaging;
-using SMSSender.Messaging.FileLog;
 using SMSSender.Messaging.Models;
+using SMSSender.Messaging.Services;
 using SMSSender.Messaging.TaskQueue;
 
 namespace SMSSender.Controllers
@@ -14,50 +15,92 @@ namespace SMSSender.Controllers
     {
         private readonly IAppSettings _appSettings;
         private readonly IBackgroundTaskQueue _taskQueue;
+        private readonly IMessageService _messageService;
         private readonly ICurrentCustomerService _currentCustomerService;
-        private readonly IFileLoggerService _fileLogger;
+        private readonly IMessageProcessingService _messageProcessingService;
 
-        public SMSReaderController(IBackgroundTaskQueue taskQueue, IAppSettings appSettings, ICurrentCustomerService currentCustomerService, IFileLoggerService fileLogger)
+
+        public SMSReaderController(IBackgroundTaskQueue taskQueue, IAppSettings appSettings, IMessageProcessingService messageProcessingService, ICurrentCustomerService currentCustomerService, IMessageService messageService)
         {
             _appSettings = appSettings;
             _taskQueue = taskQueue;
+            _messageService = messageService;
             _currentCustomerService = currentCustomerService;
-            _fileLogger = fileLogger;
+            _messageProcessingService = messageProcessingService;
         }
 
         [HttpPost("webhook")]
-        public async Task<IActionResult> IncomingMessage([FromBody] IncomingSmsParam model)
+        public async Task<IActionResult> IncomingMessage([FromBody] List<IncomingSmsParam> Model)
         {
             try
             {
-                string secretKey = Request.Headers["User-Agent"];
+                string secretKey = Request.Headers["Secret_Key"];
 
                 if (secretKey != _appSettings.SecretKey)
                     return Unauthorized("unauthorized");
 
-                string deviceName = Request.Headers["Device-Name"];
-                string phoneNumber = Request.Headers["Phone-Number"];
+                var SmsNotExist = await _messageService.GetMessageNotExist(Model.Select(m => m.SmsGateId).ToList());
 
-                var smsMessage = new SmsMessagePure
+                var messages = Model.Where(i => SmsNotExist.Contains(i.SmsGateId)).Select(model => new SmsMessagePure
                 {
-                    CustomerId = _currentCustomerService.CustomerId,
-                    BranchId = _currentCustomerService.BranchId,
-                    DeviceName = deviceName,
-                    PhoneNumber = phoneNumber,
-                    Message = model.Text,
-                    ProviderStr = model.From,
-                    ReceivedStamp = model.ReceivedStamp,
-                    SentStamp = model.SentStamp,
-                    Sim = model.Sim
-                };
-                //await _fileLogger.LogMessageData(smsMessage);
-                await _taskQueue.QueueAsync(smsMessage);
+                    SmsGateId = model.SmsGateId,
+                    CustomerId = model.CustomerId,
+                    BranchId = model.BranchId,
+                    DeviceName = model.DeviceName,
+                    PhoneNumber = model.ProviderPhone,
+                    Message = model.Message,
+                    ProviderStr = model.ProviderName,
+                    CreatedAt = model.CreatedAt,
+                    Sim = model.SimNumber
+                });
 
-                return Content("success", "text/plain");
+                await _taskQueue.QueueRangeAsync(messages);
+
+                return Ok();
             }
             catch
             {
-                return BadRequest("error");
+                return BadRequest();
+            }
+        }
+
+        [HttpPost("refresh")]
+        public async Task<IActionResult> IncomingRefreshInboxMessage([FromBody] List<IncomingSmsParam> Model)
+        {
+            try
+            {
+                string secretKey = Request.Headers["Secret_Key"];
+
+                if (secretKey != _appSettings.SecretKey)
+                    return Unauthorized("unauthorized");
+
+                _currentCustomerService.CustomerId = Model.FirstOrDefault().CustomerId;
+                _currentCustomerService.BranchId = Model.FirstOrDefault().BranchId;
+                _currentCustomerService.IsAdmin = false;
+
+                var SmsNotExist = await _messageService.GetMessageNotExist(Model.Select(m => m.SmsGateId).ToList());
+
+                var messages = Model.Where(i => SmsNotExist.Contains(i.SmsGateId)).Select(model => new SmsMessagePure
+                {
+                    SmsGateId = model.SmsGateId,
+                    CustomerId = model.CustomerId,
+                    BranchId = model.BranchId,
+                    DeviceName = model.DeviceName,
+                    PhoneNumber = model.ProviderPhone,
+                    Message = model.Message,
+                    ProviderStr = model.ProviderName,
+                    CreatedAt = model.CreatedAt,
+                    Sim = model.SimNumber
+                });
+
+                foreach (var item in messages)
+                    await _messageProcessingService.Process(item);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
             }
         }
     }

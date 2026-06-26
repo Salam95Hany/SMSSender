@@ -362,6 +362,219 @@ namespace SMSSender.Entities.Migrations
                     b.ToTable("Plans", "config");
                 });
 
+            modelBuilder.Entity("SMSSender.Entities.Models.DeviceConfig.Device", b =>
+                {
+                    b.Property<int>("DeviceId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DeviceId"));
+
+                    b.Property<string>("BaseUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("BranchId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CustomerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("DeviceName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DeviceUniqueId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Sim1Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Sim1Number")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Sim2Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Sim2Number")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("DeviceId");
+
+                    b.ToTable("Devices", "device");
+                });
+
+            modelBuilder.Entity("SMSSender.Entities.Models.DeviceConfig.DeviceChangeLog", b =>
+                {
+                    b.Property<int>("DeviceChangeLogId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DeviceChangeLogId"));
+
+                    b.Property<int>("Action")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BranchId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("DeviceId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FieldKey")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FieldValue")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Version")
+                        .HasColumnType("int");
+
+                    b.HasKey("DeviceChangeLogId");
+
+                    b.ToTable("DeviceChangeLogs", "device");
+                });
+
+            modelBuilder.Entity("SMSSender.Entities.Models.DeviceConfig.DeviceHealth", b =>
+                {
+                    b.Property<int>("DeviceHealthId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DeviceHealthId"));
+
+                    b.Property<bool>("BatteryCharging")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("BatteryLevel")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BranchId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ConnectionStatus")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ConnectionTransport")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("DeviceId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DeviceName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastSeen")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("LastSyncDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("LastUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("MessagesFailed")
+                        .HasColumnType("int");
+
+                    b.HasKey("DeviceHealthId");
+
+                    b.ToTable("DeviceHealthes", "device");
+                });
+
+            modelBuilder.Entity("SMSSender.Entities.Models.DeviceConfig.DeviceRefreshInbox", b =>
+                {
+                    b.Property<int>("DeviceRefreshInboxId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DeviceRefreshInboxId"));
+
+                    b.Property<int>("BranchId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("DeviceId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("From")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("LastUpdate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("RefreshStatus")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("To")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("DeviceRefreshInboxId");
+
+                    b.ToTable("DeviceRefreshInboxes", "device");
+                });
+
+            modelBuilder.Entity("SMSSender.Entities.Models.DeviceConfig.DeviceSyncVersion", b =>
+                {
+                    b.Property<int>("DeviceSyncVersionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DeviceSyncVersionId"));
+
+                    b.Property<int>("BranchId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CurrentVersion")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("DeviceSyncVersionId");
+
+                    b.ToTable("DeviceSyncVersions", "device");
+                });
+
             modelBuilder.Entity("SMSSender.Entities.Models.Messaging.CashBox", b =>
                 {
                     b.Property<int>("CashBoxId")
@@ -438,6 +651,9 @@ namespace SMSSender.Entities.Migrations
                     b.Property<decimal?>("Commission")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<Guid>("CustomerId")
                         .HasColumnType("uniqueidentifier");
 
@@ -446,12 +662,6 @@ namespace SMSSender.Entities.Migrations
 
                     b.Property<bool?>("IsCalculated")
                         .HasColumnType("bit");
-
-                    b.Property<DateTime?>("OperationMsgDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("OperationSentDateTime")
-                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("OperationServerDateTime")
                         .HasColumnType("datetime2");
@@ -474,6 +684,10 @@ namespace SMSSender.Entities.Migrations
                     b.Property<string>("SenderName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("SmsGateId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid>("TransactionId")
                         .HasColumnType("uniqueidentifier");
 
@@ -484,6 +698,8 @@ namespace SMSSender.Entities.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("MessageTransactionId");
+
+                    b.HasIndex("BranchId");
 
                     b.ToTable("MessageTransactions", "sms");
                 });
@@ -588,6 +804,9 @@ namespace SMSSender.Entities.Migrations
                     b.Property<int>("BranchId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
@@ -618,15 +837,11 @@ namespace SMSSender.Entities.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ReceivedStamp")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SentStamp")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Sim")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SmsGateId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -754,6 +969,17 @@ namespace SMSSender.Entities.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("SMSSender.Entities.Models.Messaging.MessageTransaction", b =>
+                {
+                    b.HasOne("SMSSender.Entities.Models.Config.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Branch");
                 });
 #pragma warning restore 612, 618
         }

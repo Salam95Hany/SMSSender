@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using SMSSender.Entities.Auth;
 using SMSSender.Entities.Models.Config;
+using SMSSender.Entities.Models.DeviceConfig;
 using SMSSender.Entities.Models.Global;
 using SMSSender.Entities.Models.Messaging;
 using System;
@@ -31,6 +32,11 @@ namespace SMSSender.Entities.Models
         public DbSet<Plan> Plans { get; set; }
         public DbSet<CustomerSubscription> CustomerSubscriptions { get; set; }
         public DbSet<Branch> Branches { get; set; }
+        public DbSet<Device> Devices { get; set; }
+        public DbSet<DeviceChangeLog> DeviceChangeLogs { get; set; }
+        public DbSet<DeviceHealth> DeviceHealthes { get; set; }
+        public DbSet<DeviceRefreshInbox> DeviceRefreshInboxes { get; set; }
+        public DbSet<DeviceSyncVersion> DeviceSyncVersions { get; set; }
 
 
 
@@ -51,38 +57,47 @@ namespace SMSSender.Entities.Models
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            if (_currentCustomerService.IsSystemJob)
-                return await base.SaveChangesAsync(cancellationToken);
-
-            var customerId = _currentCustomerService.CustomerId;
-            var branchId = _currentCustomerService.BranchId;
-            var isAdmin = _currentCustomerService.IsAdmin;
-
-            foreach (var entry in ChangeTracker.Entries<ICustomerEntity>())
+            try
             {
-                // CustomerId
-                if (entry.State == EntityState.Added)
-                    entry.Entity.CustomerId = customerId;
+                if (_currentCustomerService.IsSystemJob)
+                    return await base.SaveChangesAsync(cancellationToken);
 
-                if (entry.State == EntityState.Modified)
-                {
-                    if (entry.Entity.CustomerId != customerId)
-                        throw new Exception("Cross-tenant update detected");
-                }
+                var customerId = _currentCustomerService.CustomerId;
+                var branchId = _currentCustomerService.BranchId;
+                var isAdmin = _currentCustomerService.IsAdmin;
 
-                // BranchId
-                if (entry.Entity is ICustomerEntity branchEntity)
+                foreach (var entry in ChangeTracker.Entries<ICustomerEntity>())
                 {
+                    // CustomerId
                     if (entry.State == EntityState.Added)
-                        branchEntity.BranchId = branchId;
+                        entry.Entity.CustomerId = customerId;
 
                     if (entry.State == EntityState.Modified)
-                        if (!isAdmin && branchEntity.BranchId != branchId)
-                            throw new Exception("Cross-branch update detected");
-                }
-            }
+                    {
+                        if (entry.Entity.CustomerId != customerId)
+                            throw new Exception("Cross-tenant update detected");
+                    }
 
-            return await base.SaveChangesAsync(cancellationToken);
+                    // BranchId
+                    if (entry.Entity is ICustomerEntity branchEntity)
+                    {
+                        if (entry.State == EntityState.Added)
+                            branchEntity.BranchId = branchId;
+
+                        if (entry.State == EntityState.Modified)
+                            if (!isAdmin && branchEntity.BranchId != branchId)
+                                throw new Exception("Cross-branch update detected");
+                    }
+                }
+
+                return await base.SaveChangesAsync(cancellationToken);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            
         }
 
         private static void SetGlobalQueryFilter<TEntity>(ModelBuilder modelBuilder, SMSDbContext context) where TEntity : class, ICustomerEntity

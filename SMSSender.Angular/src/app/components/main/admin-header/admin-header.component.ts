@@ -59,6 +59,11 @@ export class AdminHeaderComponent {
       }
     });
 
+    this.notificationSignalrService.onSystemMessageAdded(() => {
+      this.notificationSound.play();
+      this.GetMessageNotification();
+    });
+
     this.GetMessageNotification();
     this.GetMessageBoxTodayData(false);
   }
