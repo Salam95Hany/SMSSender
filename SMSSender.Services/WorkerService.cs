@@ -128,7 +128,7 @@ namespace SMSSender.Services
                         entity.ConnectionTransport = item.ConnectionTransport;
                         entity.BatteryLevel = item.BatteryLevel;
                         entity.BatteryCharging = item.BatteryCharging;
-                        entity.LastSeen = item.LastSeen;
+                        entity.LastSeen = item.LastSeen.EgyptNow();
                         entity.LastSyncDate = item.LastSyncDate;
                         entity.LastUpdated = Today;
                     }

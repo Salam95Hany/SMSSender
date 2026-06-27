@@ -6,6 +6,7 @@ using SMSSender.Messaging;
 using SMSSender.Messaging.Models;
 using SMSSender.Messaging.Services;
 using SMSSender.Messaging.TaskQueue;
+using SMSSender.Services;
 
 namespace SMSSender.Controllers
 {
@@ -94,7 +95,14 @@ namespace SMSSender.Controllers
                 });
 
                 foreach (var item in messages)
+                {
+                    var acceptedMsg = _messageService.GetMessageFiltered(item.ProviderStr, item.Message);
+                    if (!acceptedMsg)
+                        continue;
+
                     await _messageProcessingService.Process(item);
+                }
+                    
 
                 return Ok();
             }
