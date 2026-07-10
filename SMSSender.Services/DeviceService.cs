@@ -7,6 +7,7 @@ using SMSSender.Entities.Models.Global;
 using SMSSender.Interfaces;
 using SMSSender.Interfaces.Repositories;
 using SMSSender.Services.Common;
+using static iText.IO.Util.IntHashtable;
 
 namespace SMSSender.Services
 {
@@ -102,6 +103,7 @@ namespace SMSSender.Services
 
         public async Task<List<DeviceRefreshInboxDto>> GetCustomerDeviceRefreshInbox()
         {
+            var egyptZone = TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time");
             var Data = await (
             from device in _unitOfWork.Repository<Device>().GetAllAsQueryable()
             join refresh in _unitOfWork.Repository<DeviceRefreshInbox>().GetAllAsQueryable()
@@ -119,8 +121,8 @@ namespace SMSSender.Services
                 BranchName = branch.Name,
                 IsActive = device.IsActive,
                 RefreshStatus = refresh.RefreshStatus,
-                From = refresh.From,
-                To = refresh.To,
+                From = refresh.From.HasValue ? TimeZoneInfo.ConvertTimeFromUtc(DateTime.SpecifyKind(refresh.From.Value, DateTimeKind.Utc), egyptZone) : null,
+                To = refresh.To.HasValue ? TimeZoneInfo.ConvertTimeFromUtc(DateTime.SpecifyKind(refresh.To.Value, DateTimeKind.Utc), egyptZone) : null,
                 LastUpdate = refresh.LastUpdate
             }).ToListAsync();
 
@@ -303,6 +305,12 @@ namespace SMSSender.Services
         {
             try
             {
+                var FromEgypt = DateTime.SpecifyKind(Model.From!.Value.Date, DateTimeKind.Unspecified);
+                var ToEgypt = DateTime.SpecifyKind(Model.To!.Value.Date.AddDays(1).AddTicks(-1), DateTimeKind.Unspecified);
+                var EgyptZone = TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time");
+                var FromUtc = TimeZoneInfo.ConvertTimeToUtc(FromEgypt, EgyptZone);
+                var ToUtc = TimeZoneInfo.ConvertTimeToUtc(ToEgypt, EgyptZone);
+
                 var Entity = await _unitOfWork.Repository<DeviceRefreshInbox>().FirstOrDefaultAsync(i => i.CustomerId == CustomerId && i.BranchId == Model.BranchId && i.DeviceId == Model.DeviceId);
                 if (Entity == null)
                 {
@@ -312,8 +320,8 @@ namespace SMSSender.Services
                         CustomerId = CustomerId,
                         BranchId = _currentCustomerService.BranchId,
                         RefreshStatus = InboxRefreshStatus.Pending,
-                        From = Model.From?.Date,
-                        To = Model.To?.AddDays(1).AddTicks(-1),
+                        From = FromUtc,
+                        To = ToUtc,
                         CreatedAt = DateTime.Now.EgyptNow(),
                         LastUpdate = DateTime.Now.EgyptNow()
                     };
@@ -323,8 +331,8 @@ namespace SMSSender.Services
                 else
                 {
                     Entity.RefreshStatus = InboxRefreshStatus.Pending;
-                    Entity.From = Model.From?.Date;
-                    Entity.To = Model.To?.AddDays(1).AddTicks(-1);
+                    Entity.From = FromUtc;
+                    Entity.To = ToUtc;
                     Entity.LastUpdate = DateTime.Now.EgyptNow();
                 }
 

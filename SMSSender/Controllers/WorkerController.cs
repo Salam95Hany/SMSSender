@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SMSSender.Entities.Common;
 using SMSSender.Entities.Contracts.DTOs.Worker;
 using SMSSender.Entities.Models.DeviceConfig;
 using SMSSender.Interfaces;

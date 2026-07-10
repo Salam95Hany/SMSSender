@@ -11,12 +11,12 @@ namespace SMSSender.Entities.Models.DeviceConfig
     public class DeviceErrorLog
     {
         public int DeviceErrorLogId { get; set; }
-        public string DeviceId { get; set; }
+        public string? DeviceId { get; set; }
         public Guid CustomerId { get; set; }
         public int BranchId { get; set; }
-        public string Service { get; set; }
-        public string Method { get; set; }
-        public string Message { get; set; }
-        public string StackTrace { get; set; }
+        public string? Service { get; set; }
+        public string? Method { get; set; }
+        public string? Message { get; set; }
+        public string? StackTrace { get; set; }
     }
 }
