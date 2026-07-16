@@ -1,3 +1,4 @@
+using SMSSender.Entities.Models.Global;
 using SMSSender.Entities.Models.Messaging;
 using SMSSender.Messaging.Handlers;
 using SMSSender.Messaging.Models;
@@ -13,14 +14,16 @@ namespace SMSSender.Messaging.Services
         private readonly IEnumerable<IOperationHandler> _operationHandlers;
         private readonly IEnumerable<IMessageParser> _parsers;
         private readonly IMessageProviderRegistry _providerRegistry;
+        private readonly ICurrentCustomerService _currentCustomerService;
 
-        public MessageProcessingService(IMessageProviderRegistry providerRegistry, IEnumerable<IMessageParser> parsers, IEnumerable<IOperationHandler> operationHandlers, IMessageLogRepository logRepo, IFailedSmsLogger failedSmsLogger)
+        public MessageProcessingService(IMessageProviderRegistry providerRegistry, IEnumerable<IMessageParser> parsers, IEnumerable<IOperationHandler> operationHandlers, IMessageLogRepository logRepo, IFailedSmsLogger failedSmsLogger, ICurrentCustomerService currentCustomerService)
         {
             _providerRegistry = providerRegistry;
             _parsers = parsers;
             _operationHandlers = operationHandlers;
             _logRepo = logRepo;
             _failedSmsLogger = failedSmsLogger;
+            _currentCustomerService = currentCustomerService;
         }
 
         public async Task<ProcessResult> Process(SmsMessagePure model)
@@ -148,6 +151,8 @@ namespace SMSSender.Messaging.Services
                     MessageTransactionId = model.MessageTransactionId.Value,
                     SmsGateId = model.SmsGateId,
                     TransactionId = transactionId.Value,
+                    CustomerId = _currentCustomerService.CustomerId,
+                    BranchId = _currentCustomerService.BranchId,
                     Provider = parsedMessage.Provider,
                     ProviderName = model.DeviceName,
                     ProviderPhone = model.PhoneNumber,

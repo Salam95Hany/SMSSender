@@ -145,6 +145,7 @@ namespace SMSSender.Services
             var Results = new MessageDetailsDto
             {
                 TransactionId = LogData.TransactionId,
+                SmsGateId = LogData.SmsGateId,
                 Provider = LogData.Provider,
                 ProviderName = LogData.ProviderName,
                 ProviderPhone = LogData.ProviderPhone,

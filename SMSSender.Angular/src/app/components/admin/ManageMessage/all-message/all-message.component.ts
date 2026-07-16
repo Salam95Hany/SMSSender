@@ -182,12 +182,12 @@ export class AllMessageComponent implements OnInit {
     let obj = {
       messageTransactionId: this.MessageUpdate.messageTransactionId,
       transactionId: this.TransactionId,
+      smsGateId: this.MessageLog.smsGateId,
       deviceName: this.MessageLog.providerName,
       phoneNumber: this.MessageLog.providerPhone,
       message: this.MessageLog.message,
       providerStr: this.MessageLog.provider,
-      sentStamp: this.MessageLog.sentStamp,
-      receivedStamp: this.MessageLog.receivedStamp,
+      createdAt:this.MessageLog.createdAt,
       sim: this.MessageLog.sim
     }
 

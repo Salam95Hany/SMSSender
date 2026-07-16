@@ -9,6 +9,7 @@ namespace SMSSender.Entities.Contracts.DTOs
     public class MessageDetailsDto
     {
         public Guid TransactionId { get; set; }
+        public string SmsGateId { get; set; }
         public string Provider { get; set; }
         public string ProviderName { get; set; }
         public string ProviderPhone { get; set; }
